@@ -1,8 +1,27 @@
 <?php
+include_once "func.php";
+$data = fetchData();
+$feedbacksData = $data[0];
+$webPageInfoData = $data[1];
+$icons = $data[2];
+
+$mappedAndOrderedData = mapAndOrderData($webPageInfoData);
+$contactItems = $mappedAndOrderedData['Contact'];
+
+$phoneNumber = ''; // Initialize the variable
+
+foreach ($contactItems as $item) {
+    if ($item['category'] === 'phone') {
+        $phoneNumber = $item['text'];
+        break; // Exit the loop once the item is found
+    }
+}
+
+$formatedPhone = implode(' ', str_split(str_replace("+33", "0", $phoneNumber), 2));
 
 ?>
 <div class="header">
-    <a href="index.php"><img src="../src/logo.svg" class="logo-header"></a>
+    <a href="index.php"><img src="./src/logo.svg" class="logo-header"></a>
     <div class="menu">
         <a href="index.php">acceuil</a>
         <a href="catalogue.php">catalogue</a>
