@@ -122,3 +122,23 @@ function mapAndOrderData($data)
 
     return $mappedData;
 }
+
+function fetch_min_max_values_filters()
+{
+    try {
+
+        global $pdo;
+        $statement = $pdo->prepare('SELECT MIN(km), MAX(km), MIN(year), MAX(year), MIN(price), MAX(price)
+        FROM vehicles
+        WHERE status = 1 OR status = 2');
+        if ($statement->execute()) {
+            $filter_minmax = $statement->fetch(PDO::FETCH_ASSOC);
+            return $filter_minmax;
+        } else {
+            echo 'Une erreur est survenue';
+        }
+    } catch (PDOException $e) {
+        die("Connection failed: " . $e->getMessage());
+        echo 'exception';
+    }
+}
