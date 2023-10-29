@@ -103,12 +103,12 @@ function vehicle_gallery()
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
     <section id="notifications"></section>
-    <?php require_once "header.php";
+    <?php include_once "./components/header.php";
     $vehicle_infos = vehicle_infos();
 
     $propertiesMain = ['Caroserie', 'Transmission', 'Carbourant', 'Conformité', 'Consomation', 'Portes', 'Couleur'];
@@ -176,18 +176,18 @@ function vehicle_gallery()
     ?>
     <section id="popup"></section>
     <div class="vehicle-page">
-        <div>
-            <a href="javascript:history.back()"><- revenir</a>
+        <div class="back-btn">
+            <a   href="javascript:history.back()"><- REVENIR A LA LISTE</a>
         </div>
         <div class="vehicle-container-main">
             <div class="vehicle-container-imgs">
-                <div class="vehicle-img-main"><img <?php echo 'src="' . $vehicle_infos['img'] . '"' ?>></div>
+                <div class="vehicle-img-main"><img <?php echo 'src="' .str_replace("../", "./", $vehicle_infos['img']) . '"' ?>></div>
                 <div class="vehicle-img-gallery">
                     <?php
                     if (!empty($vehicle_gallery)) {
                         foreach ($vehicle_gallery as $image) {
                             $imageLink = $image[0];
-                            echo '<img class="gallery-img" src="' . $imageLink . '" alt="Vehicle Image">';
+                            echo '<img class="gallery-img" src="' . str_replace("../", "./",$imageLink) . '" alt="Vehicle Image">';
                         }
                     }
                     ?>
@@ -231,7 +231,7 @@ function vehicle_gallery()
                 <p><?php echo $vehicle_infos['other_equipment'] ?></p>
             </div>
         </div>
-        <?php include_once "footer.php" ?>
+        <?php include_once "./components/footer.php" ?>
         <script src="script.js"></script>
         <script src="script-contact.js"></script>
         <script>
