@@ -78,10 +78,10 @@
 
         </div>
         <div class="table-pagination">
-            <button id="prevPage">Previous</button>
+            <button class="nav-btn" id="prevPage">Previous</button>
             <span id="currentPage">Page 1</span>
             <span id="totalPages">of 1</span>
-            <button id="nextPage">Next</button>
+            <button class="nav-btn" id="nextPage">Next</button>
         </div>
 
     </div>
@@ -318,7 +318,7 @@
             actionBtns.forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault()
-                    popup.innerHTML = `<div class="popup-div"><div class="form-close-btn">X</div><?php include 'contact-form.php' ?></div>`
+                    popup.innerHTML = `<div class="popup-div"><div class="form-close-btn">X</div><?php include './components/contact-form.php' ?></div>`
                     messageEvent()
                     // Use setTimeout to ensure that the element is available for modification
                     setTimeout(function() {

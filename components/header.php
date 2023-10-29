@@ -43,7 +43,7 @@ $formatedPhone = implode(' ', str_split(str_replace("+33", "0", $phoneNumber), 2
             <a href="catalogue.php">catalogue</a>
             <a href="index.php#feedback">temoignages</a>
             <a href="index.php#contact">contact</a>
-            <a href="tel:<?php echo $phoneNumber ?>" class="primary telephone">
+            <a href="tel:<?php echo $phoneNumber ?>" class="telephone">
                 <i class="fa-solid fa-phone-volume"></i>
                 <span><?php echo $formatedPhone ?></span>
             </a>

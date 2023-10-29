@@ -13,18 +13,18 @@
     <?php include_once "./components/header.php";
 
     ?>
+    <div class="landing-background"></div>
     <div class="hero-section">
         <div class="hero-section-content">
             <h1>GARAGE V. PARROT</h1>
             <h2>Des experts passionnés au service de votre voiture</h2>
             <div class="hero-cta">
                 <a class="btn" href="#">contactez nous</a>
-                <a class="btn no-border" href="#">en savoir plus</a>
+                <a class="btn no-border" href="#service-section">en savoir plus</a>
             </div>
         </div>
     </div>
-    <div class="service-section">
-        <?php print_r($contactItems) ?>
+    <div class="service-section" id="service-section">
         <h2 class="uppercase">nos <span class="primary">services</span></h2>
         <div class="services-container">
             <?php
@@ -207,11 +207,22 @@
             dot.addEventListener("click", () => {
                 // Update the currentIndex to the clicked dot's index
                 currentIndex = index;
-
+                console.log(index)
+console.log(feedbackContainers.length)
                 // Calculate the offset to slide the container to the center
                 const containerWidth = feedbackContainers[currentIndex].offsetWidth;
-                const offset = -currentIndex * containerWidth + slider.offsetWidth / 2 - containerWidth / 2;
+                const gap = 45
+                const screenWidth = window.innerWidth; // Get the screen width
+const offset = ((containerWidth + gap)/2)*(feedbackContainers.length+1-(2*(currentIndex+1)))
+//const offset = slider.offsetWidth/2 - containerWidth/2 + (screenWidth-containerWidth)/2 - currentIndex*(containerWidth+gap)
 
+               // const offset = -currentIndex * containerWidth + slider.offsetWidth / 2 - containerWidth / 2;
+
+console.log(containerWidth)
+console.log(slider.offsetWidth)
+console.log(screenWidth)
+console.log(offset)
+console.log(currentIndex)
                 // Slide the slider to the center of the clicked feedback
                 slider.style.transform = `translateX(${offset}px)`;
 
