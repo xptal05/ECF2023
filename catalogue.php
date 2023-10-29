@@ -13,6 +13,7 @@
 </head>
 
 <body>
+<section id="notifications"></section>
     <?php include_once "./components/header.php";
     include_once "./func.php";
     $minMaxValues = fetch_min_max_values_filters();
@@ -25,6 +26,7 @@
     $maxPrice = ceil($minMaxValues['MAX(price)'] / 1000) * 1000;
 
     ?>
+
     <section id="popup"></section>
     <div class="catalogue">
         <h1 class="uppercase primary">CATALOGUE DE NOS VEHICULES</h1>
@@ -88,9 +90,19 @@
     <?php include_once "./components/footer.php";
 
     ?>
+    <script src="./components/notifications.js"></script>
     <script src="script.js"></script>
     <script src="script-contact.js"></script>
+
     <script>
+
+const filter_toggle = document.querySelector('.filter-toggle')
+const filter_pop_up = document.querySelector('.filter-pop-up-container')
+
+
+filter_toggle.addEventListener('click', () => {
+    filter_pop_up.classList.toggle('off')
+})
         // get data -> pass it to filter -> populate
         //on filter -> filter data -> populate
         // Attach event listeners to pagination controls

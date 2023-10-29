@@ -1,9 +1,28 @@
+function notificationsServeur(data) {
+    const currentURL = window.location.pathname.split('/').pop()
+
+    notifications.classList.toggle('on')
+    if (data['message'].startsWith('Erreur')) {
+        notifications.classList.add('error')
+    } else if (data['message'].startsWith('Succès')) {
+        notifications.classList.add('success')
+    }
+    notifications.innerHTML = `${data['message']}<div class="notification-progress-bar"></div>`
+    if (currentURL != 'index.php') {
+        const popup = document.getElementById('popup')
+        popup.innerHTML = '';
+    }
+    setTimeout(function () {
+        notifications.className = '';
+    }, 8000);
+}
+
 function formvalidation() {
     return true
 }
 
 function pushNewMessage(formData, messageForm) {
-    const phpScriptURL = '../BACK/func-one.php?action=newMessage';
+    const phpScriptURL = './back/db_query.php?action=newMessage';
     formData.action = 'newMessage'
 
     // Send an AJAX request to update the database
@@ -17,10 +36,8 @@ function pushNewMessage(formData, messageForm) {
 
         .then((response) => response.json()) // Assuming the server returns JSON
         .then((data) => {
-            // Handle the response from the server
-            // Show a success message or redirect to a success page
-            //  notificationsServeur(data)
             console.log(data)
+            notificationsServeur(data)
             messageForm.reset()
         })
 

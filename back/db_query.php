@@ -3,10 +3,76 @@ require_once "./config/db.php";
 
 $pdo = connectToDatabase($dbConfig);
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    if (isset($_GET['action']) && $_GET['action'] === 'fetchData') {
-        fetchData();
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
+    switch ($_GET['action']) {
+        case 'fetchData':
+            fetchData();
+            break;
+        case 'fetchDropdowns':
+            fetchDropdowns();
+            break;
+        case 'fetchDataDashbord':
+            fetchDataDashbord();
+            break;
+        default:
+            echo 'Invalid action requested.';
+            break;
     }
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_FILES["image"])) {
+        imgUpload();
+    } else {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $action = $data['action'];
+        switch ($action) {
+            case 'delete':
+                deleteData();
+                break;
+            case 'modifyMessageFeedback':
+                updateMessageFeedbacks();
+                break;
+            case 'modifyWeb':
+                modifyWeb();
+                break;
+            case 'newFeedback':
+                addFeedback();
+                break;
+            case 'newMessage':
+                addMessage();
+                break;
+            case 'updateVehicle':
+                updateVehicle();
+                break;
+            case 'updateUser':
+                updateUser();
+                break;
+            case 'updateDropdown':
+                updateDropdown();
+                break;
+            case 'deleteImg':
+                deleteImg();
+                break;
+            default:
+                echoData();
+                break;
+        }
+    }
+} else {
+    echoData();
+}
+
+function sanitizeData($data) {
+    if (is_array($data)) {
+        // If it's an array, loop through its elements
+        foreach ($data as $key => $value) {
+            $data[$key] = sanitizeData($value); // Recursively sanitize each element
+        }
+    } else {
+        // If it's not an array, sanitize the value
+        $data = htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+    }
+    return $data;
 }
 
 function fetchData()
@@ -88,4 +154,78 @@ function fetchData()
         die("Connection failed: " . $e->getMessage());
         echo 'exception';
     }
+}
+
+
+function addMessage()
+{
+    $dataFetched = json_decode(file_get_contents('php://input'), true);
+    $data = sanitizeData($dataFetched);
+    $lastName = $data['lastname'];
+    $firstName = $data['firstname'];
+    $email = $data['email'];
+    $status = $data['status'];
+    $phone = $data['phone'];
+    $subject = $data['subject'];
+    $message = $data['message'];
+
+    try {
+        global $pdo;
+        $sql = "INSERT INTO messages (client_first_name	, client_last_name	, client_email, client_phone, message, created, status, subject) 
+            VALUES (:firstname, :lastname, :email, :phone, :message, NOW(), :status, :subject)";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':firstname', $firstName);
+        $stmt->bindParam(':lastname', $lastName);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':phone', $phone);
+        $stmt->bindParam(':message', $message);
+        $stmt->bindParam(':status', $status);
+        $stmt->bindParam(':subject', $subject);
+
+        if ($stmt->execute()) {
+            $response = ['message' => 'Succès : Feedback inserted succesfully'];
+        }
+    } catch (PDOException $e) {
+        $response = handleError($e);
+    }
+    echo json_encode($response);
+}
+
+
+function addFeedback()
+{
+    $data = json_decode(file_get_contents('php://input'), true);
+    $userId = $data['userId'];
+    $clientName = $data['client_name'];
+    $rating = $data['rating'];
+    $comment = $data['comment'];
+    $status = 2;
+
+    try {
+        global $pdo;
+        $sql = "";
+        if ($userId == "") {
+            $sql = "INSERT INTO feedbacks (client_name, rating, comment, created, status) 
+            VALUES (:clientName, :rating, :comment, NOW(), :status)";
+        } else {
+            $sql = "INSERT INTO feedbacks (client_name, rating, comment, created, modified_by, status) 
+                VALUES (:clientName, :rating, :comment, NOW(), :userId, :status)";
+        }
+        $stmt = $pdo->prepare($sql);
+        if ($userId != "") {
+            $stmt->bindParam(':userId', $userId);
+        }
+        $stmt->bindParam(':clientName', $clientName);
+        $stmt->bindParam(':rating', $rating);
+        $stmt->bindParam(':comment', $comment);
+        $stmt->bindParam(':status', $status);
+
+        if ($stmt->execute()) {
+            $response = ['message' => 'Succès : Feedback inserted succesfully'];
+        }
+    } catch (PDOException $e) {
+        $response = handleError($e);
+    }
+    echo json_encode($response);
 }

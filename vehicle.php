@@ -218,7 +218,7 @@ function vehicle_gallery()
                     </div>';
                     } ?>
                 </div>
-                <a class="btn uppercase action-btn" href="?vehicle=<?php echo $vehicle_infos['brand'] . '-' . $vehicle_infos['model'] . '-' . $vehicle_infos['year'] ?>">contactez nous</a>
+                <a class="btn uppercase action-btn" href="?vehicle=<?php echo $vehicle_infos['brandname'] . '-' . $vehicle_infos['modelname'] . '-' . $vehicle_infos['year'] ?>">contactez nous</a>
             </div>
         </div>
         <div class="vehicle-container-additional-info">
@@ -241,7 +241,7 @@ function vehicle_gallery()
             actionBtns.forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault()
-                    popup.innerHTML = `<div class="popup-div"><div class="form-close-btn">X</div><?php include 'contact-form.php' ?></div>`
+                    popup.innerHTML = `<div class="popup-div"><div class="form-close-btn">X</div><?php include './components/contact-form.php' ?></div>`
                     messageEvent()
                     // Use setTimeout to ensure that the element is available for modification
                     setTimeout(function() {

@@ -11,11 +11,5 @@ burger_menu.addEventListener('click', () => {
 })
 
 
-const filter_toggle = document.querySelector('.filter-toggle')
-const filter_pop_up = document.querySelector('.filter-pop-up-container')
 
-
-filter_toggle.addEventListener('click', () => {
-    filter_pop_up.classList.toggle('off')
-})
 

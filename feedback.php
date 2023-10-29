@@ -7,25 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="./style.css">
-    <style>
-        .form-new {
-            padding-top: 170px;
-        }
-
-        .rating {
-            display: flex;
-        }
-    </style>
 </head>
 
 <body>
-<section id="notifications"></section>
+    <section id="notifications"></section>
     <?php include_once "./components/header.php" ?>
-    <div class="form-new-container on">
-        <form id="feedbackForm" class="form-new container">
-            <h2 class="span-12">Ajouter un témoignage</h2>
+    <div class="feedback-page">
+        <div class="feedback-img"><img src="./src/feedback-img-1.png"></div>
+        <form id="feedbackForm" class="form-new container feedback-form">
+            <h2 class="span-12 primary uppercase">Ajouter un témoignage</h2>
             <div class="span-6"><label>Nom</label>
-                <input id="client_nameInput" type="text" value="" required>
+                <input id="client_nameInput" type="text" value="" required class="input-front">
             </div>
             <div class="span-6"><label>Note</label>
                 <div class="rating">
@@ -38,17 +30,17 @@
                 <input id="ratingInput" type="number" value="" hidden>
             </div>
             <div class="span-6"><label>Commentaire</label>
-                <textarea id="commentInput" rows="4" cols="50" required></textarea>
+                <textarea id="commentInput" rows="5" cols="50" required class="input-front"></textarea>
             </div>
-            <div class="span-6"><label>Statut</label><select id="statusInput" hidden>
+            <select id="statusInput" hidden>
                     <option value="2">New</option>
                 </select>
-            </div>
             <div class="button-container span-2-end">
                 <button class="btn" type="reset" id="reset-btn">Annuler</button>
                 <button class="btn" type="submit">Envoyer</button>
             </div>
         </form>
+        <div class="feedback-img"><img src="./src/feedback-img-2.png"></div>
     </div>
     <?php include_once "./components/footer.php" ?>
     <script src="script.js"></script>
@@ -74,20 +66,22 @@
             }
         }
 
-
-        /*
-            for (let i = 1; i <= maxRating; i++) {
-                if (i <= rating) {
-                    starIcons += '★'; // Add a filled star for each full rating
-                } else {
-                    starIcons += '☆'; // Add an empty star for the remaining
-                }
+        function notificationsServeur(data) {
+            notifications.classList.toggle('on')
+            if (data['message'].startsWith('Erreur')) {
+                notifications.classList.add('error')
+            } else if (data['message'].startsWith('Succès')) {
+                notifications.classList.add('success')
             }
-            */
+            notifications.innerHTML = `${data['message']}<div class="notification-progress-bar"></div>`
+            setTimeout(function() {
+                notifications.className = '';
+            }, 8000);
+        }
 
         function pushNewFeedback(formData, feedbackForm) {
 
-            const phpScriptURL = '../BACK/func-one.php?action=newFeedback';
+            const phpScriptURL = './back/db_query.php?action=newFeedback';
             formData.action = 'newFeedback'
 
             // Send an AJAX request to update the database
@@ -104,7 +98,7 @@
                     // Handle the response from the server
                     // Show a success message or redirect to a success page
                     console.log(data)
-                    //notification + clear form
+                    notificationsServeur(data)
                     feedbackForm.reset()
                     stars.forEach(star => {
                         star.innerText = `☆`

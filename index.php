@@ -10,6 +10,7 @@
 </head>
 
 <body>
+<section id="notifications"></section>
     <?php include_once "./components/header.php";
 
     ?>
@@ -19,7 +20,7 @@
             <h1>GARAGE V. PARROT</h1>
             <h2>Des experts passionnés au service de votre voiture</h2>
             <div class="hero-cta">
-                <a class="btn" href="#">contactez nous</a>
+                <a class="btn" href="#contact">contactez nous</a>
                 <a class="btn no-border" href="#service-section">en savoir plus</a>
             </div>
         </div>
@@ -217,12 +218,6 @@ const offset = ((containerWidth + gap)/2)*(feedbackContainers.length+1-(2*(curre
 //const offset = slider.offsetWidth/2 - containerWidth/2 + (screenWidth-containerWidth)/2 - currentIndex*(containerWidth+gap)
 
                // const offset = -currentIndex * containerWidth + slider.offsetWidth / 2 - containerWidth / 2;
-
-console.log(containerWidth)
-console.log(slider.offsetWidth)
-console.log(screenWidth)
-console.log(offset)
-console.log(currentIndex)
                 // Slide the slider to the center of the clicked feedback
                 slider.style.transform = `translateX(${offset}px)`;
 
