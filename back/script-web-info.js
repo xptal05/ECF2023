@@ -8,16 +8,34 @@ const webInfo = {
     'Reasons': { array: [], key: 7 }
 };
 
+const tables = [
+    { name: "Services", id: "servicetbl", headers: ["text", "description.text", "order"] },
+    { name: "Hours", id: "hourstbl", headers: ["text", "order"] },
+    { name: "Contact", id: "contacttbl", headers: ["text", "category", "order"] },
+    { name: "Address", id: "addresstbl", headers: ["TEXT", "CATEGORY", "ORDER"] },
+    { name: "About", id: "abouttbl", headers: ["TEXT"] },
+    { name: "Reasons", id: "reasonstbl", headers: ["TEXT", "CATEGORY", "ORDER"] },
+];
 
 // Function to fetch dropdown data and update dropdownMapping
 async function fetchAndUpdatePageInfo() {
+
+        // Clear existing data in arrays
+        for (const key in webInfo) {
+            webInfo[key].array = [];
+        }
+        imageData = [];
+        iconData = [];
+
     //FETCH WEB INFO
     try {
         const phpScriptURLdata = './func-one.php?action=fetchData';
         const phpScriptURLimages = './func-one.php?action=fetchData&data=images';
+
         // Fetch dropdown data from the server
-        const webInfoData = await fetchPageInfoFromServer(phpScriptURLdata);
-        const imageInfoData = await fetchPageInfoFromServer(phpScriptURLimages );
+        webInfoData = await fetchPageInfoFromServer(phpScriptURLdata);
+        imageInfoData = await fetchPageInfoFromServer(phpScriptURLimages);
+
         // Group the fetched data by "type" key
         webInfoData.forEach((item) => {
             // Find the corresponding webInfo property using "key"
@@ -29,21 +47,19 @@ async function fetchAndUpdatePageInfo() {
         });
 
         imageData = imageInfoData
-        iconData = []
         imageData.forEach(image => {
             if (image['type'] == 3) {
                 iconData.push(image)
             }
 
         });
+        updateData()
 
-        // Now that webInfo is updated, you can perform further actions with it
-        webInfolog();
+
     } catch (error) {
         console.log('Error fetching web info data:', error);
     }
 }
-
 
 // This function will fetch web info data from the server
 async function fetchPageInfoFromServer(phpScriptURL) {
@@ -65,42 +81,26 @@ async function fetchPageInfoFromServer(phpScriptURL) {
     }
 }
 
-function webInfolog() {
-    const serviceTbl = document.getElementById('servicetbl');
+function updateData(){
+        // Clear existing rows in all tables
+        tables.forEach(tableInfo => {
+            const table = document.getElementById(tableInfo.id);
+            table.innerHTML = "";
+        });
+        populateWebInfoTables();
+}
+
+function populateWebInfoTables() {
     const serviceArray = webInfo['Services']['array'];
-    const modifiedServiceArray = [];
+    //ONLY HEADING ITEMS
+    const modifiedServiceArray = serviceArray.filter(item => item['category'] === 'heading');
 
-
-    
-
-    // Combine 'text' into 'heading' with the same 'order'
-    //add the icon for each heading, the icon['associated_to_info']= item['id_info']
-    serviceArray.forEach(item => {
-        if (item['category'] === 'heading') {
-            // Initialize a new heading object with the 'order' property and an empty 'description'
-            const newHeading = { ...item, description: "" };
-    
-            // Find 'text' items with the same 'order'
-            const textItems = serviceArray.filter(textItem => textItem['category'] === 'text' && textItem['order'] === item['order']);
-    
-            // Concatenate 'text' items into the 'description' property
-            textItems.forEach(textItem => {
-                if (newHeading.description === "") {
-                    newHeading.description = textItem['text'];
-                } else {
-                    newHeading.description += "<br>" + textItem['text'];
-                }
-            });
-    
-            modifiedServiceArray.push(newHeading);
-        }
-    });
-
+    //ADD DESCRIPTION
     modifiedServiceArray.forEach(item => {
         if (item['category'] === 'heading') {
             // Find the first 'text' item with the same 'order'
             const descriptionItem = serviceArray.find(textItem => textItem['category'] === 'text' && textItem['order'] === item['order']);
-    
+
             // If a matching 'text' item is found, set the description property as an object with 'text' and 'id'
             if (descriptionItem) {
                 item.description = {
@@ -110,16 +110,17 @@ function webInfolog() {
             } else {
                 item.description = {
                     text: "",
-                    id_info:""
+                    id_info: ""
                 }; // If no matching 'text' item is found, set it to an empty object
             }
         }
     });
 
+    //ADD ICON
     modifiedServiceArray.forEach(item => {
         // Find the associated icon in iconData by matching id_info
         const associatedIcon = iconData.find(icon => icon['associated_to_info'] === item['id_info']);
-    
+
         // If an associated icon is found, add it to the heading
         if (associatedIcon) {
             item.icon = associatedIcon;
@@ -129,95 +130,49 @@ function webInfolog() {
             }
         }
     });
-    console.log('nonmodified', serviceArray)
-    console.log('modified', modifiedServiceArray)
 
-// Create the table
-modifiedServiceArray.forEach(item => {
-    const serviceRow = document.createElement('tr');
-    serviceRow.innerHTML = `
-        <td><img src="${item['icon']['link']}" style="height:60px; width:auto"></td>
-        <td>${item['text']}</td>
-        <td>${item['description']['text']}</td>
-        <td>${item['order']}</td>
-        <td>
-            <a href="?modify=Services-${item['id_info']}" class="actionbtn svg-btn" title="Modifier">
-                <img src="./src/edit_black.svg">
-            </a>
-            <a href="?delete=Services-${item['id_info']}" class="actionbtn svg-btn" title="Supprimer">
-                <img src="./src/delete_black.svg">
-            </a>
-        </td>
-    `;
-    serviceTbl.appendChild(serviceRow);
-});
+    tables.forEach(tableInfo => {
+        const table = document.getElementById(tableInfo.id);
+        let dataArray = webInfo[tableInfo.name]['array'];
+        if (tableInfo.name == "Services") { dataArray = modifiedServiceArray }
 
-    const hoursTbl = document.getElementById('hourstbl');
-    const hoursArray = webInfo['Hours']['array'];
+        // Populate tables with new data
 
-    hoursArray.forEach(item => {
-        const hoursRow = document.createElement('tr');
-        hoursRow.innerHTML += `
-        <td>${item['text']}</td>
-        <td>${item['order']}</td>
-        <td><a href="?modify=Hours-${item['id_info']}" class="actionbtn svg-btn" title="Modifier"><img src="./src/edit_black.svg"></a><a href="?delete=Hours-${item['id_info']}" class="actionbtn svg-btn" title="Supprimer"><img src="./src/delete_black.svg"></a></td>`;
-        hoursTbl.appendChild(hoursRow);
+        dataArray.forEach(item => {
+            const tableRow = document.createElement('tr');
+
+            if (tableInfo.name == "Services") {
+                const iconLink = item.icon ? item.icon.link : "../images_voiture/img.png";
+                tableRow.innerHTML += `<td><img src="${iconLink}" style="height:60px; width:auto"></td>`;
+            }
+
+            tableInfo.headers.forEach(header => {
+                // Handle nested properties like "description.text"
+                const nestedProperties = header.split('.');
+                if (nestedProperties.length > 1) {
+                    tableRow.innerHTML += `<td>${item[nestedProperties[0]][nestedProperties[1]]}</td>`;
+                } else {
+                    tableRow.innerHTML += `<td>${item[header.toLowerCase()]}</td>`;
+                }
+            });
+
+            tableRow.innerHTML += `
+                <td>
+                    <a href="?modify=${tableInfo.name}-${item.id_info}" class="actionbtn svg-btn" title="Modifier">
+                        <img src="./src/edit_black.svg">
+                    </a>
+                    <a href="?delete=${tableInfo.name}-${item.id_info}" class="actionbtn svg-btn" title="Supprimer">
+                        <img src="./src/delete_black.svg">
+                    </a>
+                </td>
+            `;
+
+            table.appendChild(tableRow);
+        });
     });
-
-    const contactTbl = document.getElementById('contacttbl');
-    const contactArray = webInfo['Contact']['array'];
-
-    contactArray.forEach(item => {
-        const contactRow = document.createElement('tr');
-        contactRow.innerHTML += `
-        <td>${item['text']}</td>
-        <td>${item['category']}</td>
-        <td>${item['order']}</td>
-        <td><a href="?modify=Contact-${item['id_info']}" class="actionbtn svg-btn" title="Modifier"><img src="./src/edit_black.svg"></a><a href="?delete=Contact-${item['id_info']}" class="actionbtn svg-btn" title="Supprimer"><img src="./src/delete_black.svg"></a></td>`;
-        contactTbl.appendChild(contactRow);
-    });
-
-    const addressTbl = document.getElementById('addresstbl');
-    const addressArray = webInfo['Address']['array'];
-
-    addressArray.forEach(item => {
-        const addressRow = document.createElement('tr');
-        addressRow.innerHTML += `
-        <td>${item['text']}</td>
-        <td>${item['category']}</td>
-        <td>${item['order']}</td>
-        <td><a href="?modify=Address-${item['id_info']}" class="actionbtn svg-btn" title="Modifier"><img src="./src/edit_black.svg"><a href="?delete=Address-${item['id_info']}" class="actionbtn svg-btn" title="Supprimer"><img src="./src/delete_black.svg"></a></td>`;
-        addressTbl.appendChild(addressRow);
-    });
-
-    const aboutTbl = document.getElementById('abouttbl');
-    const aboutArray = webInfo['About']['array'];
-
-    aboutArray.forEach(item => {
-        const aboutRow = document.createElement('tr');
-        aboutRow.innerHTML += `
-        <td>${item['text']}</td>
-        <td><a href="?modify=About-${item['id_info']}" class="actionbtn svg-btn" title="Modifier"><img src="./src/edit_black.svg"><a href="?delete=About-${item['id_info']}" class="actionbtn svg-btn" title="Supprimer"><img src="./src/delete_black.svg"></a></td>`;
-        aboutTbl.appendChild(aboutRow);
-    });
-
-    const reasonsTbl = document.getElementById('reasonstbl');
-    const reasonsArray = webInfo['Reasons']['array'];
-
-    reasonsArray.forEach(item => {
-        const reasonsRow = document.createElement('tr');
-        reasonsRow.innerHTML += `
-        <td>${item['text']}</td>
-        <td>${item['category']}</td>
-        <td>${item['order']}</td>
-        <td><a href="?modify=Reasons-${item['id_info']}" class="actionbtn svg-btn" title="Modifier"><img src="./src/edit_black.svg"><a href="?delete=Reasons-${item['id_info']}" class="actionbtn svg-btn" title="Supprimer"><img src="./src/delete_black.svg"></a></td>`;
-        reasonsTbl.appendChild(reasonsRow);
-    });
-
 
     attachActionBtnListeners(modifiedServiceArray)
 }
-
 
 // Call the function to initiate fetching web info
 fetchAndUpdatePageInfo();
@@ -228,31 +183,26 @@ function attachActionBtnListeners(modifiedServiceArray) {
     actionBtns.forEach((btn) => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
-            console.log('action')
             const itemId = e.currentTarget.getAttribute('href').split('-')[1];
             const tableId = e.currentTarget.getAttribute('href').split('=')[1].split('-')[0];
             const actionBtn = e.currentTarget.getAttribute('href').split('=')[0].replace('?', '');
-
-            console.log('item', itemId)
-            console.log('table', webInfo[tableId]['array'])
-            console.log('action', actionBtn)
-
 
             const itemArray = webInfo[tableId]['array'];
 
             const selectedItem = webInfo[tableId]['array'].find(item => item['id_info'] === itemId);
             const selectedServiceItem = modifiedServiceArray.find(item => item['id_info'] === itemId)
+
             if (selectedItem) {
                 if (actionBtn == 'modify') {
                     if (isPopupOpen == true) {
                         popup.innerHTML = ''; // Close the popup window
                         isPopupOpen = false
                     }
-                    if(tableId == "Services"){
+                    if (tableId == "Services") {
                         serviceInfoPopup(selectedServiceItem, tableId)
                     }
-                    else{webInfoPopup(selectedItem, tableId)}
-                    
+                    else { webInfoPopup(selectedItem, tableId) }
+
                 } else if (actionBtn == 'delete') {
                     if (isPopupOpen == true) {
                         popup.innerHTML = ''; // Close the popup window
@@ -260,40 +210,23 @@ function attachActionBtnListeners(modifiedServiceArray) {
                     }
                     let name = ""
                     let idKey = "id_info"
-                    console.log('selected item', selectedItem)
-                    if(tableId == "Services"){
+                    if (tableId == "Services") {
                         deletePopup(selectedServiceItem, tableId, name, idKey)
-                    } else{
-                    deletePopup(selectedItem, tableId, name, idKey) }//leave as it is so that i can trigger the php commun
+                    } else {
+                        deletePopup(selectedItem, tableId, name, idKey)
+                    }//leave as it is so that i can trigger the php commun
                 }
             } else if (actionBtn == 'add') {
                 if (isPopupOpen == true) {
                     popup.innerHTML = ''; // Close the popup window
                     isPopupOpen = false
                 }
-                console.log('key', webInfo[tableId]['key'])
-                if(tableId == "Services"){
+                if (tableId == "Services") {
                     serviceInfoPopup(selectedServiceItem, webInfo[tableId]['key'])
                 }
-                else{webInfoPopup(selectedItem, webInfo[tableId]['key'])}
-                
+                else { webInfoPopup(selectedItem, webInfo[tableId]['key']) }
+
             } else { (console.log('item2 not found')) }
         });
     });
-}
-
-//this does not work
-async function updatePageAfterAddOrDelete() {
-    const serviceTbl = document.getElementById('servicetbl');
-    const hoursTbl = document.getElementById('hourstbl');
-    const contactTbl = document.getElementById('contacttbl');
-    const addressTbl = document.getElementById('addresstbl');
-
-    // Clear the existing data in tables
-    serviceTbl.innerHTML = '';
-    hoursTbl.innerHTML = '';
-    // Clear other tables as well
-
-    // Fetch and display updated data
-    await fetchAndUpdatePageInfo();
 }
