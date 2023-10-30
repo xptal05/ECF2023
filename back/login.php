@@ -27,7 +27,7 @@ login()
             </div>
             <div class="form-field">
                 <label for="password">Password</label>
-                <input type="text" name="password" id="password" required>
+                <input type="password" name="password" id="password" required>
             </div>
             <input type="submit" class="btn front" value="se connecter">
         </form>

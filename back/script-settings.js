@@ -62,9 +62,9 @@ function dropdowntopage() {
     actionBtns.forEach((btn) => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
-            const itemId = e.target.getAttribute('href').split('-')[1];
-            const tableId = e.target.getAttribute('href').split('=')[1].split('-')[0];
-            const actionBtn = e.target.getAttribute('href').split('=')[0].replace('?', '');
+            const itemId = e.currentTarget.getAttribute('href').split('-')[1];
+            const tableId = e.currentTarget.getAttribute('href').split('=')[1].split('-')[0];
+            const actionBtn = e.currentTarget.getAttribute('href').split('=')[0].replace('?', '');
 
             const itemArray = dropdownMapping[tableId]['array'];
             const idKey = dropdownMapping[tableId]['idKey'];

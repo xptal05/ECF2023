@@ -55,10 +55,17 @@ include 'session.php';
         <div class="form-new-container">
             <form id="feedbackForm" class="form-new container">
                 <h2 class="span-12">Ajouter un témoignage</h2>
-                <div class="span-6"><label>Nom du client</label>
+                <div class="span-6 new-form-input"><label>Nom du client</label>
                     <input id="client_nameInput" type="text" value="" required>
                 </div>
-                <div class="span-6"><label>Note</label>
+                <div class="span-3 new-form-input"><label>Statut</label><select id="statusInput" required>
+                        <option value="1">Active</option>
+                        <option value="2">New</option>
+                        <option value="6">Archived</option>
+                        <option value="7">Rejected</option>
+                    </select>
+                </div>
+                <div class="span-2 new-form-input"><label>Note</label>
                     <input id="ratingInput" type="number" value="" required hidden>
                     <div class="rating">
                         <div class="star">☆</div>
@@ -68,16 +75,11 @@ include 'session.php';
                         <div class="star">☆</div>
                     </div>
                 </div>
-                <div class="span-6"><label>Commentaire</label>
-                    <textarea id="commentInput" rows="4" cols="50" required></textarea>
+                <div class="span-12 new-form-input">
+                    <label>Commentaire</label>
+                    <textarea id="commentInput" rows="4" cols="100" required></textarea>
                 </div>
-                <div class="span-6"><label>Statut</label><select id="statusInput" required>
-                        <option value="1">Active</option>
-                        <option value="2">New</option>
-                        <option value="6">Archived</option>
-                        <option value="7">Rejected</option>
-                    </select>
-                </div>
+
                 <div class="button-container span-2-end">
                     <button class="btn" type="reset" id="close-btn">Annuler</button>
                     <button class="btn" type="submit">Sauvegarder</button>

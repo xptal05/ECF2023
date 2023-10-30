@@ -63,6 +63,7 @@ include 'session.php';
                 <table>
                     <thead>
                         <th>TEXT</th>
+                        <th>CATEGORY</th>
                         <th>ORDER</th>
                     </thead>
                     <tbody id="contacttbl"></tbody>
@@ -76,6 +77,7 @@ include 'session.php';
                 <table>
                     <thead>
                         <th>TEXT</th>
+                        <th>CATEGORY</th>
                         <th>ORDER</th>
                     </thead>
                     <tbody id="addresstbl"></tbody>

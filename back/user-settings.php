@@ -43,31 +43,26 @@ include 'session.php';
             <button class="btn" id="new-item">Ajouter un utilisateur</button>
             <form id="userForm" class="form-new container">
                 <h2 class="span-12">Ajouter un utilisateur</h2>
-                <div class="span-6"><label>Nom</label>
+                <div class="span-6 new-form-input">
+                    <label>Nom</label>
                     <input id="NomInput" type="text" value="" required>
                 </div>
-                <div class="span-6"><label>Prénom</label>
+                <div class="span-6 new-form-input"><label>Prénom</label>
                     <input id="PrénomInput" type="text" value="" required>
                 </div>
-                <div class="span-6"><label>Email</label>
+                <div class="span-6 new-form-input"><label>Email</label>
                     <input id="EmailInput" type="email" value="" required>
                 </div>
-                <div class="span-6"><label>Password</label>
+                <div class="span-6 new-form-input"><label>Password</label>
                     <input id="PasswordInput" type="password" value="" required>
                 </div>
-                <div class="span-6"><label>Droits</label><select id="DroitsInput" required>
+                <div class="span-6 new-form-input"><label>Droits</label><select id="DroitsInput" required>
                         <option value="1">Admin</option>
                         <option value="2">Employee</option>
                     </select></div>
-                <div class="span-6"><label>Statut</label><select id="StatutInput" required>
+                <div class="span-6 new-form-input"><label>Statut</label><select id="StatutInput" required>
                         <option value="1">Active</option>
-                        <option value="2">New</option>
-                        <option value="3">Pending</option>
-                        <option value="4">Reserved</option>
-                        <option value="5">Sold</option>
                         <option value="6">Archived</option>
-                        <option value="7">Rejected</option>
-                        <option value="8">Done</option>
                     </select>
                 </div>
                 <div class="button-container span-2-end">

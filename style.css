@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Roboto:ital,wght@0,400;0,700;1,400&display=swap');
 
-
-
 :root {
     --primary-color: #E6AB13;
     --secondary-color: black;
@@ -367,8 +365,6 @@ footer {
 }
 
 @media (max-width: 400px) {
-
-
     .service-container {
         flex-direction: column;
     }

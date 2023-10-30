@@ -39,15 +39,18 @@ function deletePopup(selectedItem, tableId, name, idKey) {
     popupDiv.id = "popupDiv"
 
     popupDiv.innerHTML += `
-    <button class="close-sign" id="close">X</button>
+
         <div class="popup-header">
             <h2>Suppression d'élément des ${tableId}</h2>
-        <div>
-        <div>Êtes-vous sûr de vouloir supprimer l'élément <b>${selectedItem[name]}</b> ?</div>
-        <form id="archivForm">
-        <button class="btn" type="submit">OUI</button>
-        <button class="btn" type="reset">NON</button>
-        <form>`;
+            <button class="close-sign" id="close">X</button>
+        </div>
+        <div class="popup-body-normal">
+            <div>Êtes-vous sûr de vouloir supprimer l'élément <b>${selectedItem[name]}</b> ?</div>
+            <form id="archivForm" class="popup-btns">
+                <button class="btn error-btn" type="reset">NON</button>
+                <button class="btn success-btn" type="submit">OUI</button>
+            <form>
+        </div>`;
 
     popup.appendChild(popupDiv);
     popupDiv.classList.add('popup-window');
@@ -94,16 +97,20 @@ function dropdownPopup(selectedItem, tableId, name, idKey) {
     var popupDiv = document.createElement('div');
     popupDiv.id = "popupDiv"
     popupDiv.innerHTML += `
-        <button class="close-sign" id="close">X</button>
+
         <div class="popup-header">
             <h2>${title} l'élément</h2>
+            <button class="close-sign" id="close">X</button>
         </div>`;
 
     const popupform = document.createElement('form')
     popupform.id = "modifyForm"
+    popupform.classList.add('popup-body-normal')
     popupform.innerHTML = `
-    <label>Item name</label>
-    <input id="itemNameInput" value="${itemName}" required>`
+    <div class="popup-input-container">
+        <label>Item name</label>
+        <input id="itemNameInput" value="${itemName}" required>
+    </div>`
 
     if (tableId == "Modèle") {
         const brandArray = dropdownMapping['Marque'].array
@@ -121,9 +128,11 @@ function dropdownPopup(selectedItem, tableId, name, idKey) {
 
     if (itemDescription != undefined) {
         popupform.innerHTML += `    
-        <label>Description</label>
-        <input id="itemDescriptionInput" type="text" value="${itemDescription}">
-        <p>to assign the status to vehicles, messages, feedbacks, users</p>`
+        <div class="popup-input-container">
+            <label>Description</label>
+            <input id="itemDescriptionInput" type="text" value="${itemDescription}">
+            <p>to assign the status to vehicles, messages, feedbacks, users</p>
+        </div>`
     }
 
     if (tableId == "Couleur") {
@@ -132,9 +141,11 @@ function dropdownPopup(selectedItem, tableId, name, idKey) {
     }
 
     popupform.innerHTML += `
-        <button class="btn" id="delete-btn">Supprimer utilisateur</button>
-        <button class="btn" type="submit">Sauvegarder</button>
-        <button class="btn" type=reset id="close-btn">Annuler</button> 
+    <div class="popup-btns">
+        <button class="btn" id="delete-btn">Supprimer</button>
+        <button class="btn error-btn" type=reset id="close-btn">Annuler</button> 
+        <button class="btn success-btn" type="submit">Sauvegarder</button>
+    </div>
         `;
     popup.innerHTML = ''; // Clear any existing content in the popup
     popupDiv.appendChild(popupform)
@@ -201,17 +212,24 @@ function webInfoPopup(selectedItem, serviceType) {
     var popupDiv = document.createElement('div');
     popupDiv.id = "popupDiv";
     popupDiv.innerHTML += `
-        <button class="close-sign" id="close">X</button>
+
         <div class="popup-header">
             <h2>Element Information</h2>
+            <button class="close-sign" id="close">X</button>
         </div>
-        <form id="popupform">
-            <label for="text">Text</label>
-            <input name="text" type="text" value="${text}" required>
-            <label for="order">Order</label>
-            <input name="order" type="number" value="${order}" required>
-            <input type="submit" class="btn" value="Submit">
-            <input type="reset" class="btn" value="Reset">
+        <form id="popupform" class="popup-body-normal">
+            <div class="popup-input-container">
+                <label for="text">Text</label>
+                <input name="text" type="text" value="${text}" required>
+            </div>
+            <div class="popup-input-container">
+                <label for="order">Order</label>
+                <input name="order" type="number" value="${order}" required>
+            </div>
+            <div class="popup-btns">
+                <input type="reset" class="btn error-btn" value="Reset">
+                <input type="submit" class="btn success-btn" value="Submit">
+            </div>
         </form>`;
     popup.appendChild(popupDiv);
     popupDiv.classList.add('popup-window');
@@ -264,21 +282,40 @@ function serviceInfoPopup(selectedItem, serviceType) {
     var popupDiv = document.createElement('div');
     popupDiv.id = "popupDiv";
     popupDiv.innerHTML += `
-        <button class="close-sign" id="close">X</button>
+
         <div class="popup-header">
             <h2>Element Information</h2>
+            <button class="close-sign" id="close">X</button>
         </div>
-        <form id="popupform">
-        <label for="icon">Icon</label>
-        <div id="serviceIconContainer"><img src="${iconLink}"><input type="text" value="${iconId}" hidden><a href="?modify=img" class="actionbtn">MODIFY ICON</a></div>
-            <label for="text">Heading</label>
-            <input name="text" type="text" value="${text}" required>
-            <label for="description">Description</label>
-            <textarea name="description">${description}</textarea>
-            <label for="order">Order</label>
-            <input name="order" type="number" value="${order}" required>
-            <input type="submit" class="btn" value="Submit">
-            <input type="reset" class="btn" value="Reset">
+        <form id="popupform" class="popup-body">
+            <div class="column1">
+                <div class="popup-input-container service">
+                    <label for="icon">Icon</label>
+                    <div id="serviceIconContainer">
+                        <img src="${iconLink}">
+                        <input type="text" value="${iconId}" hidden>
+                        <a href="?modify=img" class="actionbtn">MODIFY ICON</a>
+                    </div>
+                </div>
+                <div class="popup-input-container service">
+                    <label for="order">Order</label>
+                    <input name="order" type="number" value="${order}" required>
+                </div>
+            </div>
+            <div class="column2">
+                <div class="popup-input-container service">
+                    <label for="text">Heading</label>
+                    <input name="text" type="text" value="${text}" required>
+                </div>
+                <div class="popup-input-container service">
+                    <label for="description">Description</label>
+                    <textarea name="description" rows="6">${description}</textarea>
+                </div>
+                <div class="popup-btns">
+                    <input type="reset" class="btn error-btn" value="Reset">
+                    <input type="submit" class="btn success-btn" value="Submit">
+                </div>
+            </div>
         </form>`;
     popup.appendChild(popupDiv);
     popupDiv.classList.add('popup-window');
@@ -360,11 +397,13 @@ function archiveMessageFeedbackPopup(selectedItem, idKey, status) {
                 <h2>Changement d'élément des ${formData.table}</h2>
                 <button class="close-sign" id="close">X</button>
             </div>
-            <div class="popu-body">Êtes-vous sûr de vouloir ${action} l'élément de <b>${selectedItem[formData.subject]}</b> ?</div>
-            <form id="archivForm">
-            <button class="btn" type="submit">OUI</button>
-            <button class="btn" type="reset">NON</button>
-            <form>`;
+            <div class="popup-body-normal">
+                <div>Êtes-vous sûr de vouloir ${action} l'élément de <b>${selectedItem[formData.subject]}</b> ?</div>
+            </div>
+                <form id="archivForm" class="popup-btns">
+                    <button class="btn error-btn" type="reset">NON</button>
+                    <button class="btn success-btn" type="submit">OUI</button>
+                <form>`;
 
     popup.appendChild(popupDiv);
     popupDiv.classList.add('popup-window');
@@ -389,11 +428,13 @@ function imgAddPopup(gallerytype) {
     const imgType = gallerytype.includes('mainCarImage') ? 'Main' : 'Gallery';
     popupDiv.id = "popupDiv"
     popupDiv.innerHTML += `
-    <button class="close-sign" id="close">X</button>
+    <div class="popup-header">
     <h2 > Upload an Image </h2> 
-    <form method="post" enctype="multipart/form-data" id="img-form">
-        <input type="file" name="image" id="image">
-        <input type="submit" name="submit" id="selectImg" value="Upload" data-value=${imgType}>
+    <button class="close-sign" id="close">X</button>
+</div>
+    <form method="post" enctype="multipart/form-data" id="img-form" class="popup-body-normal">
+        <input type="file" name="image" id="image" fieldtext="Select a File">
+        <input type="submit" name="submit" id="selectImg" value="Upload" data-value=${imgType} class="btn">
     </form>
         `;
     popup.appendChild(popupDiv);
@@ -470,18 +511,17 @@ function imgGalleryPopup(gallerytype) {
             <button class="close-sign" id="close">X</button>
         </div>
         <div class="popup-body">
-            <div class="main-gallery main-gallery-body" id="mainGallery">
-            </div>
-            <div class="image-info-sidebar">
-            </div>
-        </div>
-        <div>
+            <div class="main-gallery">
+                <div class="main-gallery-body" id="mainGallery">
+                </div>
                 <form id="mainImgSelect">
                     <input id="imageSelectedInput" type="text" hidden value="">
-                    <input type="submit" class="btn" value="submit" id="selectImg">
-                    <input type="reset" class="btn" value="reset">
+                    <input type="reset" class="btn error-btn" value="reset">
+                    <input type="submit" class="btn success-btn" value="submit" id="selectImg">
                 </form>
-
+            </div>
+            <div class="gallery-divider"></div>
+            <div class="image-info-sidebar"></div>
         </div>
         `;
         popup.appendChild(popupDiv);
@@ -519,13 +559,18 @@ function imgGalleryPopup(gallerytype) {
                         imageIdInput.innerHTML = `
                             <h3>Image info</h3>
                             <img src="${selectedImage.link}" class="gallery-image-selected">
+                            <div>
                             <label>Name</label>
                             <input type="text" readonly value="${selectedImage.name}">
+                            </div>
+                            <div>
                             <label>Link</label>
-                            <a href="..${selectedImage.link}" target="_blank" rel="noreferrer">LINK</a>
+                            <a href="${selectedImage.link}" target="_blank" rel="noreferrer">Show image in a new tab</a>
+                            </div>
+                            <div>
                             <a href="?id=${selectedImage.id_img}" id="supprimer-img">Supprimer Image</a>
                             <input id="imageID" type="text" hidden value="${selectedImage.id_img}">
-                    `
+                            </div>`
                         // Set the value of the input field to the checkedImgId
                         imageSelectedInput.value = checkedImgId;
                         const deleteImgBtn = document.getElementById('supprimer-img')
@@ -539,10 +584,13 @@ function imgGalleryPopup(gallerytype) {
 
                             // Prompt the user for confirmation in French
                             subPopup.innerHTML = `
+
                             <h3>Confirmer la suppression</h3>
                             <p>Êtes-vous sûr de vouloir supprimer cette image ?</p>
-                            <button class="btn" id="confirm-delete">Oui</button>
-                            <button class="btn" id="cancel-delete">Non</button>
+                            <div class="popup-btns">
+                                <button class="btn error-btn" id="cancel-delete">Non</button>
+                                <button class="btn success-btn" id="confirm-delete">Oui</button>
+                            </div>
                         `;
 
                             const confirmDeleteBtn = document.getElementById('confirm-delete');
@@ -627,19 +675,16 @@ function imgGalleryPopup(gallerytype) {
                     <a href="" id="this-car">This car images</a>
                     <a href="" id="all">All images</a>
                 </div>
-                <div class="main-gallery-body" id="mainGallery" data-value=${imgType}>
-                </div>
-            </div>
-            <div class="image-info-sidebar">
-            </div>
-        </div>
-        <div>
+                <div class="main-gallery-body" id="mainGallery" data-value=${imgType}></div>
                 <form id="mainImgSelect">
                     <input id="imageSelectedInput" type="number" hidden value="">
-                    <input type="submit" class="btn" value="submit" id="selectImg" data-value=${imgType}>
-                    <input type="reset" class="btn" value="reset">
+                    <input type="reset" class="btn error-btn" value="reset">
+                    <input type="submit" class="btn success-btn" value="submit" id="selectImg" data-value=${imgType}>
                 </form>
-
+            </div>
+            <div class="gallery-divider"></div>
+            <div class="image-info-sidebar">
+            </div>
         </div>
         `;
         popup.appendChild(popupDiv);
@@ -670,8 +715,10 @@ function imgSubPopup() {
                 subPopup.innerHTML = `
                 <form id="reattribute-img">
                 <div>Êtes-vous sûr de vouloir attribuer cette image à ce véhicule ? Elle est attribuée à un véhicule différent.</div>
-                <input type="submit" value="Oui">
-                <input type="reset" value="Non">
+                <div class="popup-btns">
+                <input class="btn error-btn"  type="reset" value="Non">
+                <input class="btn success-btn" type="submit" value="Oui">
+                </div>
                 </form>`
 
                 const form = document.getElementById('reattribute-img')
@@ -705,13 +752,18 @@ function imgModifyPopup(gallerytype) {
     var popupDiv = document.createElement('div');
     popupDiv.id = "popupDiv"
     popupDiv.innerHTML += `
-        <button class="close-sign" id="close">X</button>
+
         <div class="popup-header">
-                <h2> l'élément</h2>
+                <h2>Modifier l'image</h2>
+                <button class="close-sign" id="close">X</button>
         </div>
-        <div>Do you wish to upload a new image or choose one from the gallery?</div>
-        <a href="?choose=img" class="actionbtn btn">CHOOSE FROM GALLERY</a>
-        <a href="?add=img" class="actionbtn btn">UPLOAD NEW</a>`;
+        <div class="popup-body-normal">
+            <div>Do you wish to upload a new image or choose one from the gallery?
+        </div>
+        <div class="popup-btns">
+            <a href="?choose=img" class="actionbtn btn">CHOOSE FROM GALLERY</a>
+            <a href="?add=img" class="actionbtn btn">UPLOAD NEW</a>
+        </div>`;
     popup.appendChild(popupDiv);
     popupDiv.classList.add('popup-window');
 
@@ -800,12 +852,18 @@ function populateGallery(imageData) {
 
                     imageIdInput.innerHTML = `
                 <h3>Image info</h3>
-                <img src="${selectedImage.link}" class="gallery-image">
+                <img src="${selectedImage.link}" class="gallery-image-selected">
+                <div>
                 <label>Name</label>
                 <input type="text" readonly value="${selectedImage.name}">
+                </div>
+                <div>
                 <label>Link</label>
-                <a href="..${selectedImage.link}" target="_blank" rel="noreferrer">LINK</a>
+                <a href="${selectedImage.link}" target="_blank" rel="noreferrer">Show image in a new tab</a>
+                </div>
+                <div>
                 <a href="?id=${selectedImage.id_img}" id="supprimer-img">Supprimer Image</a>
+                </div>
                 `
                     // Set the value of the input field to the checkedImgId
                     const imageSelectedInput = document.getElementById('imageSelectedInput')
@@ -825,8 +883,10 @@ function populateGallery(imageData) {
                         subPopup.innerHTML = `
                         <h3>Confirmer la suppression</h3>
                         <p>Êtes-vous sûr de vouloir supprimer cette image ?</p>
-                        <button class="btn" id="confirm-delete">Oui</button>
-                        <button class="btn" id="cancel-delete">Non</button>
+                        <div class="popup-btns">
+                            <button class="btn error-btn" id="cancel-delete">Non</button>
+                            <button class="btn success-btn" id="confirm-delete">Oui</button>
+                        </div>
                     `;
 
                         const confirmDeleteBtn = document.getElementById('confirm-delete');
@@ -920,59 +980,59 @@ async function modifyUserPopup(selectedItem) {
         var popupDiv = document.createElement('div');
         popupDiv.id = "popupDiv"
         popupDiv.innerHTML += `
-    <button class="close-sign" id="close">X</button>
         <div class="popup-header">
             <h2>Modifier un utilisateur</h2>
+            <button class="close-sign" id="close">X</button>
         <div>`;
 
         const popupform = document.createElement('form')
         popupform.id = "userForm"
-
-
+        popupform.classList.add('popup-body-normal')
 
         for (const header of formHeaders) {
             console.log('header value', customMappings[currentURL].headers[header])
             const headerValue = customMappings[currentURL].headers[header];
             const divElement = document.createElement("div")
-            divElement.innerHTML += `<label>${header}</label>`
+            divElement.classList.add('popup-input-container')
 
-            if (dropdownMapping.hasOwnProperty(header)) {
-                const selectElement = document.createElement("select");
-                selectElement.id = `${header}Input`
-                const { array, idKey, name } = dropdownMapping[header];
-                console.log('dropdown', dropdownMapping[header])
+            if (header === "Password") {
+                divElement.innerHTML += `
+            <div class="btn" id="Passwordbtn" class="">Change Password</div>
+            <div id="PasswordDiv" class="hidden">
+                <input id="PasswordInput" value="" type="password">
+                <span id="revealPassword">Show Password</span>
+            </div>
+            `
+            } else {
+                divElement.innerHTML += `<label>${header}</label>`
 
-                for (const dropdownObj of array) {
-                    const optionElement = document.createElement("option");
-                    optionElement.value = Number(dropdownObj[idKey]);
-                    optionElement.text = dropdownObj[name];
-                    selectElement.appendChild(optionElement);
-                }
-                divElement.appendChild(selectElement);
+                if (dropdownMapping.hasOwnProperty(header)) {
+                    const selectElement = document.createElement("select");
+                    selectElement.id = `${header}Input`
+                    const { array, idKey, name } = dropdownMapping[header];
+                    console.log('dropdown', dropdownMapping[header])
 
-
-
-            } else
-                if (header === "Password") {
-                    divElement.innerHTML += `
-                <div class="btn" id="Passwordbtn">Change Password</div>
-                <div id="PasswordDiv" class="hidden">
-                    <input id="PasswordInput" value="" type="password">
-                    <span id="revealPassword">Show Password</span>
-                </div>
-                `
-                } else {
+                    for (const dropdownObj of array) {
+                        const optionElement = document.createElement("option");
+                        optionElement.value = Number(dropdownObj[idKey]);
+                        optionElement.text = dropdownObj[name];
+                        selectElement.appendChild(optionElement);
+                    }
+                    divElement.appendChild(selectElement);
+                } else
                     divElement.innerHTML += `
                     <input id="${header}Input" type="text" value="${selectedItem[headerValue]}" required>`
-                }
+            }
 
             popupform.appendChild(divElement)
         }
 
         popupform.innerHTML += `
-    <button class="btn" id="delete-btn">Supprimer utilisateur</button>
-    <button class="btn" type="submit">Sauvegarder</button>
-    <button class="btn" type=reset id="close-btn">Annuler</button> 
+        <div class="popup-btns">
+            <button class="btn" id="delete-btn">Supprimer</button>
+            <button class="btn error-btn" type=reset id="close-btn">Annuler</button> 
+            <button class="btn success-btn" type="submit">Sauvegarder</button>
+        </div>
     `;
 
         popup.innerHTML = ''; // Clear any existing content in the popup
@@ -996,6 +1056,7 @@ async function modifyUserPopup(selectedItem) {
 
         const revealPassword = document.getElementById('revealPassword')
         passwordButton.addEventListener('click', (e) => {
+            passwordButton.classList.toggle('hidden')
             passwordDiv.classList.toggle('hidden')
             passwordInput.required = true
         })
@@ -1034,15 +1095,18 @@ function confirmationPopup(selectedItem) {
     popupDiv.id = "popupDiv"
 
     popupDiv.innerHTML += `
-    <button class="close-sign" id="close">X</button>
+
         <div class="popup-header">
             <h2>Archiver l'utilisateur</h2>
-        <div>
-        <h3>Êtes-vous sûr de vouloir archiver cet utilisateur ?</h3>
-        <form id="archivForm">
-        <button class="btn" type="submit">OUI</button>
-        <button class="btn" type="reset">NON</button>
-        <form>`;
+            <button class="close-sign" id="close">X</button>
+        </div>
+        <div class="popup-body-normal">
+            <h3>Êtes-vous sûr de vouloir archiver cet utilisateur ?</h3>
+        <form id="archivForm" class="popup-btns">
+            <button class="btn error-btn" type="reset">NON</button>
+            <button class="btn success-btn" type="submit">OUI</button>
+        <form>
+        </div>`;
 
     popup.appendChild(popupDiv);
     popupDiv.classList.add('popup-window');

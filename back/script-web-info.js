@@ -145,6 +145,7 @@ modifiedServiceArray.forEach(item => {
         const contactRow = document.createElement('tr');
         contactRow.innerHTML += `
         <td>${item['text']}</td>
+        <td>${item['category']}</td>
         <td>${item['order']}</td>
         <td><a href="?modify=Contact-${item['id_info']}" class="actionbtn svg-btn" title="Modifier"><img src="./src/edit_black.svg"></a><a href="?delete=Contact-${item['id_info']}" class="actionbtn svg-btn" title="Supprimer"><img src="./src/delete_black.svg"></a></td>`;
         contactTbl.appendChild(contactRow);
@@ -157,6 +158,7 @@ modifiedServiceArray.forEach(item => {
         const addressRow = document.createElement('tr');
         addressRow.innerHTML += `
         <td>${item['text']}</td>
+        <td>${item['category']}</td>
         <td>${item['order']}</td>
         <td><a href="?modify=Address-${item['id_info']}" class="actionbtn svg-btn" title="Modifier"><img src="./src/edit_black.svg"><a href="?delete=Address-${item['id_info']}" class="actionbtn svg-btn" title="Supprimer"><img src="./src/delete_black.svg"></a></td>`;
         addressTbl.appendChild(addressRow);
