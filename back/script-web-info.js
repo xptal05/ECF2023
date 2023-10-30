@@ -3,7 +3,9 @@ const webInfo = {
     'Services': { array: [], key: 1 },
     'Address': { array: [], key: 2 },
     'Contact': { array: [], key: 3 },
-    'Hours': { array: [], key: 4 }
+    'Hours': { array: [], key: 4 },
+    'About': { array: [], key: 5 },
+    'Reasons': { array: [], key: 7 }
 };
 
 
@@ -68,6 +70,8 @@ function webInfolog() {
     const serviceArray = webInfo['Services']['array'];
     const modifiedServiceArray = [];
 
+
+    
 
     // Combine 'text' into 'heading' with the same 'order'
     //add the icon for each heading, the icon['associated_to_info']= item['id_info']
@@ -185,6 +189,31 @@ modifiedServiceArray.forEach(item => {
         <td><a href="?modify=Address-${item['id_info']}" class="actionbtn svg-btn" title="Modifier"><img src="./src/edit_black.svg"><a href="?delete=Address-${item['id_info']}" class="actionbtn svg-btn" title="Supprimer"><img src="./src/delete_black.svg"></a></td>`;
         addressTbl.appendChild(addressRow);
     });
+
+    const aboutTbl = document.getElementById('abouttbl');
+    const aboutArray = webInfo['About']['array'];
+
+    aboutArray.forEach(item => {
+        const aboutRow = document.createElement('tr');
+        aboutRow.innerHTML += `
+        <td>${item['text']}</td>
+        <td><a href="?modify=About-${item['id_info']}" class="actionbtn svg-btn" title="Modifier"><img src="./src/edit_black.svg"><a href="?delete=About-${item['id_info']}" class="actionbtn svg-btn" title="Supprimer"><img src="./src/delete_black.svg"></a></td>`;
+        aboutTbl.appendChild(aboutRow);
+    });
+
+    const reasonsTbl = document.getElementById('reasonstbl');
+    const reasonsArray = webInfo['Reasons']['array'];
+
+    reasonsArray.forEach(item => {
+        const reasonsRow = document.createElement('tr');
+        reasonsRow.innerHTML += `
+        <td>${item['text']}</td>
+        <td>${item['category']}</td>
+        <td>${item['order']}</td>
+        <td><a href="?modify=Reasons-${item['id_info']}" class="actionbtn svg-btn" title="Modifier"><img src="./src/edit_black.svg"><a href="?delete=Reasons-${item['id_info']}" class="actionbtn svg-btn" title="Supprimer"><img src="./src/delete_black.svg"></a></td>`;
+        reasonsTbl.appendChild(reasonsRow);
+    });
+
 
     attachActionBtnListeners(modifiedServiceArray)
 }

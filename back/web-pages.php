@@ -1,5 +1,15 @@
 <?php
 include 'session.php';
+
+// Table array
+$tables = [
+    ['name' => 'Services', 'columns' => ['IMG', 'HEADING', 'TEXT', 'ORDER'], 'id' => 'servicetbl', 'span' => 'span-12'],
+    ['name' => 'Hours', 'columns' => ['TEXT', 'ORDER'], 'id' => 'hourstbl', 'span' => 'span-6 row-2'],
+    ['name' => 'Contact', 'columns' => ['TEXT', 'CATEGORY', 'ORDER'], 'id' => 'contacttbl', 'span' => 'span-6'],
+    ['name' => 'Address', 'columns' => ['TEXT', 'CATEGORY', 'ORDER'], 'id' => 'addresstbl', 'span' => 'span-6'],
+    ['name' => 'About us', 'columns' => ['TEXT'], 'id' => 'abouttbl', 'span' => 'span-4'],
+    ['name' => 'Reasons', 'columns' => ['TEXT', 'CATEGORY', 'ORDER'], 'id' => 'reasonstbl', 'span' => 'span-8'],
+];
 ?>
 
 <!DOCTYPE html>
@@ -12,7 +22,11 @@ include 'session.php';
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="style/style-svg-btn.css">
-
+<style>
+    table th:last-child{
+        min-width: 125px;
+    }
+</style>
 </head>
 
 <body class="application-window">
@@ -26,89 +40,23 @@ include 'session.php';
     <section class="application">
         <h1>Gestion du site</h1>
         <div class="application-body">
-            <div class="tbl span-12">
-                <div class="table-header">
-                    <h2>Les Services</h2>
-                    <a class="actionbtn svg-btn add" href="?add=Services" title="Ajouter">+</a>
+        <?php foreach ($tables as $table): ?>
+                <div class="tbl <?php echo $table['span'] ?>">
+                    <div class="table-header">
+                        <h2><?php echo $table['name']; ?></h2>
+                        <a class="actionbtn svg-btn add" href="?add=<?php echo $table['name']; ?>" title="Ajouter">+</a>
+                    </div>
+                    <table>
+                        <thead>
+                            <?php foreach ($table['columns'] as $column): ?>
+                                <th><?php echo $column; ?></th>
+                            <?php endforeach; ?>
+                            <th></th>
+                        </thead>
+                        <tbody id="<?php echo $table['id']; ?>"></tbody>
+                    </table>
                 </div>
-                <table>
-                    <thead>
-                        <th>IMG</th>
-                        <th>HEADING</th>
-                        <th>TEXT</th>
-                        <th>ORDER</th>
-                    </thead>
-                    <tbody id="servicetbl"></tbody>
-                </table>
-
-            </div>
-            <div class="tbl span-6 row-2">
-                <div class="table-header">
-                    <h2>Les Horaires</h2>
-                    <a class="actionbtn svg-btn add" href="?add=Hours" title="Ajouter">+</a>
-                </div>
-                <table>
-                    <thead>
-                        <th>TEXT</th>
-                        <th>ORDER</th>
-                    </thead>
-                    <tbody id="hourstbl"></tbody>
-                </table>
-            </div>
-            <div class="tbl span-6">
-                <div class="table-header">
-                    <h2>Le Contact</h2>
-                    <a class="actionbtn svg-btn add" href="?add=Contact" title="Ajouter">+</a>
-                </div>
-                <table>
-                    <thead>
-                        <th>TEXT</th>
-                        <th>CATEGORY</th>
-                        <th>ORDER</th>
-                    </thead>
-                    <tbody id="contacttbl"></tbody>
-                </table>
-            </div>
-            <div class="tbl span-6">
-                <div class="table-header">
-                    <h2>L 'Addresse</h2>
-                    <a class="actionbtn svg-btn add" href="?add=Address" title="Ajouter">+</a>
-                </div>
-                <table>
-                    <thead>
-                        <th>TEXT</th>
-                        <th>CATEGORY</th>
-                        <th>ORDER</th>
-                    </thead>
-                    <tbody id="addresstbl"></tbody>
-                </table>
-            </div>
-            <div class="tbl span-6">
-                <div class="table-header">
-                    <h2>About us</h2>
-                    <a class="actionbtn svg-btn add" href="?add=About" title="Ajouter">+</a>
-                </div>
-                <table>
-                    <thead>
-                        <th>TEXT</th>
-                    </thead>
-                    <tbody id="abouttbl"></tbody>
-                </table>
-            </div>
-            <div class="tbl span-6">
-                <div class="table-header">
-                    <h2>Raisons</h2>
-                    <a class="actionbtn svg-btn add" href="?add=Reasons" title="Ajouter">+</a>
-                </div>
-                <table>
-                    <thead>
-                        <th>TEXT</th>
-                        <th>CATEGORY</th>
-                        <th>ORDER</th>
-                    </thead>
-                    <tbody id="reasonstbl"></tbody>
-                </table>
-            </div>
+            <?php endforeach; ?>
         </div>
     </section>
     <script src="./scripts/script-popups.js"></script>
