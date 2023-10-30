@@ -83,6 +83,21 @@ function arraydelete(tableDb, idKey, id) {
     return sendAjaxRequest(phpScriptURL, 'POST', postData);
 }
 
+function deteleService(selectedItem){
+    const phpScriptURL = './func-one.php?action=deleteService';
+    const postData = {
+        action: 'deleteService',
+        table: 'web_page_info',
+        idKey: 'id_info',
+        items: selectedItem
+    }
+    console.log(postData)
+
+    // Send an AJAX request to update the database
+    return sendAjaxRequest(phpScriptURL, 'POST', postData);
+}
+
+
 function vehicleInfoPush(formData) {
     const phpScriptURL = 'func-one.php?action=updateVehicle';
     formData.action = 'updateVehicle'
@@ -99,12 +114,20 @@ function pushWebPageInfo(formData) {
     return sendAjaxRequest(phpScriptURL, 'POST', formData)
 }
 
+function pushServiceInfo(formData) {
+    const phpScriptURL = './func-one.php?action=modifyServices';
+    formData.action = 'modifyServices'
+
+    return sendAjaxRequest(phpScriptURL, 'POST', formData)
+}
+
 function pushMessageFeedback(formData) {
     const phpScriptURL = './func-one.php?action=modifyMessageFeedback';
     formData.action = 'modifyMessageFeedback'
 
     return sendAjaxRequest(phpScriptURL, 'POST', formData)
 }
+
 
 //ACTIONS SPECIFIQUE
 

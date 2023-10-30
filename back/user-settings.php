@@ -34,10 +34,10 @@ include 'session.php';
             </table>
         </div>
         <div class="table-pagination">
-            <button id="prevPage">Previous</button>
+            <button class="svg-btn" id="prevPage">Previous</button>
             <span id="currentPage">Page 1</span>
             <span id="totalPages">of 1</span>
-            <button id="nextPage">Next</button>
+            <button class="svg-btn" id="nextPage">Next</button>
         </div>
         <div class="form-new-container">
             <button class="btn" id="new-item">Ajouter un utilisateur</button>
@@ -53,8 +53,9 @@ include 'session.php';
                 <div class="span-6 new-form-input"><label>Email</label>
                     <input id="EmailInput" type="email" value="" required>
                 </div>
-                <div class="span-6 new-form-input"><label>Password</label>
+                <div class="span-6 new-form-input password-input"><label>Password</label>
                     <input id="PasswordInput" type="password" value="" required>
+                    <img src="./src/eye.svg">
                 </div>
                 <div class="span-6 new-form-input"><label>Droits</label><select id="DroitsInput" required>
                         <option value="1">Admin</option>
@@ -90,6 +91,19 @@ include 'session.php';
     <script src="./components/script-new-item.js"></script>
     <script src="./event/script-users.js"></script>
     <script src="./components/menu.js"></script>
+    <script>
+                    //Event Listener Password btn
+                    const revealPassword = document.querySelector('.password-input img');
+            const passwordInput = document.querySelector('.password-input input')
+
+            revealPassword.addEventListener('click', () => {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text'; // Change input type to text to reveal the password
+                } else {
+                    passwordInput.type = 'password'; // Change input type back to password
+                }
+            })
+            </script>
 
 </body>
 

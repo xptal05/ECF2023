@@ -90,6 +90,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
             case 'delete':
                 deleteData();
                 break;
+            case 'deleteService':
+                deleteService();
+                break;
             case 'modifyMessageFeedback':
                 updateMessageFeedbacks();
                 break;
@@ -114,6 +117,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
             case 'deleteImg':
                 deleteImg();
                 break;
+            case 'modifyServices':
+                updateServices();
+                break;
+
+
             default:
                 echoData();
                 break;
@@ -163,6 +171,56 @@ function deleteData()
         echo json_encode($response);
     }
 }
+
+function deleteService()
+{
+    $data = json_decode(file_get_contents('php://input'), true);
+    $table = $data['table'];
+    $idKey = $data['idKey'];
+
+    $id = $data['items']['id_info']; //heading ID
+    $id2 = $data['items']['description']['id_info']; //text ID
+    $img_id = $data['items']['icon']['id_img']; //img id
+
+    try {
+        global $pdo;
+
+        //dis-asociate images with the service
+        $sql = "UPDATE images SET associated_to_info = null, type = 4 WHERE associated_to_info = :serviceiId AND type = 3";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindParam(':serviceiId', $id);
+
+        if ($stmt->execute()) {
+            $response = ['message' => 'Succès : Element from ' . $table . ' deleted successfully'];
+
+            $sql = "DELETE FROM $table WHERE $idKey = :id2;";   //DELETE TEXT
+            $statement = $pdo->prepare($sql);
+            $statement->bindParam(':id2', $id2);
+
+            if ($statement->execute()) {
+                $response = ['message' => 'Succès : Element from ' . $table . ' deleted successfully'];
+
+                $sql = "DELETE FROM $table WHERE $idKey = :id;";  //DELETE HEADING
+                $statement = $pdo->prepare($sql);
+                $statement->bindParam(':id', $id);
+                if ($statement->execute()) {
+                    $response = ['message' => 'Succès : Element from ' . $table . ' deleted successfully'];
+                }
+            }
+        }
+    } catch (PDOException $e) {
+        $errorInfo = $e->errorInfo;
+        if ($errorInfo[0] === '23000' && $errorInfo[1] === 1451) {
+            // This error message is specific to the integrity constraint violation
+            $response = ['message' => 'Erreur : This item cannot be deleted as other items are related to it.'];
+        } else {
+            // Handle other errors as needed
+            $response = handleError($e);
+        }
+    }
+    echo json_encode($response);
+}
+
 
 function fetchData()
 {
@@ -556,6 +614,79 @@ function modifyWeb()
     echo json_encode($response);
 }
 
+function updateServices()
+{
+    $data = json_decode(file_get_contents('php://input'), true);
+    $id = $data['id'];
+    $type = $data['type'];
+    $text = $data['heading'];
+    $order = $data['order'];
+
+    $id_text = $data['description-id'];
+    $text_text = $data['description'];
+
+    $imgId = $data['img-id'];
+    $sql = "";
+
+    try {
+        global $pdo;
+        if (isset($id)) { //UPDATE INFO
+            $sql = "UPDATE web_page_info SET type = :type, text = :text, `order` = :order WHERE id_info = :id";
+        } else { //INSERT INFO
+            $sql = "INSERT INTO web_page_info (type, text, `order`, category) VALUES (:type, :text, :order, 'heading')";
+        }
+        $stmt = $pdo->prepare($sql);
+        if (isset($id)) {
+            $stmt->bindParam(':id', $id);
+        }
+        $stmt->bindParam(':type', $type);
+        $stmt->bindParam(':text', $text);
+        $stmt->bindParam(':order', $order);
+
+        if ($stmt->execute()) {
+            $serviceId = ($id === null) ? $pdo->lastInsertId() : $id;
+
+            if ($id_text != "") { //UPDATE INFO
+                $sql = "UPDATE web_page_info SET type = :type, text = :text, `order` = :order WHERE id_info = :id_text";
+            } else { //INSERT INFO
+                $sql = "INSERT INTO web_page_info (type, text, `order`, category) VALUES (:type, :text, :order, 'text')";
+            }
+            $stmt = $pdo->prepare($sql);
+            if ($id_text != "") {
+                $stmt->bindParam(':id_text', $id_text);
+            }
+            $stmt->bindParam(':type', $type);
+            $stmt->bindParam(':text', $text_text);
+            $stmt->bindParam(':order', $order);
+
+            if ($stmt->execute()) {
+                $response = ['message' => 'Succès : Web page info updated succesfully'];
+            }
+
+            if (isset($imgId)) {
+                //dis-asociate images with the service
+                $sql = "UPDATE images SET associated_to_info = null, type = 4 WHERE associated_to_info = :serviceiId AND type = 3";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindParam(':serviceiId', $serviceId);
+                if ($stmt->execute()) {
+
+                    // Insert MainImg into the images table
+                    $sql = "UPDATE images SET associated_to_info = :serviceiId, type = 3 WHERE id_img = :mainImage";
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->bindParam(':mainImage', $imgId);
+                    $stmt->bindParam(':serviceiId', $serviceId);
+                    if ($stmt->execute()) {
+                        $response = ['message' => 'Succès : Web page info updated succesfully'];
+                    }
+                }
+            }
+        }
+    } catch (PDOException $e) {
+        $response = handleError($e);
+    }
+    echo json_encode($response);
+}
+
 function fetchDataDashbord()
 {
     try {
@@ -798,7 +929,7 @@ function updateDropdown()
             } else if ($brandSelect != '') {
                 $sql = "UPDATE " . $table . " SET " . $nameColumn . " = :itemName, brand ='" . $brandSelect . "' WHERE " . $idColumn . " = :id";
             } else {
-                $sql = "UPDATE " . $table . " SET '". $nameColumn ."'= :itemName WHERE " . $idColumn . " = :id";
+                $sql = "UPDATE " . $table . " SET '" . $nameColumn . "'= :itemName WHERE " . $idColumn . " = :id";
             }
         } else {
             $sql = 'UPDATE properties_meta SET ' . $nameColumn . ' = :itemName WHERE ' . $idColumn . ' = :id';
@@ -831,7 +962,7 @@ function updateDropdown()
             $response = ['message' => 'Succès: Element from ' . $table . ' ' . (isset($id) ? 'updated' : 'inserted') . ' successfully.'];
         }
     } catch (PDOException $e) {
-        $response = handleError($e).' '. $sql;
+        $response = handleError($e) . ' ' . $sql;
     }
     header('Content-Type: application/json');
     echo json_encode($response);

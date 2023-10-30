@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 include 'func.php';
 login()
@@ -27,10 +27,24 @@ login()
             </div>
             <div class="form-field">
                 <label for="password">Password</label>
-                <input type="password" name="password" id="password" required>
+                <div class="password-input"><input type="password" name="password" id="password" required><img src="./src/eye.svg"></div>
             </div>
             <input type="submit" class="btn front" value="se connecter">
         </form>
+
+        <script>
+            //Event Listener Password btn
+            const revealPassword = document.querySelector('.password-input img');
+            const passwordInput = document.querySelector('.password-input input')
+
+            revealPassword.addEventListener('click', () => {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text'; // Change input type to text to reveal the password
+                } else {
+                    passwordInput.type = 'password'; // Change input type back to password
+                }
+            })
+        </script>
 </body>
 
 </html>

@@ -43,10 +43,10 @@ include 'session.php';
             </table>
         </div>
         <div class="table-pagination">
-            <button id="prevPage">Previous</button>
+            <button class="svg-btn" id="prevPage">Previous</button>
             <span id="currentPage">Page 1</span>
             <span id="totalPages">of 1</span>
-            <button id="nextPage">Next</button>
+            <button class="svg-btn" id="nextPage">Next</button>
         </div>
     </section>
     <script src="./scripts/script-mapping.js"></script>

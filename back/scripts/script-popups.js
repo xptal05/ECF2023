@@ -60,7 +60,11 @@ function deletePopup(selectedItem, tableId, name, idKey) {
     const archivForm = document.getElementById('archivForm');
     archivForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        arraydelete(tableDb, idKey, id)
+        if(selectedItem['type'] == "1"){
+            console.log('deleting service')
+            deteleService(selectedItem)
+        }else{
+        arraydelete(tableDb, idKey, id)}
     });
 
     archivForm.addEventListener('reset', (e) => {
@@ -106,11 +110,20 @@ function dropdownPopup(selectedItem, tableId, name, idKey) {
     const popupform = document.createElement('form')
     popupform.id = "modifyForm"
     popupform.classList.add('popup-body-normal')
+    colorPicker = ""
+
+    if (tableId == "Couleur") {
+        colorPicker = `<input type="color" id="colorPicker" name="color" value="${colorRgb}">`
+    }
+
     popupform.innerHTML = `
     <div class="popup-input-container">
         <label>Item name</label>
         <input id="itemNameInput" value="${itemName}" required>
+        ${colorPicker}
     </div>`
+
+
 
     if (tableId == "Modèle") {
         const brandArray = dropdownMapping['Marque'].array
@@ -122,7 +135,7 @@ function dropdownPopup(selectedItem, tableId, name, idKey) {
         brandSelect.id = "brandInput"
         for (brand of brandArray)
             brandSelect.innerHTML += `    
-        <option value="${brand['id_brand']}">${brand['name']}</option`
+        <option value="${brand['id_brand']}">${brand['name']}</option>`
         popupform.appendChild(brandSelect)
     }
 
@@ -135,10 +148,7 @@ function dropdownPopup(selectedItem, tableId, name, idKey) {
         </div>`
     }
 
-    if (tableId == "Couleur") {
-        popupform.innerHTML += `  
-        <input type="color" id="colorPicker" name="color" value="${colorRgb}">`
-    }
+
 
     popupform.innerHTML += `
     <div class="popup-btns">
@@ -267,13 +277,15 @@ function serviceInfoPopup(selectedItem, serviceType) {
     let iconLink = ""
     let iconId = ""
     let description = ""
+    let descriptionId = ""
 
     if (selectedItem) {
         id = selectedItem['id_info']
         iconLink = selectedItem['icon']['link']
         iconId = selectedItem['icon']['id_img']
         text = selectedItem['text']
-        description = selectedItem['description']
+        descriptionId = selectedItem['description']['id_info']
+        description = selectedItem['description']['text']
         type = selectedItem['type']
         order = selectedItem['order']
     }
@@ -293,7 +305,7 @@ function serviceInfoPopup(selectedItem, serviceType) {
                     <label for="icon">Icon</label>
                     <div id="serviceIconContainer">
                         <img src="${iconLink}">
-                        <input type="text" value="${iconId}" hidden>
+                        <input type="text" name="img-id" hidden>
                         <a href="?modify=img" class="actionbtn">MODIFY ICON</a>
                     </div>
                 </div>
@@ -305,11 +317,11 @@ function serviceInfoPopup(selectedItem, serviceType) {
             <div class="column2">
                 <div class="popup-input-container service">
                     <label for="text">Heading</label>
-                    <input name="text" type="text" value="${text}" required>
+                    <input name="heading" type="text" value="${text}" required>
                 </div>
                 <div class="popup-input-container service">
                     <label for="description">Description</label>
-                    <textarea name="description" rows="6">${description}</textarea>
+                    <textarea name="description" data-value="${descriptionId}" rows="6">${description}</textarea>
                 </div>
                 <div class="popup-btns">
                     <input type="reset" class="btn error-btn" value="Reset">
@@ -349,18 +361,29 @@ function serviceInfoPopup(selectedItem, serviceType) {
     // Add a submit event listener to the form
     form.addEventListener('submit', (e) => {
         e.preventDefault();
-        if (formValidationtwo() == true) {
+        if (formvalidation() == true) {
             // Collect data from the form
             const formData = {}
             formData.id = id
             formData.type = type
 
-            const formInputs = document.querySelectorAll('input[type="text"], input[type="number');
+            const formInputs = document.querySelectorAll('input[type="text"], input[type="number"]');
+            const formTextarea = document.querySelectorAll('textarea')
+            const icon = document.querySelector('#serviceIconContainer img')
 
             formInputs.forEach(input => {
                 formData[input.name] = input.value;
             })
-            pushWebPageInfo(formData)
+
+            formTextarea.forEach(input => {
+                formData[input.name + '-id'] = input.getAttribute("data-value")
+                formData[input.name] = input.value
+            })
+
+            formData['img-id'] = icon.getAttribute("data-value")
+
+            console.log('form data', formData)
+            pushServiceInfo(formData)
         }
     });
 
@@ -639,8 +662,9 @@ function imgGalleryPopup(gallerytype) {
 
                             if (selectedImage) {
                                 // Set the source and value for service icon
+                                const serviceIconContainer = document.getElementById('serviceIconContainer')
                                 serviceIconContainer.querySelector('img').src = selectedImage.link;
-                                serviceIconContainer.querySelector('input').value = selectedImage.id_img;
+                                serviceIconContainer.querySelector('img').setAttribute('data-value', selectedImage.id_img)
                                 thirdDiv.remove()
                                 secondDiv.remove()
                             } else { console.log('no image selected') }

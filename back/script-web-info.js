@@ -64,9 +64,6 @@ async function fetchPageInfoFromServer(phpScriptURL) {
 }
 
 function webInfolog() {
-    console.log('info', webInfo);
-    console.log('icons',iconData)
-
     const serviceTbl = document.getElementById('servicetbl');
     const serviceArray = webInfo['Services']['array'];
     const modifiedServiceArray = [];
@@ -96,14 +93,39 @@ function webInfolog() {
     });
 
     modifiedServiceArray.forEach(item => {
+        if (item['category'] === 'heading') {
+            // Find the first 'text' item with the same 'order'
+            const descriptionItem = serviceArray.find(textItem => textItem['category'] === 'text' && textItem['order'] === item['order']);
+    
+            // If a matching 'text' item is found, set the description property as an object with 'text' and 'id'
+            if (descriptionItem) {
+                item.description = {
+                    text: descriptionItem['text'],
+                    id_info: descriptionItem['id_info'],
+                };
+            } else {
+                item.description = {
+                    text: "",
+                    id_info:""
+                }; // If no matching 'text' item is found, set it to an empty object
+            }
+        }
+    });
+
+    modifiedServiceArray.forEach(item => {
         // Find the associated icon in iconData by matching id_info
         const associatedIcon = iconData.find(icon => icon['associated_to_info'] === item['id_info']);
     
         // If an associated icon is found, add it to the heading
         if (associatedIcon) {
             item.icon = associatedIcon;
+        } else {
+            item.icon = {
+                link: "../images_voiture/img.png"
+            }
         }
     });
+    console.log('nonmodified', serviceArray)
     console.log('modified', modifiedServiceArray)
 
 // Create the table
@@ -112,7 +134,7 @@ modifiedServiceArray.forEach(item => {
     serviceRow.innerHTML = `
         <td><img src="${item['icon']['link']}" style="height:60px; width:auto"></td>
         <td>${item['text']}</td>
-        <td>${item['description']}</td>
+        <td>${item['description']['text']}</td>
         <td>${item['order']}</td>
         <td>
             <a href="?modify=Services-${item['id_info']}" class="actionbtn svg-btn" title="Modifier">
@@ -198,8 +220,6 @@ function attachActionBtnListeners(modifiedServiceArray) {
                         isPopupOpen = false
                     }
                     if(tableId == "Services"){
-
-
                         serviceInfoPopup(selectedServiceItem, tableId)
                     }
                     else{webInfoPopup(selectedItem, tableId)}
@@ -212,7 +232,10 @@ function attachActionBtnListeners(modifiedServiceArray) {
                     let name = ""
                     let idKey = "id_info"
                     console.log('selected item', selectedItem)
-                    deletePopup(selectedItem, tableId, name, idKey) //leave as it is so that i can trigger the php commun
+                    if(tableId == "Services"){
+                        deletePopup(selectedServiceItem, tableId, name, idKey)
+                    } else{
+                    deletePopup(selectedItem, tableId, name, idKey) }//leave as it is so that i can trigger the php commun
                 }
             } else if (actionBtn == 'add') {
                 if (isPopupOpen == true) {

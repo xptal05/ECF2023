@@ -2,8 +2,6 @@
 if (session_status() == PHP_SESSION_NONE) {
     include 'session.php';
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -14,8 +12,7 @@ if (session_status() == PHP_SESSION_NONE) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" type="text/css" href="styles.php">
+    <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" type="text/css" href="./style/style-svg-btn.css">
     <style>
         <?php $imgBackground = $_GET['id'] ? $vehicle_img : 'src/img.png';
@@ -97,13 +94,13 @@ if (session_status() == PHP_SESSION_NONE) {
                                 ORDER BY images.link
                                 SEPARATOR ", "
                             ) FROM images 
-                        WHERE images.associated_to_vehicle = vehicles.id_vehicle AND images.type = 1), "No Images") AS gallery,
+                        WHERE images.associated_to_vehicle = vehicles.id_vehicle AND images.type = 1), "") AS gallery,
                 IFNULL((SELECT GROUP_CONCAT(
                                 DISTINCT images.id_img
                                 ORDER BY images.id_img
                                 SEPARATOR ", "
                             ) FROM images 
-                        WHERE images.associated_to_vehicle = vehicles.id_vehicle AND images.type = 1), "No Images") AS gallery_ids       
+                        WHERE images.associated_to_vehicle = vehicles.id_vehicle AND images.type = 1), "") AS gallery_ids       
                 FROM vehicles
                 LEFT JOIN brands ON vehicles.brand = brands.id_brand
                 LEFT JOIN models ON vehicles.model = models.id_model
@@ -125,7 +122,7 @@ if (session_status() == PHP_SESSION_NONE) {
                 ${'vehicle_' . $key} = !empty($value) ? $value : '';
             }
 
-            $vehicle_img = !empty($vehicle_img) ? $vehicle_img . '" data-value="' . $vehicle_id_img : '/images_voiture/img.png';
+            $vehicle_img = !empty($vehicle_img) ? $vehicle_img . '" data-value="' . $vehicle_id_img : '../images_voiture/img.png';
             $imageGalleryImgs = !empty($vehicle_infos['gallery']) ? explode(", ", $vehicle_infos['gallery']) : '';
 
             $header = $_GET['id'] ? 'Modifier Vehicle' : 'New Vehicle';
@@ -154,17 +151,17 @@ if (session_status() == PHP_SESSION_NONE) {
                     </div>
                     <div>
                         <label for="Price">Prix</label>
-                        <input type="number" name="Price" id="Price" value="<?php echo $vehicle_price ?>" autocomplete="off">
+                        <input type="number" name="Price" id="Price" value="<?php echo $vehicle_price ?>" autocomplete="off" required>
                     </div>
 
                     <div>
                         <label for="year">Année</label>
-                        <input type="number" name="year" id="year" value="<?php echo $vehicle_year ?>" autocomplete="off">
+                        <input type="number" name="year" id="year" value="<?php echo $vehicle_year ?>" autocomplete="off" required>
                     </div>
 
                     <div>
                         <label for="km">Kilométres</label>
-                        <input type="number" name="km" id="km" value="<?php echo $vehicle_km ?>" autocomplete="off">
+                        <input type="number" name="km" id="km" value="<?php echo $vehicle_km ?>" autocomplete="off" required>
                     </div>
 
                     <div>
@@ -252,8 +249,8 @@ if (session_status() == PHP_SESSION_NONE) {
                 </div>
             </div>
             <div class="button-container span-2-end">
-                <input type="reset" class="btn" value="Annuler">
-                <input type="submit" class="btn" value="Sauvegarder">
+                <input type="reset" class="btn error-btn" value="Annuler">
+                <input type="submit" class="btn success-btn" value="Sauvegarder">
             </div>
         </form>
     </section>

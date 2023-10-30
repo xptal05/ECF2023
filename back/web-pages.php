@@ -83,6 +83,32 @@ include 'session.php';
                     <tbody id="addresstbl"></tbody>
                 </table>
             </div>
+            <div class="tbl span-6">
+                <div class="table-header">
+                    <h2>About us</h2>
+                    <a class="actionbtn svg-btn add" href="?add=About" title="Ajouter">+</a>
+                </div>
+                <table>
+                    <thead>
+                        <th>TEXT</th>
+                    </thead>
+                    <tbody id="abouttbl"></tbody>
+                </table>
+            </div>
+            <div class="tbl span-6">
+                <div class="table-header">
+                    <h2>Raisons</h2>
+                    <a class="actionbtn svg-btn add" href="?add=Reasons" title="Ajouter">+</a>
+                </div>
+                <table>
+                    <thead>
+                        <th>TEXT</th>
+                        <th>CATEGORY</th>
+                        <th>ORDER</th>
+                    </thead>
+                    <tbody id="reasonstbl"></tbody>
+                </table>
+            </div>
         </div>
     </section>
     <script src="./scripts/script-popups.js"></script>
