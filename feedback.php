@@ -17,7 +17,7 @@
         <form id="feedbackForm" class="form-new container feedback-form">
             <h2 class="span-12 primary uppercase">Ajouter un témoignage</h2>
             <div class="span-6"><label>Nom</label>
-                <input id="client_nameInput" type="text" value="" required class="input-front">
+                <input id="client_nameInput" type="text" value="" required class="input-front" maxlength="150">
             </div>
             <div class="span-6"><label>Note</label>
                 <div class="rating">

@@ -18,7 +18,7 @@ function notificationsServeur(data) {
 }
 
 function formvalidation() {
-    return true
+        return true
 }
 
 function pushNewMessage(formData, messageForm) {

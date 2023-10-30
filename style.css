@@ -758,6 +758,7 @@ textarea {
     justify-content: center;
     gap: 15px;
     margin-bottom: 25px;
+    min-height: 350px;
 }
 
 @media (min-width: 800px) {
