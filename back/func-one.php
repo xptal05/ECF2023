@@ -588,14 +588,15 @@ function modifyWeb()
     $type = $data['type'];
     $text = $data['text'];
     $order = $data['order'];
+    $category = $data['category'];
     $sql = "";
 
     try {
         global $pdo;
         if (isset($id)) { //UPDATE INFO
-            $sql = "UPDATE web_page_info SET type = :type, text = :text, `order` = :order WHERE id_info = :id";
+            $sql = "UPDATE web_page_info SET type = :type, text = :text, `order` = :order, category = :category WHERE id_info = :id";
         } else { //INSERT INFO
-            $sql = "INSERT INTO web_page_info (type, text, `order`) VALUES (:type, :text, :order)";
+            $sql = "INSERT INTO web_page_info (type, text, `order`, category) VALUES (:type, :text, :order, :category)";
         }
         $stmt = $pdo->prepare($sql);
         if (isset($id)) {
@@ -604,6 +605,7 @@ function modifyWeb()
         $stmt->bindParam(':type', $type);
         $stmt->bindParam(':text', $text);
         $stmt->bindParam(':order', $order);
+        $stmt->bindParam(':category', $category);
 
         if ($stmt->execute()) {
             $response = ['message' => 'Succès : Web page info updated succesfully'];

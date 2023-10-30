@@ -87,7 +87,6 @@ function populateList(data) {
 
     pageData.forEach(item => {
 
-
         const row = document.createElement('tr');
         console.log('item', item)
         console.log('table headers', tableHeaders);
@@ -102,7 +101,7 @@ function populateList(data) {
                 const statusValue = mapStatus(item[customMappings[currentURL].headers[header]]);
                 row.innerHTML += `<td>${statusValue}</td>`;
             } else if (header === "Droits") {
-                role = (item[customMappings[currentURL].headers[header]] == 1) ? 'Admin' : 'Employee';
+                const role = mapRole(item[customMappings[currentURL].headers[header]]);
                 row.innerHTML += `<td>${role}</td>`;
             } else if (header === "Image") {
                 if (item[customMappings[currentURL].headers[header]] != null) {

@@ -60,11 +60,12 @@ function deletePopup(selectedItem, tableId, name, idKey) {
     const archivForm = document.getElementById('archivForm');
     archivForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        if(selectedItem['type'] == "1"){
+        if (selectedItem['type'] == "1") {
             console.log('deleting service')
             deteleService(selectedItem)
-        }else{
-        arraydelete(tableDb, idKey, id)}
+        } else {
+            arraydelete(tableDb, idKey, id)
+        }
     });
 
     archivForm.addEventListener('reset', (e) => {
@@ -210,37 +211,50 @@ function webInfoPopup(selectedItem, serviceType) {
     let text = ""
     let type = serviceType
     let order = ""
+    let category = ""
+    let categoryDiv = ""
 
     if (selectedItem) {
         id = selectedItem['id_info']
         text = selectedItem['text']
         type = selectedItem['type']
         order = selectedItem['order']
+        category = selectedItem['category']
     }
 
     const popup = document.getElementById('popup');
     var popupDiv = document.createElement('div');
     popupDiv.id = "popupDiv";
     popupDiv.innerHTML += `
-
         <div class="popup-header">
             <h2>Element Information</h2>
             <button class="close-sign" id="close">X</button>
-        </div>
-        <form id="popupform" class="popup-body-normal">
-            <div class="popup-input-container">
+        </div>`
+    const popupForm = document.createElement('form')
+    popupForm.id = "popupform"
+    popupForm.classList.add('popup-body-normal')
+    popupForm.innerHTML =
+        `<div class="popup-input-container">
                 <label for="text">Text</label>
                 <input name="text" type="text" value="${text}" required>
             </div>
             <div class="popup-input-container">
                 <label for="order">Order</label>
                 <input name="order" type="number" value="${order}" required>
-            </div>
-            <div class="popup-btns">
+            </div>`
+    if (serviceType == 3 || serviceType == 2 || serviceType == 7 || serviceType == "Contact" || serviceType == "Address" || serviceType == "Reasons") {
+        popupForm.innerHTML += `
+        <div class="popup-input-container">
+            <label for="category">Category</label>
+            <input name="category" type="text" value="${category}">
+        </div>`
+    }
+    popupForm.innerHTML += `<div class="popup-btns">
                 <input type="reset" class="btn error-btn" value="Reset">
                 <input type="submit" class="btn success-btn" value="Submit">
-            </div>
-        </form>`;
+            </div>`
+
+    popupDiv.appendChild(popupForm)
     popup.appendChild(popupDiv);
     popupDiv.classList.add('popup-window');
     closePopup();

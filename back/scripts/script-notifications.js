@@ -12,7 +12,9 @@ function notificationsServeur(data) {
 
     if(currentUrl ==="web-pages.php"){
         fetchAndUpdatePageInfo()
-    } else{
+    } else if(currentUrl ==="settings.php"){
+        fetchAndUpdateDropdownData()
+    }else{
         fetchDataAndRenderList()
     }
     setTimeout(function () {

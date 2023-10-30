@@ -1,7 +1,7 @@
 const notifications = document.getElementById('notifications')
 
+fetchAndUpdateDropdownData();
 
-fetchAndUpdateDropdownData(); // Make sure you call this function first to populate the data
 let isPopupOpen = false
 const metaTables = [
     "carrosserie",
@@ -13,8 +13,11 @@ const metaTables = [
 const formHeadersDropdowns = ["itemName", "itemDescription"];
 
 function dropdowntopage() {
+    console.log('trigered')
     console.log(dropdownMapping)
+
     const dropdownsContainer = document.getElementById('dropdownsContainer');
+    dropdownsContainer.innerHTML = ""
 
     for (const key in dropdownMapping) {
         if (dropdownMapping.hasOwnProperty(key)) {

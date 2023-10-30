@@ -106,7 +106,7 @@ function vehicleInfoPush(formData) {
 }
 
 function pushWebPageInfo(formData) {
-    console.log('pushweb trigerred'); // Form data with inputId and dataValue for select options
+    console.log('pushweb trigerred',formData); // Form data with inputId and dataValue for select options
 
     const phpScriptURL = './func-one.php?action=modifyWeb';
     formData.action = 'modifyWeb'

@@ -92,18 +92,18 @@ include 'session.php';
     <script src="./event/script-users.js"></script>
     <script src="./components/menu.js"></script>
     <script>
-                    //Event Listener Password btn
-                    const revealPassword = document.querySelector('.password-input img');
-            const passwordInput = document.querySelector('.password-input input')
+        //Event Listener Password btn
+        const revealPassword = document.querySelector('.password-input img');
+        const passwordInput = document.querySelector('.password-input input')
 
-            revealPassword.addEventListener('click', () => {
-                if (passwordInput.type === 'password') {
-                    passwordInput.type = 'text'; // Change input type to text to reveal the password
-                } else {
-                    passwordInput.type = 'password'; // Change input type back to password
-                }
-            })
-            </script>
+        revealPassword.addEventListener('click', () => {
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text'; // Change input type to text to reveal the password
+            } else {
+                passwordInput.type = 'password'; // Change input type back to password
+            }
+        })
+    </script>
 
 </body>
 
