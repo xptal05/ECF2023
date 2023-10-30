@@ -54,8 +54,12 @@ include 'session.php';
     }
 
     $data = fetchDataDashbord();
-
     $statusData = $data['statuses'];
+    $feedbacks = $data['feedbacks'];
+
+    // Initialize variables to calculate the sum and count of ratings
+    $totalRating = 0;
+    $count = 0;
 
     $statusMapping = [];
     foreach ($statusData as $status) {
@@ -137,12 +141,6 @@ include 'session.php';
         return $allStatusesCount;
     }
 
-    $feedbacks = $data['feedbacks'];
-
-    // Initialize variables to calculate the sum and count of ratings
-    $totalRating = 0;
-    $count = 0;
-
     // Loop through the feedbacks and calculate the sum and count of ratings
     foreach ($feedbacks as $feedback) {
         // Check if the status is not 7
@@ -154,7 +152,6 @@ include 'session.php';
 
     // Calculate the average rating
     $averageRating = ($count > 0) ? round(($totalRating / $count)) : 0;
-
 
     $formattedNumberWithCurrency = number_format($number, 0, '.', ' ') . ' EUR';
 
@@ -189,8 +186,6 @@ include 'session.php';
         return $averageRating;
     }
 
-
-
     ?>
     <section class="nav">
         <?php include_once "./components/menu.php" ?>
@@ -198,87 +193,105 @@ include 'session.php';
     <section class="application">
         <h1>Tableau de bord</h1>
         <div class="application-body">
-            <div class="container span-4">
+            <div class="container span-4 dashboard">
                 <div class="container-header">
-                    <div class="container-header-icon"></div>
+                    <div class="container-header-icon">
+                        <img src="./src/cars.svg">
+                    </div>
                     <h2>Vehicles</h2>
                 </div>
                 <div class="container-content">
-                    <div>
-                        <h3>Total</h3>
-                        <div><?php echo count($data['vehicles']); ?></div>
-                        <h3>Total available</h3>
+                    <div class="dashboard-total-container">
                         <div>
-                            <?php
-                            echo countItemsAndRevenueByDateCriteria($data['vehicles'], $statusMapping["Active"], 'total') + countItemsAndRevenueByDateCriteria($data['vehicles'], $statusMapping["New"], 'total');;
-                            ?>
+                            <h3>Total</h3>
+                            <div><?php echo count($data['vehicles']); ?></div>
                         </div>
+                        <div>
+                            <h3>Total available</h3>
+                            <div>
+                                <?php
+                                echo countItemsAndRevenueByDateCriteria($data['vehicles'], $statusMapping["Active"], 'total') + countItemsAndRevenueByDateCriteria($data['vehicles'], $statusMapping["New"], 'total');;
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <th></th>
+                            <th>Vendu</th>
+                            <th>Revenu</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Total</td>
+                                <td><?php echo countItemsAndRevenueByDateCriteria($data['vehicles'], $statusMapping["Sold"], 'total'); ?></td>
+                                <td><?php echo countItemsAndRevenueByDateCriteria($data['vehicles'], $statusMapping["Sold"], 'total', false); ?></td>
+                            </tr>
+                            <tr>
+                                <td>Année</td>
+                                <td><?php echo countItemsAndRevenueByDateCriteria($data['vehicles'], $statusMapping["Sold"], 'year'); ?></td>
+                                <td><?php echo countItemsAndRevenueByDateCriteria($data['vehicles'], $statusMapping["Sold"], 'year', false); ?></td>
+                            </tr>
+                            <tr>
+                                <td>Mois</td>
+                                <td><?php echo countItemsAndRevenueByDateCriteria($data['vehicles'], $statusMapping["Sold"], 'month'); ?></td>
+                                <td><?php echo countItemsAndRevenueByDateCriteria($data['vehicles'], $statusMapping["Sold"], 'month', false); ?></td>
+                            </tr>
+                            <tr>
+                                <td>Semaine</td>
+                                <td><?php echo countItemsAndRevenueByDateCriteria($data['vehicles'], $statusMapping["Sold"], 'week'); ?></td>
+                                <td><?php echo countItemsAndRevenueByDateCriteria($data['vehicles'], $statusMapping["Sold"], 'week', false); ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div>
+                        <h3>Vehicles by status</h3>
                         <table>
                             <thead>
-                                <th></th>
-                                <th>Vendu</th>
-                                <th>Revenu</th>
+                                <th>Status</th>
+                                <th>Count</th>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Total</td>
-                                    <td><?php echo countItemsAndRevenueByDateCriteria($data['vehicles'], $statusMapping["Sold"], 'total'); ?></td>
-                                    <td><?php echo countItemsAndRevenueByDateCriteria($data['vehicles'], $statusMapping["Sold"], 'total', false); ?></td>
-                                </tr>
-                                <tr>
-                                    <td>Année</td>
-                                    <td><?php echo countItemsAndRevenueByDateCriteria($data['vehicles'], $statusMapping["Sold"], 'year'); ?></td>
-                                    <td><?php echo countItemsAndRevenueByDateCriteria($data['vehicles'], $statusMapping["Sold"], 'year', false); ?></td>
-                                </tr>
-                                <tr>
-                                    <td>Mois</td>
-                                    <td><?php echo countItemsAndRevenueByDateCriteria($data['vehicles'], $statusMapping["Sold"], 'month'); ?></td>
-                                    <td><?php echo countItemsAndRevenueByDateCriteria($data['vehicles'], $statusMapping["Sold"], 'month', false); ?></td>
-                                </tr>
-                                <tr>
-                                    <td>Semaine</td>
-                                    <td><?php echo countItemsAndRevenueByDateCriteria($data['vehicles'], $statusMapping["Sold"], 'week'); ?></td>
-                                    <td><?php echo countItemsAndRevenueByDateCriteria($data['vehicles'], $statusMapping["Sold"], 'week', false); ?></td>
-                                </tr>
+                                <?php
+                                // Loop through the status mapping to display each status and its count.
+                                foreach ($statusMapping as $statusName => $statusId) {
+                                    $count = countItemsAndRevenueByDateCriteria($data['vehicles'], $statusId, 'total');
+                                ?>
+                                    <tr>
+                                        <td><?php echo $statusName; ?></td>
+                                        <td><?php echo $count; ?></td>
+                                    </tr>
+                                <?php
+                                }
+                                ?>
                             </tbody>
                         </table>
-                        <div>
-                            <h3>Vehicles by status</h3>
-                            <table>
-                                <thead>
-                                    <th>Status</th>
-                                    <th>Count</th>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    // Loop through the status mapping to display each status and its count.
-                                    foreach ($statusMapping as $statusName => $statusId) {
-                                        $count = countItemsAndRevenueByDateCriteria($data['vehicles'], $statusId, 'total');
-                                    ?>
-                                        <tr>
-                                            <td><?php echo $statusName; ?></td>
-                                            <td><?php echo $count; ?></td>
-                                        </tr>
-                                    <?php
-                                    }
-                                    ?>
-                                </tbody>
-                            </table>
-                        </div>
+                    </div>
+                    <div class="dashboard-btn-container">
                         <a href="./vehicles.php" class="btn">GO TO VEHICLES</a>
                         <a href="./vehicle-form.php" class="btn">ADD NEW VEHICLE</a>
                     </div>
                 </div>
             </div>
-            <div class="container span-4">
+            <div class="container span-4 dashboard">
                 <div class="container-header">
-                    <div class="container-header-icon"></div>
-                    <div class="container-content">
-                        <h2>Messages</h2>
-                        <h3>Total</h3>
-                        <div><?php echo count($data['messages']); ?></div>
-                        <h3>Total nouveaux</h3>
-                        <div><?php echo countItemsAndRevenueByDateCriteria($data['messages'], $statusMapping["New"], 'total'); ?></div>
+                    <div class="container-header-icon">
+                        <img src="./src/messages.svg">
+                    </div>
+                    <h2>Messages</h2>
+                </div>
+                <div class="container-content">
+                    <div class="dashboard-total-container">
+                        <div>
+                            <h3>Total</h3>
+                            <div><?php echo count($data['messages']); ?></div>
+                        </div>
+                        <div>
+                            <h3>Total nouveaux</h3>
+                            <div><?php echo countItemsAndRevenueByDateCriteria($data['messages'], $statusMapping["New"], 'total'); ?></div>
+                        </div>
+                    </div>
+                    <div>
                         <h3>Response time</h3>
                         <div><?php
                                 function calculateResponseTime($messages, $statusMapping)
@@ -307,58 +320,69 @@ include 'session.php';
                                 }
                                 echo calculateResponseTime($data['messages'], $statusMapping);
                                 ?></div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>Recu</th>
-                                    <th>Répondu</th>
-                                    <th>Archivé</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Total</td>
-                                    <td><?php echo itemCountAllStatus($data['messages'], $statusMapping, 'total') ?></td>
-                                    <td><?php echo countItemsAndRevenueByDateCriteria($data['messages'], $statusMapping['Done'], 'total', true); ?></td>
-                                    <td><?php echo countItemsAndRevenueByDateCriteria($data['messages'], $statusMapping['Archived'], 'total', true); ?></td>
-                                </tr>
-                                <tr>
-                                    <td>Année</td>
-                                    <td><?php echo itemCountAllStatus($data['messages'], $statusMapping, 'year') ?></td>
-                                    <td><?php echo countItemsAndRevenueByDateCriteria($data['messages'], $statusMapping['Done'], 'year', true); ?></td>
-                                    <td><?php echo countItemsAndRevenueByDateCriteria($data['messages'], $statusMapping['Archived'], 'year', true); ?></td>
-                                </tr>
-                                <tr>
-                                    <td>Mois</td>
-                                    <td><?php echo itemCountAllStatus($data['messages'], $statusMapping, 'month') ?></td>
-                                    <td><?php echo countItemsAndRevenueByDateCriteria($data['messages'], $statusMapping['Done'], 'month', true); ?></td>
-                                    <td><?php echo countItemsAndRevenueByDateCriteria($data['messages'], $statusMapping['Archived'], 'month', true); ?></td>
-                                </tr>
-                                <tr>
-                                    <td>Semaine</td>
-                                    <td><?php echo itemCountAllStatus($data['messages'], $statusMapping, 'week') ?></td>
-                                    <td><?php echo countItemsAndRevenueByDateCriteria($data['messages'], $statusMapping['Done'], 'week', true); ?></td>
-                                    <td><?php echo countItemsAndRevenueByDateCriteria($data['messages'], $statusMapping['Archived'], 'week', true); ?></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <a href="./messages.php" class="btn">GO TO MESSAGES</a>
                     </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Recu</th>
+                                <th>Répondu</th>
+                                <th>Archivé</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Total</td>
+                                <td><?php echo itemCountAllStatus($data['messages'], $statusMapping, 'total') ?></td>
+                                <td><?php echo countItemsAndRevenueByDateCriteria($data['messages'], $statusMapping['Done'], 'total', true); ?></td>
+                                <td><?php echo countItemsAndRevenueByDateCriteria($data['messages'], $statusMapping['Archived'], 'total', true); ?></td>
+                            </tr>
+                            <tr>
+                                <td>Année</td>
+                                <td><?php echo itemCountAllStatus($data['messages'], $statusMapping, 'year') ?></td>
+                                <td><?php echo countItemsAndRevenueByDateCriteria($data['messages'], $statusMapping['Done'], 'year', true); ?></td>
+                                <td><?php echo countItemsAndRevenueByDateCriteria($data['messages'], $statusMapping['Archived'], 'year', true); ?></td>
+                            </tr>
+                            <tr>
+                                <td>Mois</td>
+                                <td><?php echo itemCountAllStatus($data['messages'], $statusMapping, 'month') ?></td>
+                                <td><?php echo countItemsAndRevenueByDateCriteria($data['messages'], $statusMapping['Done'], 'month', true); ?></td>
+                                <td><?php echo countItemsAndRevenueByDateCriteria($data['messages'], $statusMapping['Archived'], 'month', true); ?></td>
+                            </tr>
+                            <tr>
+                                <td>Semaine</td>
+                                <td><?php echo itemCountAllStatus($data['messages'], $statusMapping, 'week') ?></td>
+                                <td><?php echo countItemsAndRevenueByDateCriteria($data['messages'], $statusMapping['Done'], 'week', true); ?></td>
+                                <td><?php echo countItemsAndRevenueByDateCriteria($data['messages'], $statusMapping['Archived'], 'week', true); ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <a href="./messages.php" class="btn">GO TO MESSAGES</a>
                 </div>
+
             </div>
-            <div class="container span-4">
+            <div class="container span-4 dashboard">
                 <div class="container-header">
-                    <div class="container-header-icon"></div>
+                    <div class="container-header-icon">
+                        <img src="./src/feedbacks.svg">
+                    </div>
                     <h2>Témoignages</h2>
                 </div>
                 <div class="container-content">
-                    <h3>Total</h3>
-                    <div><?php echo count($data['feedbacks']); ?></div>
-                    <h3>Total nouveaux</h3>
-                    <div><?php echo countItemsAndRevenueByDateCriteria($data['feedbacks'], $statusMapping["New"], 'total'); ?></div>
-                    <h3>Average Note</h3>
-                    <div><?php echo $averageRating; ?></div>
+                    <div class="dashboard-total-container">
+                        <div>
+                            <h3>Total</h3>
+                            <div><?php echo count($data['feedbacks']); ?></div>
+                        </div>
+                        <div>
+                            <h3>Total nouveaux</h3>
+                            <div><?php echo countItemsAndRevenueByDateCriteria($data['feedbacks'], $statusMapping["New"], 'total'); ?></div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>Average Note</h3>
+                        <div><?php echo $averageRating; ?></div>
+                    </div>
                     <table>
                         <thead>
                             <th></th>
@@ -371,7 +395,7 @@ include 'session.php';
                                 <td>Total</td>
                                 <td><?php echo itemCountAllStatus($data['feedbacks'], $statusMapping, 'total') ?></td>
                                 <td><?php echo countItemsAndRevenueByDateCriteria($data['feedbacks'], $statusMapping['Active'], 'total', true); ?></td>
-                                <td><?php echo calculateAverageNote($data['feedbacks'], 'total');?></td>
+                                <td><?php echo calculateAverageNote($data['feedbacks'], 'total'); ?></td>
                             </tr>
                             <tr>
                                 <td>Année</td>
