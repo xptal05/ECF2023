@@ -262,6 +262,7 @@ $pdo = connectToDatabase($dbConfig);
     <script src="./scripts/script-popups.js"></script>
     <script src="./scripts/script-postDb.js"></script>
     <script>
+
         const notifications = document.getElementById('notifications')
         let isPopupOpen = false
         const metaTables = [

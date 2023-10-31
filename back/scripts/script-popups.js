@@ -1,3 +1,5 @@
+const popup = document.getElementById('popup')
+
 function closePopup() {
   //  if (isPopupOpen == true) {
         // Attach the closeAction event listener

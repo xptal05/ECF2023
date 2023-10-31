@@ -6,6 +6,8 @@ const nextPageBtn = document.getElementById('nextPage');
 let currentPage = 1
 let totalPages = 1
 
+fetchDataAndRenderList()
+
 function createTableHeaders() {
 
     const thead = document.getElementById('tableHeaders')
@@ -21,6 +23,21 @@ function createTableHeaders() {
         headerRow.appendChild(th); // Append the header cell to the header row
     });
     thead.appendChild(headerRow);
+}
+
+function sortData(data) {
+    //ORDER THE ITEMS SELON STATUS
+    const customStatusOrder = [2, 3, 1, 8, 4, 5, 6];
+
+    const sortedData = Object.values(data).sort((a, b) => {
+        const statusA = customStatusOrder.indexOf(Number(a.status));
+        const statusB = customStatusOrder.indexOf(Number(b.status));
+
+        return statusA - statusB;
+    });
+        console.log('sorted data', sortedData)
+        updateList(sortedData); 
+        attachEventListeners(sortedData)
 }
 
 function updateList(data) {

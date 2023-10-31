@@ -19,17 +19,14 @@ if (session_status() == PHP_SESSION_NONE) {
 
 <body class="application-window">
     <?php
+
+require_once "./config/db.php";
+$pdo = connectToDatabase($dbConfig);
     function fetchDataDashbord()
     {
-        $user = 'studi';
-        $password = 'studi-ecf';
-        $db = 'studi_ecf';
-        $host = 'localhost';
-        $port = 3001;
 
         try {
-            $pdo = new PDO("mysql:host=$host;port=$port;dbname=$db", $user, $password);
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+global $pdo;
 
             // Initialize an empty array to store the results
             $data = array();
@@ -154,8 +151,6 @@ if (session_status() == PHP_SESSION_NONE) {
 
     // Calculate the average rating
     $averageRating = ($count > 0) ? round(($totalRating / $count)) : 0;
-
-    $formattedNumberWithCurrency = number_format($number, 0, '.', ' ') . ' EUR';
 
     function calculateAverageNote($feedbacks, $dateCriteria)
     {

@@ -17,69 +17,8 @@ const tables = [
     { name: "Reasons", id: "reasonstbl", headers: ["TEXT", "CATEGORY", "ORDER"] },
 ];
 
-// Function to fetch dropdown data and update dropdownMapping
-async function fetchAndUpdatePageInfo() {
-
-        // Clear existing data in arrays
-        for (const key in webInfo) {
-            webInfo[key].array = [];
-        }
-        imageData = [];
-        iconData = [];
-
-    //FETCH WEB INFO
-    try {
-        const phpScriptURLdata = './func-one.php?action=fetchData';
-        const phpScriptURLimages = './func-one.php?action=fetchData&data=images';
-
-        // Fetch dropdown data from the server
-        webInfoData = await fetchPageInfoFromServer(phpScriptURLdata);
-        imageInfoData = await fetchPageInfoFromServer(phpScriptURLimages);
-
-        // Group the fetched data by "type" key
-        webInfoData.forEach((item) => {
-            // Find the corresponding webInfo property using "key"
-            for (const key in webInfo) {
-                if (webInfo[key].key == item.type) {
-                    webInfo[key].array.push(item);
-                }
-            }
-        });
-
-        imageData = imageInfoData
-        imageData.forEach(image => {
-            if (image['type'] == 3) {
-                iconData.push(image)
-            }
-
-        });
-        updateData()
-
-
-    } catch (error) {
-        console.log('Error fetching web info data:', error);
-    }
-}
-
-// This function will fetch web info data from the server
-async function fetchPageInfoFromServer(phpScriptURL) {
-    try {
-        const response = await fetch(phpScriptURL, {
-            method: 'GET', // Use GET method
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Fetch error:', error);
-        throw error; // Re-throw the error to propagate it further
-    }
-}
+// Call the function to initiate fetching web info
+fetchAndUpdatePageInfo();
 
 function updateData(){
         // Clear existing rows in all tables
@@ -174,8 +113,7 @@ function populateWebInfoTables() {
     attachActionBtnListeners(modifiedServiceArray)
 }
 
-// Call the function to initiate fetching web info
-fetchAndUpdatePageInfo();
+
 
 function attachActionBtnListeners(modifiedServiceArray) {
     let isPopupOpen = false

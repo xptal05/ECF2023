@@ -96,7 +96,6 @@ function deteleService(selectedItem) {
     return sendAjaxRequest(phpScriptURL, 'POST', postData);
 }
 
-
 function vehicleInfoPush(formData) {
     const phpScriptURL = 'func-one.php?action=updateVehicle';
     formData.action = 'updateVehicle'

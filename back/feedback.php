@@ -90,10 +90,10 @@ if (session_status() == PHP_SESSION_NONE) {
         </div>
     </section>
     <script src="./scripts/script-mapping.js"></script>
-    <script src="./scripts/script-createTag.js"></script>
-    <script src="./scripts/script-eventListeners.js"></script>
-    <script src="./scripts/script-updateData.js"></script>
     <script src="./scripts/script-fetchData.js"></script>
+    <script src="./scripts/script-filterActions.js"></script>
+    <script src="./scripts/script-updateData.js"></script>
+
     <script src="./scripts/script-popups.js"></script>
     <script src="./scripts/script-postDb.js"></script>
     <script src="./scripts/script-notifications.js"></script>

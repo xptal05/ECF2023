@@ -869,7 +869,7 @@ function updateUser()
             $statement->bindParam(':password', $hashedPassword);
         }
         if ($statement->execute()) {
-            $response = ['message' => 'User updated successfully.'];
+            $response = ['message' => 'Success:User updated successfully.'];
         }
     } catch (PDOException $e) {
         $response = handleError($e);
