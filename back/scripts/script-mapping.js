@@ -92,11 +92,6 @@ const customMappings = {
         actions: ['?confirm=', 'Valider', '?archiv=', 'Archiver'],
         formHeaders : ["Nom", "Prénom", "Email", "Droits", "Statut"],
         filter: (item, filterText, tagArray, statusValue) => {
-            /*
-            console.log('Item:', item);
-            console.log('Filter Text:', filterText);
-            console.log('Tag Array:', tagArray);
-            console.log('Status Value:', statusValue);*/
             return (
                 (filterText === '' || (
                     item.client_name.toLowerCase().includes(filterText) ||
@@ -124,7 +119,7 @@ const customMappings = {
             'Année': 'year',
             'Kilomètres': 'km',
             'Image': 'img',
-            'Carburant': 'fuel',
+            'Carbourant': 'fuel',
             'Statut': 'status',
             'Actions': 'id'
         },

@@ -4,7 +4,7 @@ fetchAndUpdateDropdownData();
 
 let isPopupOpen = false
 const metaTables = [
-    "carrosserie",
+    "caroserie",
     "carbourant",
     "couleur",
     "portes",
@@ -72,6 +72,7 @@ function dropdowntopage() {
             const itemArray = dropdownMapping[tableId]['array'];
             const idKey = dropdownMapping[tableId]['idKey'];
             const name = dropdownMapping[tableId]['name'];
+            console.log(dropdownMapping[tableId])
 
             const selectedItem = dropdownMapping[tableId]['array'].find(item => item[idKey] === itemId);
             if (selectedItem) {

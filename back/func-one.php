@@ -245,10 +245,10 @@ function fetchData()
             INNER JOIN models ON vehicles.model = models.id_model
             LEFT JOIN images ON vehicles.id_vehicle = images.associated_to_vehicle AND images.type = 2
             LEFT JOIN (
-                SELECT DISTINCT vehicle, value
-                FROM vehicle_properties
-                INNER JOIN properties_meta ON vehicle_properties.property = properties_meta.id_meta
-                WHERE properties_meta.name = "Carburant"
+                SELECT vehicle_properties.*, properties_meta.*
+FROM vehicle_properties
+LEFT JOIN properties_meta ON vehicle_properties.property = properties_meta.id_meta
+WHERE vehicle_properties.property_name = "Carbourant"
             ) AS fuel_properties ON vehicles.id_vehicle = fuel_properties.vehicle;
         ';
         } else if (strpos($currentURL, 'vehicle-form.php') !== false || $_GET['data'] === 'images') {
@@ -265,7 +265,7 @@ function fetchData()
                 SELECT DISTINCT vehicle, value
                 FROM vehicle_properties
                 INNER JOIN properties_meta ON vehicle_properties.property = properties_meta.id_meta
-                WHERE properties_meta.name = "Carburant"
+                WHERE properties_meta.name = "Carbourant"
             ) AS fuel_properties ON vehicles.id_vehicle = fuel_properties.vehicle WHERE (status = 1 OR status = 2);
         ';
         }
@@ -766,7 +766,7 @@ function updateVehicle()
                 'Couleur' => 'Couleur',
                 'Portes' => 'Portes',
                 'Transmission' => 'Transmission',
-                'Carbourant' => 'Carburant',
+                'Carbourant' => 'Carbourant',
                 'Options' => 'Options'
             ];
 
@@ -925,16 +925,17 @@ function updateDropdown()
     ];
 
     if (isset($id)) {
-        if (!in_array($table, $metaTables) || $table != "properties_meta") {
+        if (!in_array($table, $metaTables) || $table !== "properties_meta") {
             if ($itemDescription != '') {
-                $sql = "UPDATE " . $table . " SET " . $nameColumn . " = :itemName, description ='" . $itemDescription . "' WHERE " . $idColumn . " = :id";
+                $sql = "UPDATE " . $table . " SET `" . $nameColumn . "` = :itemName, `description` = '" . $itemDescription . "' WHERE " . $idColumn . " = :id";
             } else if ($brandSelect != '') {
-                $sql = "UPDATE " . $table . " SET " . $nameColumn . " = :itemName, brand ='" . $brandSelect . "' WHERE " . $idColumn . " = :id";
+                $sql = "UPDATE " . $table . " SET " . $nameColumn . " = :itemName, brand ='" . $brandSelect . "' WHERE " . $idColumn . " = :id";//funguje
             } else {
-                $sql = "UPDATE " . $table . " SET '" . $nameColumn . "'= :itemName WHERE " . $idColumn . " = :id";
+                $sql = "UPDATE " . $table . " SET `" . $nameColumn . "` = :itemName WHERE `" . $idColumn . "` = :id";
             }
         } else {
-            $sql = 'UPDATE properties_meta SET ' . $nameColumn . ' = :itemName WHERE ' . $idColumn . ' = :id';
+            $sql = "UPDATE properties_meta SET `" . $nameColumn . "` = :itemName WHERE '" . $idColumn . "' = :id";
+
         }
     } else {
         if ($table != "properties_meta") {
@@ -957,14 +958,14 @@ function updateDropdown()
         $statement->bindParam(':itemName', $itemName);
 
         if (isset($id)) {
-            $statement->bindValue(':id', $id);
+            $statement->bindParam(':id', $id);
         }
 
         if ($statement->execute()) {
             $response = ['message' => 'Succès: Element from ' . $table . ' ' . (isset($id) ? 'updated' : 'inserted') . ' successfully.'];
         }
     } catch (PDOException $e) {
-        $response = handleError($e) . ' ' . $sql;
+        $response = handleError($e);
     }
     header('Content-Type: application/json');
     echo json_encode($response);

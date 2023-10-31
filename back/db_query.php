@@ -77,18 +77,10 @@ function sanitizeData($data) {
 
 function fetchData()
 {
-    $user = 'studi';
-    $password = 'studi-ecf';
-    $db = 'studi_ecf';
-    $host = 'localhost';
-    $port = 3001;
 
     try {
-        $pdo = new PDO("mysql:host=$host;port=$port;dbname=$db", $user, $password);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+        global $pdo;
         $currentURL = $_SERVER['HTTP_REFERER']; // Get the current URL
-
         $sql = ''; // Initialize an empty SQL query
 
         // Determine the SQL query based on the current URL

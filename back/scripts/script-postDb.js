@@ -133,7 +133,8 @@ function pushMessageFeedback(formData) {
 
 function dropdownpush(tableId, name, selectedItem, idKey, additionalValue) {
     let tableDb
-    if (metaTables.some(table => table.toLowerCase().trim() == tableId.toLowerCase().trim())) {
+    console.log(tableId)
+    if (metaTables.some(table => table.toLowerCase().trim() == tableId.toLowerCase().trim()) || tableId == "Carrosserie" || tableId == "caroserie") {
         { tableDb = "properties_meta" }
     } else { tableDb = dropdownKeys[tableId] }
 
@@ -167,7 +168,7 @@ function dropdownpush(tableId, name, selectedItem, idKey, additionalValue) {
     if (selectedItem) {
         itemData.id = selectedItem[idKey]
     }
-
+console.log(itemData)
     console.log('item id : ',itemData.id)
     console.log('item name : ', itemData.name )
 

@@ -12,7 +12,7 @@ function notificationsServeur(data) {
 
     if(currentUrl ==="web-pages.php"){
         fetchAndUpdatePageInfo()
-    } else if(currentUrl ==="settings.php"){
+    } else if(currentUrl ==="settings.php" ||currentUrl ==="vehicle-form.php" ){
         fetchAndUpdateDropdownData()
     }else{
         fetchDataAndRenderList()
@@ -20,4 +20,8 @@ function notificationsServeur(data) {
     setTimeout(function () {
         notifications.className = '';
     }, 8000);
+
+    if(currentUrl ==="vehicle-form.php" ){
+        setTimeout(function () {window.location.reload();},4000)
+    }
 }

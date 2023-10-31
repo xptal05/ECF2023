@@ -5,7 +5,7 @@ const dropdownMapping = {
     "Marque": { array: [], idKey: "id_brand", name: "name" },
     "Modèle": { array: [], idKey: "id_model", name: "name" },
     "Carrosserie": { array: [], idKey: "id_meta", name: "value" },
-    "Carburant": { array: [], idKey: "id_meta", name: "value" },
+    "Carbourant": { array: [], idKey: "id_meta", name: "value" },
     "Couleur": { array: [], idKey: "id_meta", name: "value" },
     "Portes": { array: [], idKey: "id_meta", name: "value" },
     "Transmission": { array: [], idKey: "id_meta", name: "value" },
@@ -17,7 +17,7 @@ const dropdownKeys = {
     "Marque": "brand",
     "Modèle": "model",
     "Carrosserie": "caroserie",
-    "Carburant": "carbourant",
+    "Carbourant": "carbourant",
     "Couleur": "couleur",
     "Portes": "portes",
     "Transmission": "transmission"

@@ -18,6 +18,7 @@ function resetPopup() {
 }
 
 function deletePopup(selectedItem, tableId, name, idKey) {
+    console.log(name)
     console.log(tableId)
     let tableDb
     let id = selectedItem[idKey]
@@ -28,6 +29,7 @@ function deletePopup(selectedItem, tableId, name, idKey) {
             tableDb = "properties_meta"
         } else { tableDb = dropdownKeys[tableId] }
     }
+    console.log((name !== ""))
 
     //WEB SERVICES
     if (idKey === "id_info") {
@@ -144,7 +146,7 @@ function dropdownPopup(selectedItem, tableId, name, idKey) {
         popupform.innerHTML += `    
         <div class="popup-input-container">
             <label>Description</label>
-            <input id="itemDescriptionInput" type="text" value="${itemDescription}">
+            <input id="itemDescriptionInput" type="text" value="${itemDescription}" required>
             <p>to assign the status to vehicles, messages, feedbacks, users</p>
         </div>`
     }

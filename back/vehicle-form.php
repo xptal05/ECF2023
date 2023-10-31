@@ -367,26 +367,8 @@ if (session_status() == PHP_SESSION_NONE) {
         // Function to create options based on the mapping
         function createOptions(inputId, mapping) {
             const selectOptions = document.getElementById(`${inputId}Options`);
-
-
-            /*const brandInput = document.getElementById('MarqueInput')
-
-            let optionsArray = []
-            console.log('inputId', inputId)
-            if (inputId == "Modèle") {
-                dropdownMapping['Marque'].array.forEach(item => {
-                    if (item.name == brandInput.value) {
-                        const selecteBrand = item.id_brand
-                        mapping.array.forEach(item => {
-                            if (item.id_model == selecteBrand) {
-                                optionsArray.push(item)
-                            }
-                        })
-                    }
-                })
-            } else {*/
+            selectOptions.innerHTML = ""
                 optionsArray = mapping.array;
-            //}
 
             optionsArray.forEach(option => {
                 const optionDiv = document.createElement("div");
