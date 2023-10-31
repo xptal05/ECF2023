@@ -1,5 +1,7 @@
 <?php
-include 'session.php';
+if (session_status() == PHP_SESSION_NONE) {
+    include 'session.php';
+}
 ?>
 
 <!DOCTYPE html>
@@ -122,7 +124,6 @@ include 'session.php';
             }
         }
 
-
         const feedbackForm = document.getElementById('feedbackForm')
         // Add a submit event listener to the form
         feedbackForm.addEventListener('submit', (e) => {
@@ -138,10 +139,10 @@ include 'session.php';
                     formData[input.id.replace("Input", "")] = input.value;
                 });
                 pushNewFeedback(formData)
+                form.classList.toggle('on')
             }; // Call the arraypush function when the form is submitted
         });
     </script>
-    <script src="script.js"></script>
 </body>
 
 </html>

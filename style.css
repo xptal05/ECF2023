@@ -13,18 +13,14 @@
     --transparent-gradient: linear-gradient(90deg, #000 -6.3%, rgba(0, 0, 0, 0.00) 19.93%, rgba(0, 0, 0, 0.80) 50%);
     --box-shadow: 0px 2px 4px 1px rgba(0, 0, 0, 0.25);
     --box-shadow-white: 0px 2px 4px 1px rgba(255, 255, 255, 0.25);
-
-    -webkit-box-sizing: border-box;
-    /* Safari/Chrome, other WebKit */
-    -moz-box-sizing: border-box;
-    /* Firefox, other Gecko */
-    box-sizing: border-box;
-    /* Opera/IE 8+ */
 }
 
 * {
     margin: 0;
     padding: 0;
+    -webkit-box-sizing: border-box;             /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;                /* Firefox, other Gecko */
+    box-sizing: border-box;                     /* Opera/IE 8+ */
 }
 
 body {
@@ -33,10 +29,6 @@ body {
     margin: 0;
     color: var(--text-color);
 }
-
-
-
-
 
 h1 {
     font-size: 24px;
@@ -201,8 +193,6 @@ a {
 .burger-lines.selected .middle {
     display: none;
 }
-
-.burger-menu-container .active {}
 
 .menu {
     display: none

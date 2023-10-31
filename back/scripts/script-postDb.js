@@ -77,13 +77,12 @@ function arraydelete(tableDb, idKey, id) {
         idKey: idKey,
         id: id
     }
-    console.log(postData)
 
     // Send an AJAX request to update the database
     return sendAjaxRequest(phpScriptURL, 'POST', postData);
 }
 
-function deteleService(selectedItem){
+function deteleService(selectedItem) {
     const phpScriptURL = './func-one.php?action=deleteService';
     const postData = {
         action: 'deleteService',
@@ -106,7 +105,7 @@ function vehicleInfoPush(formData) {
 }
 
 function pushWebPageInfo(formData) {
-    console.log('pushweb trigerred',formData); // Form data with inputId and dataValue for select options
+    console.log('pushweb trigerred', formData); // Form data with inputId and dataValue for select options
 
     const phpScriptURL = './func-one.php?action=modifyWeb';
     formData.action = 'modifyWeb'
@@ -145,7 +144,7 @@ function dropdownpush(tableId, name, selectedItem, idKey, additionalValue) {
             const inputValue = document.getElementById(`${header}Input`).value;
             itemData[header] = inputValue;
         }
-    } else if(tableId == "Couleur"){
+    } else if (tableId == "Couleur") {
         console.log('push dropdown colour')
         console.log('addition', additionalValue)
         const inputValue = document.getElementById(`itemNameInput`).value;
@@ -168,9 +167,9 @@ function dropdownpush(tableId, name, selectedItem, idKey, additionalValue) {
     if (selectedItem) {
         itemData.id = selectedItem[idKey]
     }
-console.log(itemData)
-    console.log('item id : ',itemData.id)
-    console.log('item name : ', itemData.name )
+    console.log(itemData)
+    console.log('item id : ', itemData.id)
+    console.log('item name : ', itemData.name)
 
     itemData.action = 'updateDropdown'
     // Send an AJAX request to update the database
@@ -242,7 +241,7 @@ function arraypush(itemId) {
     console.log(userData)
 
     userData.id = itemId
-    userData.action ='updateUser'
+    userData.action = 'updateUser'
 
     // Send an AJAX request to update the database
     fetch('./func-one.php?action=updateUser', {
@@ -273,7 +272,7 @@ function arraydeleteUser(itemId) {
         key2: 'value2',
         action: 'delete',
         table: 'users',
-        idKey : 'id_user',
+        idKey: 'id_user',
         id: itemId
     }
 
@@ -296,4 +295,48 @@ function arraydeleteUser(itemId) {
             console.error('Error:', error);
         });
 
+}
+
+async function fetchAndUpdateImageInfo() {
+    try {
+        // Fetch dropdown data from the server
+        const imageInfoData = await fetchImageInfoFromServer();
+        // Group the fetched data by "type" key
+
+        imageData = imageInfoData
+        console.log('image data', imageData)
+
+        currentURL = window.location.pathname.split('/').pop()
+        if (currentURL == "web-pages.php") {
+            console.log('fetch')
+            let gallerytype = "Main"
+            //imgGalleryPopup(gallerytype)
+            populateGallery(imageData)
+        } else {
+            filterGallery();
+        }
+    } catch (error) {
+        console.log('Error fetching web info data:', error);
+    }
+}
+
+// This function will fetch web info data from the server
+async function fetchImageInfoFromServer() {
+    const phpScriptURL = './func-one.php?action=fetchData&data=images';
+    try {
+        const response = await fetch(phpScriptURL, {
+            method: 'GET', // Use GET method
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Fetch error:', error);
+        throw error; // Re-throw the error to propagate it further
+    }
 }

@@ -1,3 +1,4 @@
+//Event Listners for Filter - messages, feedback, vehiclules, users
 function attachEventListeners(data) {
     // Attach keydown event listener to the filter input
     filter.addEventListener('keydown', (e) => {
@@ -16,7 +17,6 @@ function attachEventListeners(data) {
         }
     });
 
-
     // Attach blur event listener to the filter input
     filter.addEventListener('blur', (e) => {
         if (e.target.value.trim() !== '') {
@@ -30,30 +30,24 @@ function attachEventListeners(data) {
             updateList(data);
         }
     });
-    
-    if (currentURL !== "web-pages.pgp") {
-        // Attach event listener to filter
-        filter.addEventListener('input', () => updateList(data));
 
-        // Attach event listeners to pagination controls
-        prevPageBtn.addEventListener('click', () => {
-            if (currentPage > 1) {
-                currentPage--;
-                updateList(data);
-            }
-        });
+    // Attach event listener to filter
+    filter.addEventListener('input', () => updateList(data));
 
-        nextPageBtn.addEventListener('click', () => {
-            if (currentPage < totalPages) {
-                currentPage++;
-                updateList(data);
-            }
-        });
-    }
-    console.log('current page',currentPage)
-}
+    // Attach event listeners to pagination controls
+    prevPageBtn.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            updateList(data);
+        }
+    });
 
-function attachActionBtnListeners(data) {
-    //messages and feedbacks voir script messagesFeedbacks
-    
+    nextPageBtn.addEventListener('click', () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            updateList(data);
+        }
+    });
+
+    console.log('current page', currentPage)
 }

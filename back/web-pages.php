@@ -1,5 +1,7 @@
 <?php
-include 'session.php';
+if (session_status() == PHP_SESSION_NONE) {
+    include 'session.php';
+}
 
 // Table array
 $tables = [

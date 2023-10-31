@@ -794,6 +794,8 @@ textarea {
 
 .gallery-image-selected {
     height: 250px;
+    max-width: 300px;
+    object-fit: contain;
     width: auto;
 }
 
@@ -915,7 +917,7 @@ input[type="file"]::file-selector-button {
 #popup textarea,
 #popup input[type='password'],
 .new-form-input>input,
-.new-form-input>textarea {
+.new-form-input>textarea, .new-form-input>select {
     background-color: rgba(255, 255, 255, 0.5);
     border: 1px solid var(--primary-color);
     font-size: 18px;
@@ -982,6 +984,7 @@ input[type="file"]::file-selector-button {
 
 #serviceIconContainer>img {
     height: 200px;
+    max-width: 200px;
     object-fit: contain;
 }
 

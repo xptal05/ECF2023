@@ -1,28 +1,6 @@
 <?php
-
-// Database Configuration
-$dbConfig = [
-    'host' => 'localhost',
-    'port' => 3001,
-    'name' => 'studi_ecf',
-    'user' => 'studi',
-    'password' => 'studi-ecf'
-];
-
-// Connect to the database
-function connectToDatabase($config)
-{
-    try {
-        $dsn = "mysql:host={$config['host']};port={$config['port']};dbname={$config['name']}";
-        $pdo = new PDO($dsn, $config['user'], $config['password']);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return $pdo;
-    } catch (PDOException $e) {
-        die("Connection failed: " . $e->getMessage());
-        //        $response = ['message' => 'issue'];
-        //echo json_encode($response);
-    }
-}
+require_once "./config/db.php";
+$pdo = connectToDatabase($dbConfig);
 
 function handleError($e)
 {
@@ -41,9 +19,6 @@ function handleError($e)
     return $response;
     //echo json_encode($response);
 }
-
-
-$pdo = connectToDatabase($dbConfig);
 
 /*
 $actions = [
@@ -381,7 +356,7 @@ function imgUpload()
     if ($check !== false && $_FILES["image"]["size"] < 1000000) {
         // Check if the file already exists.
         if (file_exists($targetFile)) {
-            $response['message'] = "Sorry, this file already exists.";
+            $response['message'] = "Erreur:Sorry, this file already exists.";
         } else {
             // Move the uploaded file to the specified directory.
             if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
@@ -393,14 +368,14 @@ function imgUpload()
                     $response['id_img'] = $imageInfo['id_img'];
                     $response['link'] = $imageInfo['link'];
                 } else {
-                    $response['message'] = "Failed to create a database entry.";
+                    $response['message'] = "Erreur: Failed to create a database entry.";
                 }
             } else {
-                $response['message'] =  "Sorry, there was an error uploading your file.";
+                $response['message'] =  "Erreur: There was an error uploading your file.";
             }
         }
     } else {
-        $response['message'] =  "File is not an image or the image size exceeds 1MB.";
+        $response['message'] =  "Erreur: File is not an image or the image size exceeds 1MB.";
     }
 
     // Return the response as JSON.

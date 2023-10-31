@@ -16,7 +16,7 @@ function attachActionBtnListeners(filteredData) {
 
             // Fetch the corresponding data from your 'data' array
             const selectedItem = filteredData.find(item => item[customMappings[currentURL].headers["Actions"]] === itemId);
-console.log(selectedItem)
+            console.log(selectedItem)
 
             if (selectedItem) {
 
@@ -52,10 +52,14 @@ console.log(selectedItem)
 }
 
 const userForm = document.getElementById('userForm')
+
 // Add a submit event listener to the form
 userForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    const form = document.querySelector('.form-new-container')
+    
     if (formvalidation() == true) {
         arraypush()
+        form.classList.toggle('on')
     }; // Call the arraypush function when the form is submitted
 });

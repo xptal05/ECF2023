@@ -1,22 +1,9 @@
 <?php
 
-$user = 'studi';
-$password = 'studi-ecf';
-$db = 'studi_ecf';
-$host = 'localhost';
-$port = 3001;
-
-try {
-    $pdo = new PDO("mysql:host=$host;port=$port;dbname=$db", $user, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Connection failed: " . $e->getMessage());
-    // Handle connection error if needed
-}
-
 function login()
 {
-    global $pdo;
+    require_once "./config/db.php";
+    $pdo = connectToDatabase($dbConfig);
     try {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $inputUsername = $_POST["login"];

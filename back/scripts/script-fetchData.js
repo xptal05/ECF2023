@@ -51,3 +51,4 @@ function sortData(data) {
 }
 
 fetchDataAndRenderList()
+

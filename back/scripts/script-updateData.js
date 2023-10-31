@@ -89,8 +89,6 @@ function populateList(data) {
 
         const row = document.createElement('tr');
         console.log('item', item)
-        console.log('table headers', tableHeaders);
-        console.log('role', item.role)
 
         // Generate table columns based on tableHeaders
         for (const header of tableHeaders) {

@@ -7,21 +7,28 @@ function notificationsServeur(data) {
         notifications.classList.add('success')
     }
     notifications.innerHTML = `${data['message']}<div class="notification-progress-bar"></div>`
-    popup.innerHTML = '';
-    const currentUrl = window.location.pathname.split('/').pop()
 
-    if(currentUrl ==="web-pages.php"){
-        fetchAndUpdatePageInfo()
-    } else if(currentUrl ==="settings.php" ||currentUrl ==="vehicle-form.php" ){
-        fetchAndUpdateDropdownData()
-    }else{
-        fetchDataAndRenderList()
+    if (notifications.classList.contains('error')) {
+        console.log('error');
+    } else {
+        //Close the last popup
+        const lastPopup = popup.lastChild;
+        if (lastPopup) {
+            popup.removeChild(lastPopup);
+            isPopupOpen = false
+        }
+
+        //Update data in UI
+        const currentUrl = window.location.pathname.split('/').pop()
+        if (currentUrl === "web-pages.php") {
+            fetchAndUpdatePageInfo()
+        } else if (currentUrl === "settings.php" || currentUrl === "vehicle-form.php") {
+            fetchAndUpdateDropdownData()
+        } else {
+            fetchDataAndRenderList()
+        }
     }
     setTimeout(function () {
         notifications.className = '';
     }, 8000);
-
-    if(currentUrl ==="vehicle-form.php" ){
-        setTimeout(function () {window.location.reload();},4000)
-    }
 }

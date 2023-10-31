@@ -2,6 +2,9 @@
 if (session_status() == PHP_SESSION_NONE) {
     include 'session.php';
 }
+
+require_once "./config/db.php";
+$pdo = connectToDatabase($dbConfig);
 ?>
 
 <!DOCTYPE html>
@@ -367,7 +370,7 @@ if (session_status() == PHP_SESSION_NONE) {
         // Function to create options based on the mapping
         function createOptions(inputId, mapping) {
             const selectOptions = document.getElementById(`${inputId}Options`);
-            selectOptions.innerHTML = ""
+            selectOptions.innerHTML = "";
                 optionsArray = mapping.array;
 
             optionsArray.forEach(option => {
@@ -485,39 +488,9 @@ if (session_status() == PHP_SESSION_NONE) {
             })
         })
 
-        let imageData = {}
-        async function fetchAndUpdateImageInfo() {
-            try {
-                // Fetch dropdown data from the server
-                const imageInfoData = await fetchImageInfoFromServer();
-                // Group the fetched data by "type" key
-                imageData = imageInfoData
-                filterGallery();
-            } catch (error) {
-                console.log('Error fetching web info data:', error);
-            }
-        }
 
-        // This function will fetch web info data from the server
-        async function fetchImageInfoFromServer() {
-            const phpScriptURL = './func-one.php?action=fetchData';
-            try {
-                const response = await fetch(phpScriptURL, {
-                    method: 'GET', // Use GET method
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                return data;
-            } catch (error) {
-                console.error('Fetch error:', error);
-                throw error; // Re-throw the error to propagate it further
-            }
-        }
+        let imageData = {}
+
     </script>
 
     <script src="./components/menu.js"></script>
