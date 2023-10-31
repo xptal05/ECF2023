@@ -19,6 +19,35 @@ async function fetchData(phpScriptURL) {
     }
 }
 
+// Fetch dropdown data and update dropdownMapping
+async function fetchAndUpdateDropdownData() {
+    console.log('fetch')
+    const phpScriptURL = './func-one.php?action=fetchDropdowns';
+    try {
+        // Clear existing data from the arrays
+        for (const key in dropdownMapping) {
+            dropdownMapping[key].array = [];
+        }
+
+        // Fetch dropdown data from the server
+        const dropdownData = await fetchData(phpScriptURL);
+
+        // Loop through the keys and update dropdownMapping based on the received data
+        for (const key in dropdownKeys) {
+            const dataKey = dropdownKeys[key];
+            if (dropdownData[dataKey] && Array.isArray(dropdownData[dataKey])) {
+                // Use the idKey and name from the dropdownMapping
+                dropdownMapping[key] = { array: dropdownData[dataKey], idKey: dropdownMapping[key].idKey, name: dropdownMapping[key].name };
+            } 
+        }
+        // Now that dropdownMapping is updated, proceed to set up your pop-up
+        pageDropdownsActions();
+    } catch (error) {
+        console.log('Error fetching dropdown data:', error);
+    }
+}
+
+
 //Fetch web info and icons to web pages
 async function fetchAndUpdatePageInfo() {
     try {
@@ -59,7 +88,7 @@ async function fetchAndUpdatePageInfo() {
 
 
 
-// Function to fetch data and render a list - all data
+// Fetch data and render a list - all data
 async function fetchDataAndRenderList() {
     const phpScriptURL = './func-one.php?action=fetchData';
 
@@ -71,5 +100,17 @@ async function fetchDataAndRenderList() {
     } catch (error) {
         console.error('Fetch error:', error);
         throw error;
+    }
+}
+
+
+// Fetch data for dashboard
+async function fetchDataForDashboard() {
+    const phpScriptURL = './func-one.php?action=fetchDataDashbord';
+    try {
+        data = await fetchData(phpScriptURL);
+        return data
+    } catch (error) {
+        // Handle errors if needed
     }
 }

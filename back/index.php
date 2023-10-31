@@ -419,8 +419,11 @@ global $pdo;
             </div>
         </div>
     </section>
-    <script src="script-dashboard.js"></script>
+    <script src="./scripts/script-fetchData.js"></script>
     <script src="./components/menu.js"></script>
+    <script>
+        fetchDataForDashboard()
+    </script>
 </body>
 
 </html>

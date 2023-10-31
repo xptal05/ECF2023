@@ -113,8 +113,6 @@ function populateWebInfoTables() {
     attachActionBtnListeners(modifiedServiceArray)
 }
 
-
-
 function attachActionBtnListeners(modifiedServiceArray) {
     let isPopupOpen = false
     const actionBtns = document.querySelectorAll('a.actionbtn');

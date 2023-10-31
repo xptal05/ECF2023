@@ -257,6 +257,7 @@ $pdo = connectToDatabase($dbConfig);
             </div>
         </form>
     </section>
+    <script src="./scripts/script-fetchData.js"></script>
     <script src="script-dropdowns.js"></script>
     <script src="./scripts/script-notifications.js"></script>
     <script src="./scripts/script-popups.js"></script>
