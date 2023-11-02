@@ -399,7 +399,15 @@ function archiveMessageFeedbackPopup(selectedItem, idKey, status) {
     }
 
     formData.idColumn = idKey
-    action = status == 6 ? 'archiver' : 'valider'
+    let action;
+
+    if (status === 6) {
+        action = 'archiver';
+    } else if (status === 8) {
+        action = 'modifier le statut de';
+    } else {
+        action = 'valider';
+    }
 
     // Create and populate the popup with the selected data
     const header = `Changement d'élément des ${formData.table}`
