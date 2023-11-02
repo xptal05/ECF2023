@@ -1,9 +1,4 @@
-/* PUSHES DATA INTO THE PHP FUNCTION - AJAX
-
-
-LIST: DROPDOWN PUSH + DROPDOWN DELETE
-
-MANQUE: IMG, CONFIRMATION, USER, etc...*/
+/* PUSHES DATA INTO THE PHP FUNCTION - AJAX*/
 
 // Reusable function for making AJAX requests
 
@@ -95,6 +90,7 @@ function deteleService(selectedItem) {
     // Send an AJAX request to update the database
     return sendAjaxRequest(phpScriptURL, 'POST', postData);
 }
+
 
 function vehicleInfoPush(formData) {
     const phpScriptURL = 'func-one.php?action=updateVehicle';
@@ -267,8 +263,6 @@ function arraypush(itemId) {
 function arraydeleteUser(itemId) {
     const phpScriptURL = './func-one.php?action=deleteData';
     const postData = {
-        key1: 'value1',
-        key2: 'value2',
         action: 'delete',
         table: 'users',
         idKey: 'id_user',
@@ -296,46 +290,47 @@ function arraydeleteUser(itemId) {
 
 }
 
-async function fetchAndUpdateImageInfo() {
-    try {
-        // Fetch dropdown data from the server
-        const imageInfoData = await fetchImageInfoFromServer();
-        // Group the fetched data by "type" key
-
-        imageData = imageInfoData
-        console.log('image data', imageData)
-
-        currentURL = window.location.pathname.split('/').pop()
-        if (currentURL == "web-pages.php") {
-            console.log('fetch')
-            let gallerytype = "Main"
-            //imgGalleryPopup(gallerytype)
-            populateGallery(imageData)
-        } else {
-            filterGallery();
-        }
-    } catch (error) {
-        console.log('Error fetching web info data:', error);
+function deleteImage(selectedImage, notify = true) {
+    const phpScriptURL = './func-one.php?action=deleteImg';
+    const postData = {
+        action: 'deleteImg',
+        id_img: selectedImage.id_img,
+        image_link: selectedImage.link
     }
-}
 
-// This function will fetch web info data from the server
-async function fetchImageInfoFromServer() {
-    const phpScriptURL = './func-one.php?action=fetchData&data=images';
-    try {
-        const response = await fetch(phpScriptURL, {
-            method: 'GET', // Use GET method
-            headers: {
-                'Content-Type': 'application/json',
-            },
+    // Send an AJAX request to update the database
+    fetch(phpScriptURL, {
+        method: 'POST',
+        body: JSON.stringify(postData), // Send data as JSON
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(response => response.json())
+        .then(data => {
+            // Handle the response from the server
+            console.log(data);
+
+            // Clear the innerHTML and remove the popup window
+            const subPopup = document.getElementById('sub-popup');
+            subPopup.innerHTML = '';
+            subPopup.classList.remove('popup-window');
+            //refetch images
+            fetchAndUpdateImageInfo()
+
+            //update UI - sidebar
+            const imageIdInput = document.querySelector('.image-info-sidebar')
+            let imgLink = imageIdInput.querySelector(".gallery-image-selected")
+            let imageName = imageIdInput.querySelector("input")
+            let actionLinks = imageIdInput.querySelectorAll("a")
+
+            imgLink.src =""
+            imageName.value = ""
+            actionLinks[0].href = ""
+            actionLinks[1].href = ""
+
+        })
+        .catch(error => {
+            console.error('Error:', error);
         });
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Fetch error:', error);
-        throw error; // Re-throw the error to propagate it further
-    }
 }

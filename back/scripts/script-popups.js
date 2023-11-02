@@ -1,22 +1,70 @@
 const popup = document.getElementById('popup')
 
 function closePopup() {
-  //  if (isPopupOpen == true) {
-        // Attach the closeAction event listener
-        const closeBtns = document.querySelectorAll('.close-btn');
-        //    const cancelButton = document.querySelector('button.btn[type="reset"]');
-        closeBtns.forEach(closeBtn => {
-            closeBtn.addEventListener('click', () => {
-                const lastPopup = popup.lastChild;
-                if (lastPopup) {
-                    popup.removeChild(lastPopup);
-                    isPopupOpen = false
-                }
-            });
-        })
-   // }
+    //  if (isPopupOpen == true) {
+    // Attach the closeAction event listener
+    const closeBtns = document.querySelectorAll('.close-btn');
+    //    const cancelButton = document.querySelector('button.btn[type="reset"]');
+    closeBtns.forEach(closeBtn => {
+        closeBtn.addEventListener('click', () => {
+            const lastPopup = popup.lastChild;
+            if (lastPopup) {
+                popup.removeChild(lastPopup);
+                isPopupOpen = false
+            }
+        });
+    })
+    // }
 }
 
+function createPopup(header, content, formActions) {
+    // Create and populate the popup
+    var popupDiv = document.createElement('div');
+    popupDiv.id = "popupDiv";
+
+    popupDiv.innerHTML += `
+        <div class="popup-header">
+            <h2>${header}</h2>
+            <button class="close-sign close-btn" id="close">X</button>
+        </div>
+        ${content}
+    `;
+
+    popup.appendChild(popupDiv);
+    popupDiv.classList.add('popup-window');
+    isPopupOpen = true;
+
+    // Add event listeners after appending the form to the DOM
+    formActions();
+    closePopup()
+}
+
+//user delete
+function confirmationPopup(selectedItem) {
+    const header = "Archiver l'utilisateur";
+    const content = `
+    <div class="popup-body-normal">
+        <h3>Êtes-vous sûr de vouloir archiver cet utilisateur ?</h3>
+        <form id="archivForm" class="popup-btns">
+            <button class="btn error-btn close-btn" type="reset">NON</button>
+            <button class="btn success-btn" type="submit">OUI</button>
+        <form>
+    </div>
+    `;
+
+    function eventListeners() {
+        const archivForm = document.getElementById('archivForm');
+        archivForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            console.log('supprimer');
+            arraydeleteUser(selectedItem.id_user)
+        });
+    }
+
+    createPopup(header, content, eventListeners);
+}
+
+//delete items
 function deletePopup(selectedItem, tableId, name, idKey) {
     console.log(name)
 
@@ -36,110 +84,41 @@ function deletePopup(selectedItem, tableId, name, idKey) {
     }
 
     // Create and populate the popup with the selected data
-    var popupDiv = document.createElement('div');
-    popupDiv.id = "popupDiv"
+    const header = `Suppression d'élément des ${tableId}`
+    const content = `
+    <div class="popup-body-normal">
+        <div>Êtes-vous sûr de vouloir supprimer l'élément <b>${selectedItem[name]}</b> ?</div>
+        <form id="archivForm" class="popup-btns">
+            <button class="btn error-btn close-btn" type="reset">NON</button>
+            <button class="btn success-btn" type="submit">OUI</button>
+        <form>
+    </div>
+    `
 
-    popupDiv.innerHTML += `
-        <div class="popup-header">
-            <h2>Suppression d'élément des ${tableId}</h2>
-            <button class="close-sign close-btn" id="close">X</button>
-        </div>
-        <div class="popup-body-normal">
-            <div>Êtes-vous sûr de vouloir supprimer l'élément <b>${selectedItem[name]}</b> ?</div>
-            <form id="archivForm" class="popup-btns">
-                <button class="btn error-btn close-btn" type="reset">NON</button>
-                <button class="btn success-btn" type="submit">OUI</button>
-            <form>
-        </div>`;
+    function eventListeners() {
+        const archivForm = document.getElementById('archivForm');
 
-    popup.appendChild(popupDiv);
-    popupDiv.classList.add('popup-window');
-    isPopupOpen = true;
-
-    // Add event listeners after appending the form to the DOM
-    const archivForm = document.getElementById('archivForm');
-
-    //SUBMIT
-    archivForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        if (selectedItem['type'] == "1") {
-            deteleService(selectedItem)   //FOR SERVICES
-        } else {
-            arraydelete(tableDb, idKey, id)    //FOR ALL OTHER ITEMS
-        }
-    });
-
-    closePopup()
-}
-
-//delete image action
-function deleteImagePopup(selectedImage, gallerytype) {
-    const deleteImgBtn = document.getElementById('supprimer-img')
-
-    deleteImgBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        // Create a confirmation pop-up
-        const subPopup = document.getElementById('sub-popup');
-        subPopup.classList.add('popup-window');
-
-        // Prompt the user for confirmation in French
-        subPopup.innerHTML = `
-                                    <h3>Confirmer la suppression</h3>
-                                    <p>Êtes-vous sûr de vouloir supprimer cette image ?</p>
-                                    <div class="popup-btns">
-                                        <button class="btn error-btn" id="cancel-delete">Non</button>
-                                        <button class="btn success-btn" id="confirm-delete">Oui</button>
-                                    </div>
-                                `
-        deleteImagePopupActions(selectedImage, subPopup, gallerytype)
-    })
-}
-
-//ASSIGN EVENT LISTNERES TO CONFIRMATION DELET POPUP
-function deleteImagePopupActions(selectedImage, subPopup, gallerytype) {
-    const confirmDeleteBtn = document.getElementById('confirm-delete');
-    const cancelDeleteBtn = document.getElementById('cancel-delete');
-
-    confirmDeleteBtn.addEventListener('click', () => {
-        // User confirmed deletion - trigger the deletion action
-        fetch('func-one.php', {
-            method: 'POST',
-            body: JSON.stringify({ action: 'deleteImg', id_img: selectedImage.id_img, image_link: selectedImage.link }),
-            headers: {
-                'Content-Type': 'application/json'
+        //SUBMIT
+        archivForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (selectedItem['type'] == "1") {
+                deteleService(selectedItem)   //FOR SERVICES
+            } else {
+                arraydelete(tableDb, idKey, id)    //FOR ALL OTHER ITEMS
             }
-        })
-            .then(response => response.json())
-            .then(data => {
-                // Handle the response from the server (image deleted or not)
-                console.log(data.message);
-
-                // Clear the innerHTML and remove the popup window
-                subPopup.innerHTML = '';
-                subPopup.classList.remove('popup-window');
-                //BUG TO BE FIXED    fetchImages()
-
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    });
-
-    cancelDeleteBtn.addEventListener('click', () => {
-        // User canceled deletion - clear the innerHTML and remove the popup window
-        subPopup.innerHTML = '';
-        subPopup.classList.remove('popup-window');
-    });
+        });
+    }
+    createPopup(header, content, eventListeners);
 
 }
 
+//Modify dropdown elements - web pages + vehicle form
 function dropdownPopup(selectedItem, tableId, name, idKey) {
     console.log(selectedItem)
 
     let itemName = ""
     let itemDescription
     let title = "Ajouter"
-    let brandSelect
     let colorRgb = "#ff0000"
 
     if (selectedItem) {
@@ -155,48 +134,29 @@ function dropdownPopup(selectedItem, tableId, name, idKey) {
     }
 
     // Create and populate the popup with the selected data
-    var popupDiv = document.createElement('div');
-    popupDiv.id = "popupDiv"
-    popupDiv.innerHTML += `
-
-        <div class="popup-header">
-            <h2>${title} l'élément</h2>
-            <button class="close-sign close-btn" id="close">X</button>
-        </div>`;
-
-    const popupform = document.createElement('form')
-    popupform.id = "modifyForm"
-    popupform.classList.add('popup-body-normal')
-    colorPicker = ""
-
-    if (tableId == "Couleur") {
-        colorPicker = `<input type="color" id="colorPicker" name="color" value="${colorRgb}">`
-    }
-
-    popupform.innerHTML = `
+    const header = `${title} l'élément`
+    let content = `
+    <form id="modifyForm" class="popup-body-normal">
     <div class="popup-input-container">
         <label>Item name</label>
-        <input id="itemNameInput" value="${itemName}" required>
-        ${colorPicker}
-    </div>`
-
+        <input id="itemNameInput" value="${itemName}" required>`
+    if (tableId == "Couleur") {
+        content += `<input type="color" id="colorPicker" name="color" value="${colorRgb}">`
+    }
+    content += `</div>`
 
     if (tableId == "Modèle") {
         const brandArray = dropdownMapping['Marque'].array
-        popupform.innerHTML += `<label>Marque</label>`
-        brandSelect = document.createElement('select')
-        brandSelect.required = true
-        brandSelect.innerHTML = `
-        <option value="0" selected disabled>Select</option>`
-        brandSelect.id = "brandInput"
+        content += `<label>Marque</label>
+        <select required id="brandInput">
+            <option value="0" selected disabled>Select</option>`
         for (brand of brandArray)
-            brandSelect.innerHTML += `    
-        <option value="${brand['id_brand']}">${brand['name']}</option>`
-        popupform.appendChild(brandSelect)
+            content += `<option value="${brand['id_brand']}">${brand['name']}</option>`
+        content += `</select>`
     }
 
     if (itemDescription != undefined) {
-        popupform.innerHTML += `    
+        content += `    
         <div class="popup-input-container">
             <label>Description</label>
             <input id="itemDescriptionInput" type="text" value="${itemDescription}" required>
@@ -204,56 +164,50 @@ function dropdownPopup(selectedItem, tableId, name, idKey) {
         </div>`
     }
 
-
-    popupform.innerHTML += `
+    content += `
     <div class="popup-btns">
         <button class="btn" id="delete-btn">Supprimer</button>
         <button class="btn error-btn close-btn" type=reset id="close-btn">Annuler</button> 
         <button class="btn success-btn" type="submit">Sauvegarder</button>
     </div>
-        `;
-    popup.innerHTML = ''; // Clear any existing content in the popup
-    popupDiv.appendChild(popupform)
-    popup.appendChild(popupDiv);
+    </form>`
 
-    if (selectedItem && tableId == "Modèle") {
-        const itemBrand = selectedItem['brand']
-        //select correct option odf select tag
-        const brandInput = document.getElementById('brandInput')
-        brandInput.value = itemBrand
-        console.log('value', brandInput.value)
+
+    function eventListeners() {
+        if (selectedItem && tableId == "Modèle") {
+            const itemBrand = selectedItem['brand']
+            //select correct option odf select tag
+            const brandInput = document.getElementById('brandInput')
+            brandInput.value = itemBrand
+            console.log('value', brandInput.value)
+        }
+
+        const popupform = document.getElementById('modifyForm')
+
+        // Add a submit event listener to the form
+        popupform.addEventListener('submit', (e) => {
+            e.preventDefault();
+            formType = 'dropdownForm'
+            if (formvalidation(formType) == true) {
+                let additionalValue
+                if (tableId == "Modèle") {
+                    const brandSelect = document.getElementById('brandInput');
+                    additionalValue = brandSelect.value
+                }
+                if (tableId == "Couleur") {
+                    const colorPicker = document.getElementById('colorPicker')
+                    additionalValue = colorPicker.value
+                }
+                console.log(selectedItem)
+                console.log('tableid', tableId.toLowerCase())
+                dropdownpush(tableId, name, selectedItem, idKey, additionalValue)
+            };
+        });
     }
-
-    popupDiv.classList.add('popup-window');
-    isPopupOpen = true
-
-
-
-    // Add a submit event listener to the form
-    popupform.addEventListener('submit', (e) => {
-        e.preventDefault();
-        formType = 'dropdownForm'
-        if (formvalidation(formType) == true) {
-            let additionalValue
-            if (tableId == "Modèle") {
-                const brandSelect = document.getElementById('brandInput');
-                additionalValue = brandSelect.value
-            }
-            if (tableId == "Couleur") {
-                const colorPicker = document.getElementById('colorPicker')
-                additionalValue = colorPicker.value
-            }
-            console.log(selectedItem)
-            console.log('tableid', tableId.toLowerCase())
-            dropdownpush(tableId, name, selectedItem, idKey, additionalValue)
-        };
-    });
-
-    // Attach the closeAction event listener
-    closePopup()
+    createPopup(header, content, eventListeners);
 }
 
-
+//Web info modifications - simple
 function webInfoPopup(selectedItem, serviceType) {
     console.log('selected item', selectedItem)
     let id
@@ -270,77 +224,60 @@ function webInfoPopup(selectedItem, serviceType) {
         category = selectedItem['category']
     }
 
-    const popup = document.getElementById('popup');
-    var popupDiv = document.createElement('div');
-    popupDiv.id = "popupDiv";
-    popupDiv.innerHTML += `
-        <div class="popup-header">
-            <h2>Element Information</h2>
-            <button class="close-sign close-btn" id="close">X</button>
-        </div>`
-    const popupForm = document.createElement('form')
-    popupForm.id = "popupform"
-    popupForm.classList.add('popup-body-normal')
-    popupForm.innerHTML =
-        `<div class="popup-input-container">
+    // Create and populate the popup with the selected data
+    const header = `Element Information`
+    let content = `
+        <form id="popupform" class="popup-body-normal">
+        <div class="popup-input-container">
                 <label for="text">Text</label>
                 <input name="text" type="text" value="${text}" required>
             </div>
             <div class="popup-input-container">
                 <label for="order">Order</label>
                 <input name="order" type="number" value="${order}" required>
-            </div>`
+            </div>
+        `
     if (serviceType == 3 || serviceType == 2 || serviceType == 7 || serviceType == "Contact" || serviceType == "Address" || serviceType == "Reasons") {
-        popupForm.innerHTML += `
+        content += `
         <div class="popup-input-container">
             <label for="category">Category</label>
             <input name="category" type="text" value="${category}">
         </div>`
     }
-    popupForm.innerHTML += `<div class="popup-btns">
+    content += `<div class="popup-btns">
                 <input type="reset" class="btn error-btn close-btn" value="Reset">
                 <input type="submit" class="btn success-btn" value="Submit">
             </div>`
 
-    popupDiv.appendChild(popupForm)
-    popup.appendChild(popupDiv);
-    popupDiv.classList.add('popup-window');
+    function eventListeners() {
+        const form = document.getElementById('popupform');
 
-    const form = document.getElementById('popupform');
+        // Add a submit event listener to the form
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formType = "webInfoForm"
+            if (formvalidation(formType) == true) {
+                // Collect data from the form
+                const formData = {}
+                formData.id = id
+                formData.type = type
 
-    // Add a submit event listener to the form
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const formType = "webInfoForm"
-        if (formvalidation(formType) == true) {
-            // Collect data from the form
-            const formData = {}
-            formData.id = id
-            formData.type = type
+                const formInputs = document.querySelectorAll('input[type="text"], input[type="number');
 
-            const formInputs = document.querySelectorAll('input[type="text"], input[type="number');
-
-            formInputs.forEach(input => {
-                formData[input.name] = input.value;
-            })
-            pushWebPageInfo(formData)
-        }
-    });
-
-    closePopup();
+                formInputs.forEach(input => {
+                    formData[input.name] = input.value;
+                })
+                pushWebPageInfo(formData)
+            }
+        });
+    }
+    createPopup(header, content, eventListeners);
 }
 
+//WEB PAGE INFO - SERVICE modification
 function serviceInfoPopup(selectedItem, serviceType) {
-    console.log('services popup')
     console.log('selected item', selectedItem)
-    let id
-    let text = ""
-    let type = serviceType
-    let order = ""
-    let iconLink = ""
-    let iconId = ""
-    let description = ""
-    let descriptionId = ""
+    let id, text, type = serviceType, order, iconLink, iconId, description, descriptionId;
 
     if (selectedItem) {
         id = selectedItem['id_info']
@@ -353,14 +290,9 @@ function serviceInfoPopup(selectedItem, serviceType) {
         order = selectedItem['order']
     }
 
-    const popup = document.getElementById('popup');
-    var popupDiv = document.createElement('div');
-    popupDiv.id = "popupDiv";
-    popupDiv.innerHTML += `
-        <div class="popup-header">
-            <h2>Element Information</h2>
-            <button class="close-sign close-btn" id="close">X</button>
-        </div>
+    // Create and populate the popup with the selected data
+    const header = `Element Information`
+    let content = `
         <form id="popupform" class="popup-body">
             <div class="column1">
                 <div class="popup-input-container service">
@@ -390,68 +322,66 @@ function serviceInfoPopup(selectedItem, serviceType) {
                     <input type="submit" class="btn success-btn" value="Submit">
                 </div>
             </div>
-        </form>`;
-    popup.appendChild(popupDiv);
-    popupDiv.classList.add('popup-window');
+        </form>
+        `
+    function eventListeners() {
+        const form = document.getElementById('popupform');
 
-    const form = document.getElementById('popupform');
+        // trigger pop modify drop downs
+        const actionBtns = document.querySelectorAll('a.actionbtn');
+        actionBtns.forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const tableId = e.currentTarget.getAttribute('href').split('=')[1].split('-')[0];
+                const actionBtn = e.currentTarget.getAttribute('href').split('=')[0].replace('?', '');
 
-    // trigger pop modify drop downs
-    const actionBtns = document.querySelectorAll('a.actionbtn');
-    actionBtns.forEach((btn) => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const tableId = e.currentTarget.getAttribute('href').split('=')[1].split('-')[0];
-            const actionBtn = e.currentTarget.getAttribute('href').split('=')[0].replace('?', '');
-
-            if (tableId == "img") {
-                console.log('image')
-                const gallerytype = e.currentTarget.className;
-                if (actionBtn == "add") {
-                    imgAddPopup(gallerytype)
-                } else if (actionBtn == "modify") {
-                    imgModifyPopup(gallerytype)
+                if (tableId == "img") {
+                    console.log('image')
+                    const gallerytype = e.currentTarget.className;
+                    if (actionBtn == "add") {
+                        imgAddPopup(gallerytype)
+                    } else if (actionBtn == "modify") {
+                        imgModifyPopup(gallerytype)
+                    }
                 }
-            }
+            })
         })
-    })
 
+        // Add a submit event listener to the form
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (formvalidation() == true) {
+                // Collect data from the form
+                const formData = {}
+                formData.id = id
+                formData.type = type
 
-    // Add a submit event listener to the form
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        if (formvalidation() == true) {
-            // Collect data from the form
-            const formData = {}
-            formData.id = id
-            formData.type = type
+                const formInputs = document.querySelectorAll('input[type="text"], input[type="number"]');
+                const formTextarea = document.querySelectorAll('textarea')
+                const icon = document.querySelector('#serviceIconContainer img')
 
-            const formInputs = document.querySelectorAll('input[type="text"], input[type="number"]');
-            const formTextarea = document.querySelectorAll('textarea')
-            const icon = document.querySelector('#serviceIconContainer img')
+                formInputs.forEach(input => {
+                    formData[input.name] = input.value;
+                })
 
-            formInputs.forEach(input => {
-                formData[input.name] = input.value;
-            })
+                formTextarea.forEach(input => {
+                    formData[input.name + '-id'] = input.getAttribute("data-value")
+                    formData[input.name] = input.value
+                })
 
-            formTextarea.forEach(input => {
-                formData[input.name + '-id'] = input.getAttribute("data-value")
-                formData[input.name] = input.value
-            })
+                formData['img-id'] = icon.getAttribute("data-value")
 
-            formData['img-id'] = icon.getAttribute("data-value")
-
-            console.log('form data', formData)
-            pushServiceInfo(formData)
-        }
-    });
-
-    closePopup();
+                console.log('form data', formData)
+                pushServiceInfo(formData)
+            }
+        });
+    }
+    createPopup(header, content, eventListeners);
 }
 
+//ARCHIVE ALL ELEMENTS
 function archiveMessageFeedbackPopup(selectedItem, idKey, status) {
     formData = {}
-
     formData.id = selectedItem[idKey]
     formData.status = status
     formData.userId = UserId
@@ -472,38 +402,69 @@ function archiveMessageFeedbackPopup(selectedItem, idKey, status) {
     action = status == 6 ? 'archiver' : 'valider'
 
     // Create and populate the popup with the selected data
-    var popupDiv = document.createElement('div');
-    popupDiv.id = "popupDiv"
-
-    popupDiv.innerHTML += `
-            <div class="popup-header">
-                <h2>Changement d'élément des ${formData.table}</h2>
-                <button class="close-sign close-btn" id="close">X</button>
-            </div>
-            <div class="popup-body-normal">
+    const header = `Changement d'élément des ${formData.table}`
+    let content = `
+    <div class="popup-body-normal">
                 <div>Êtes-vous sûr de vouloir ${action} l'élément de <b>${selectedItem[formData.subject]}</b> ?</div>
             </div>
                 <form id="archivForm" class="popup-btns">
                     <button class="btn error-btn close-btn" type="reset">NON</button>
                     <button class="btn success-btn" type="submit">OUI</button>
-                <form>`;
+                <form>
+    `
 
-    popup.appendChild(popupDiv);
-    popupDiv.classList.add('popup-window');
-
-    // Add event listeners after appending the form to the DOM
-    const archivForm = document.getElementById('archivForm');
-    archivForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        pushMessageFeedback(formData)
-    });
-
-    closePopup()
-
+    function eventListeners() {
+        // Add event listeners after appending the form to the DOM
+        const archivForm = document.getElementById('archivForm');
+        archivForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            pushMessageFeedback(formData)
+        });
+    }
+    createPopup(header, content, eventListeners);
 }
 
+//MODIFY IMAGE POPUP -> choose from gallery or upload new
+function imgModifyPopup(gallerytype) {
+    // Create and populate the popup with the selected data
+    const header = `Upload an Image`
+    let content = `
+    <div class="popup-body-normal">
+            <div>Do you wish to upload a new image or choose one from the gallery?
+        </div>
+        <div class="popup-btns">
+            <a href="?choose=img" class="actionbtn btn">CHOOSE FROM GALLERY</a>
+            <a href="?add=img" class="actionbtn btn">UPLOAD NEW</a>
+        </div>
+    `
+    function eventListeners() {
+        let popupDiv = popup.lastChild;
+        popupDiv.classList.add('newOrGalleryPopup')
+
+        const actionBtns = document.querySelectorAll('a.actionbtn');
+        actionBtns.forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const tableId = e.currentTarget.getAttribute('href').split('=')[1].split('-')[0];
+                const actionBtn = e.currentTarget.getAttribute('href').split('=')[0].replace('?', '');
+
+                if (tableId == "img") {
+                    console.log('image')
+                    if (actionBtn == "add") {
+                        imgAddPopup(gallerytype)
+                    } else if (actionBtn == "choose") {
+                        imgGalleryPopup(gallerytype)
+                    }
+                }
+            })
+        })
+    }
+    createPopup(header, content, eventListeners);
+}
+
+//UPLOAD AN IMAGE
 function imgAddPopup(gallerytype) {
-    const popup = document.getElementById('popup')
+    let imgType = gallerytype.includes('mainCarImage') ? 'Main' : 'Gallery';
 
     //close the popup newOrGalleryPopup
     const newOrGalleryPopup = document.querySelector('.newOrGalleryPopup')
@@ -512,27 +473,18 @@ function imgAddPopup(gallerytype) {
     }
 
     // Create and populate the popup with the selected data
-    var popupDiv = document.createElement('div');
-    let imgType = gallerytype.includes('mainCarImage') ? 'Main' : 'Gallery';
-
-    popupDiv.id = "popupDiv"
-    popupDiv.innerHTML += `
-    <div class="popup-header">
-    <h2 > Upload an Image </h2> 
-    <button class="close-sign close-btn" id="close">X</button>
-    </div>
+    const header = `Upload an Image`
+    let content = `
     <form method="post" enctype="multipart/form-data" id="img-form" class="popup-body-normal">
-        <input type="file" name="image" id="image" fieldtext="Select a File">
-        <input type="submit" name="submit" id="selectImg" value="Upload" data-value=${imgType} class="btn">
+    <input type="file" name="image" id="image" fieldtext="Select a File">
+    <input type="submit" name="submit" id="selectImg" value="Upload" data-value=${imgType} class="btn">
     </form>
-        `;
-    popup.appendChild(popupDiv);
-    popupDiv.classList.add('popup-window');
+    `
+    createPopup(header, content, uploadImageAndUpdateUI);
 
-    uploadImageAndUpdateUI()
-    closePopup()
 }
 
+//EVENT FUNCTION OF UPLOAD AN IMAGE
 function uploadImageAndUpdateUI() {
     const imgForm = document.getElementById('img-form')
     const imageInput = document.getElementById('image');
@@ -553,10 +505,9 @@ function uploadImageAndUpdateUI() {
             })
                 .then(response => response.json())
                 .then(data => {
-                    notificationsServeur(data)
-
                     const submitType = document.getElementById('selectImg')
                     currentURL = window.location.pathname.split('/').pop()
+                    notificationsServeur(data)
 
                     if (currentURL == "web-pages.php") {
                         console.log('webpages')
@@ -594,162 +545,11 @@ function uploadImageAndUpdateUI() {
     })
 }
 
-function imgGalleryPopup(gallerytype) {
-    currentURL = window.location.pathname.split('/').pop()
-
-    //close the popup newOrGalleryPopup
-    const newOrGalleryPopup = document.querySelector('.newOrGalleryPopup')
-    if (newOrGalleryPopup) {
-        newOrGalleryPopup.remove()
-    }
-
-    if (currentURL == "web-pages.php") {
-        console.log('img gallery service')
-        const popup = document.getElementById('popup')
-        //create new popup unstead
-        var popupDiv = document.createElement('div');
-        popupDiv.id = "popupDiv"
-        popupDiv.innerHTML += `
-    <div id="sub-popup"></div>
-        <div class="popup-header">
-            <h2>l'élément</h2>
-            <button class="close-sign close-btn" id="close">X</button>
-        </div>
-        <div class="popup-body">
-            <div class="main-gallery">
-                <div class="main-gallery-body" id="mainGallery">
-                </div>
-                <form id="mainImgSelect">
-                    <input id="imageSelectedInput" type="text" hidden value="">
-                    <input type="reset" class="btn error-btn close-btn" value="reset">
-                    <input type="submit" class="btn success-btn" value="submit" id="selectImg">
-                </form>
-            </div>
-            <div class="gallery-divider"></div>
-            <div class="image-info-sidebar"></div>
-        </div>
-        `;
-        popup.appendChild(popupDiv);
-        popupDiv.classList.add('popup-window-gallery');
-
-        //POPULATE GALLERY WITH ICONS
-        console.log(imageData)
-        const mainGallery = document.getElementById('mainGallery');
-        const imageSelectedInput = document.getElementById('imageSelectedInput')
-
-        imageData.forEach(image => {
-            if (image['type'] != 2 && image['type'] != 1) {
-                //CREATE IMG DIV
-                const imgdiv = document.createElement('div');
-                imgdiv.classList.add('galleryImgDiv')
-                imgdiv.innerHTML = `
-                <img src="${image['link']}" class="gallery-image">
-                <input type="checkbox" value="${image['id_img']}" class="img-checkbox">
-                `
-                mainGallery.appendChild(imgdiv);
-
-                const input = imgdiv.querySelector('input.img-checkbox');
-                imgdiv.addEventListener('click', handleCheckboxClick);
-                input.addEventListener('click', handleCheckboxClick);
-
-                function handleCheckboxClick() {
-                    input.checked = !input.checked;
-                    imgdiv.classList.toggle('checked', input.checked);
-
-                    if (input.checked) {
-                        let checkedImgId = input.value;
-                        const imageIdInput = document.querySelector('.image-info-sidebar');
-                        const selectedImage = imageData.find(image => image.id_img === checkedImgId);
-
-                        imageIdInput.innerHTML = `
-                            <h3>Image info</h3>
-                            <img src="${selectedImage.link}" class="gallery-image-selected">
-                            <div>
-                            <label>Name</label>
-                            <input type="text" readonly value="${selectedImage.name}">
-                            </div>
-                            <div>
-                            <label>Link</label>
-                            <a href="${selectedImage.link}" target="_blank" rel="noreferrer">Show image in a new tab</a>
-                            </div>
-                            <div>
-                            <a href="?id=${selectedImage.id_img}" id="supprimer-img">Supprimer Image</a>
-                            <input id="imageID" type="text" hidden value="${selectedImage.id_img}">
-                            </div>`
-                        // Set the value of the input field to the checkedImgId
-                        imageSelectedInput.value = checkedImgId;
-
-                        deleteImagePopup(selectedImage, gallerytype)
-
-                        const gallerySubmit = document.querySelector('#mainImgSelect #selectImg')
-                        const imageselect = document.getElementById('imageID')
-
-                        gallerySubmit.addEventListener('click', (e) => {
-                            e.preventDefault()
-                            // Get the selected image
-                            const selectedImage = imageData.find(image => image.id_img === imageselect.value);
-                            const secondDiv = popup.children[1];
-
-                            if (selectedImage) {
-                                // Set the source and value for service icon
-                                const serviceIconContainer = document.getElementById('serviceIconContainer')
-                                serviceIconContainer.querySelector('img').src = selectedImage.link;
-                                serviceIconContainer.querySelector('img').setAttribute('data-value', selectedImage.id_img)
-                                secondDiv.remove()
-                            } else { console.log('no image selected') }
-                        })
-
-                    }
-
-                };
-            }
-        })
-
-
-    } else {
-        let checkedImgId
-        const popup = document.getElementById('popup')
-        popup.innerHTML = ""
-        // Create and populate the popup with the selected data
-        var popupDiv = document.createElement('div');
-        console.log(gallerytype)
-        const imgType = gallerytype.includes('mainCarImage') ? 'Main' : 'Gallery';
-        popupDiv.id = "popupDiv"
-        popupDiv.innerHTML += `
-    <div id="sub-popup"></div>
-        <div class="popup-header">
-            <h2>l'élément</h2>
-            <button class="close-sign close-btn" id="close">X</button>
-        </div>
-        <div class="popup-body">
-            <div class="main-gallery">
-                <div class="main-gallery-header">
-                    <a href="" id="not-assigned">Only not assigned</a>
-                    <a href="" id="this-car">This car images</a>
-                    <a href="" id="all">All images</a>
-                </div>
-                <div class="main-gallery-body" id="mainGallery" data-value=${imgType}></div>
-                <form id="mainImgSelect">
-                    <input id="imageSelectedInput" type="number" hidden value="">
-                    <input type="reset" class="btn error-btn close-btn" value="reset">
-                    <input type="submit" class="btn success-btn" value="submit" id="selectImg" data-value=${imgType}>
-                </form>
-            </div>
-            <div class="gallery-divider"></div>
-            <div class="image-info-sidebar">
-            </div>
-        </div>
-        `;
-        popup.appendChild(popupDiv);
-        popupDiv.classList.add('popup-window-gallery');
-
-
-        fetchImages()
-        selectImgfromGallery()
-        closePopup()
-    }
+function fetchImages() {
+    fetchAndUpdateImageInfo()
 }
 
+//ASSIGN IMAGE ALREADY ASSIGNED POPUP
 function imgSubPopup() {
     console.log('trigered')
     const imgdivs = document.querySelectorAll('.galleryImgDiv');
@@ -757,13 +557,9 @@ function imgSubPopup() {
     imgdivs.forEach(imgdiv => {
         const associatedImage = imgdiv.querySelector('img.associated');
         imgdiv.addEventListener('click', (e) => {
-            console.log('trigered')
-
             const input = imgdiv.querySelector('input.img-checkbox')
 
-            console.log('trigereed')
             if (associatedImage && input.checked == true) {
-                console.log('Triggered action for image with associated class:');
                 const subPopup = document.getElementById('sub-popup')
                 subPopup.classList.add('popup-window')
                 subPopup.innerHTML = `
@@ -795,150 +591,87 @@ function imgSubPopup() {
     });
 }
 
+//IMAGE GALLERY POPUP - choose from gallery
+function imgGalleryPopup(gallerytype) {
+    currentURL = window.location.pathname.split('/').pop()
+    let imgType = ""
 
-function imgModifyPopup(gallerytype) {
-    const popup = document.getElementById('popup')
-    // Create and populate the popup with the selected data
-    var popupDiv = document.createElement('div');
-    popupDiv.id = "popupDiv"
-    popupDiv.innerHTML += `
+    //close the popup newOrGalleryPopup
+    const newOrGalleryPopup = document.querySelector('.newOrGalleryPopup')
+    if (newOrGalleryPopup) {
+        newOrGalleryPopup.remove()
+    }
 
-        <div class="popup-header">
-                <h2>Modifier l'image</h2>
-                <button class="close-sign close-btn" id="close">X</button>
+    const header = `Image gallery`
+    let content = `
+    <div class="popup-body">
+        <div class="main-gallery">
+            <div class="main-gallery-header">
+                <a href="" id="not-assigned">Only not assigned</a>
+                <a href="" id="this-car">This car images</a>
+                <a href="" id="all">All images</a>
+            </div>
+            <div class="main-gallery-body" id="mainGallery" data-value=${imgType}></div>
+            <form id="mainImgSelect">
+                <input id="imageSelectedInput" type="number" hidden value="">
+                <input type="reset" class="btn error-btn close-btn" value="reset">
+                <input type="submit" class="btn success-btn" value="submit" id="selectImg" data-value=${imgType}>
+            </form>
         </div>
-        <div class="popup-body-normal">
-            <div>Do you wish to upload a new image or choose one from the gallery?
+        <div class="gallery-divider"></div>
+        <div class="image-info-sidebar">
+        <h3>Image info</h3>
+        <img src="" class="gallery-image-selected">
+        <div>
+        <label>Name</label>
+        <input type="text" readonly value="">
         </div>
-        <div class="popup-btns">
-            <a href="?choose=img" class="actionbtn btn">CHOOSE FROM GALLERY</a>
-            <a href="?add=img" class="actionbtn btn">UPLOAD NEW</a>
-        </div>`;
-    popup.appendChild(popupDiv);
-    popupDiv.classList.add('popup-window')
-    popupDiv.classList.add('newOrGalleryPopup')
+        <div>
+        <label>Link</label>
+        <a href="" target="_blank" rel="noreferrer">Show image in a new tab</a>
+        </div>
+        <div>
+        <a href="" id="supprimer-img">Supprimer Image</a>
+        </div>
+        </div>
+    </div>
+    <div id="sub-popup"></div>`
 
-    const actionBtns = document.querySelectorAll('a.actionbtn');
-    actionBtns.forEach((btn) => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const tableId = e.target.getAttribute('href').split('=')[1].split('-')[0];
-            const actionBtn = e.target.getAttribute('href').split('=')[0].replace('?', '');
+    if (currentURL == "web-pages.php") {
 
-            if (tableId == "img") {
-                console.log('image')
-                if (actionBtn == "add") {
-                    imgAddPopup(gallerytype)
-                } else if (actionBtn == "choose") {
-                    imgGalleryPopup(gallerytype)
-                }
-            }
-        })
-    })
+        function getGalleryContent() {
+            //POPULATE GALLERY WITH ICONS
+            //fetchAndUpdateImageInfo()
+            populateGallery(imageData)
+            selectImgfromGallery()
 
-    closePopup()
-}
-
-function fetchImages() {
-    fetchAndUpdateImageInfo()
-
-}
-
-function populateGallery(imageData) {
-    console.log('data2', imageData)
-    const mainGallery = document.getElementById('mainGallery');
-    mainGallery.innerHTML = ""
-    console.log(imageData)
-    console.log(currentURL)
-
-    imageData.forEach(image => {
-        const imgdiv = document.createElement('div');
-        //FOR POP UP to populate the good image type
-
-        if (image['type'] != 3) {
-            imgdiv.classList.add('galleryImgDiv');
-
-            let associated
-
-            if (image['associated_to_vehicle'] != null) {
-                associated = "associated"
-            }
-
-
-            imgdiv.innerHTML = `
-            <img src="${image['link']}" class="gallery-image ${associated}">
-            <input type="checkbox" value="${image['id_img']}" class="img-checkbox">
-        `;
-
-            mainGallery.appendChild(imgdiv);
-
-            const input = imgdiv.querySelector('input.img-checkbox');
-
-
-            const urlParams = new URLSearchParams(window.location.search);
-            const vehicleId = urlParams.get('id');
-            if (mainGallery.getAttribute('data-value') === "Main") {
-                if (image['associated_to_vehicle'] == vehicleId && image['type'] == 2) {
-                    imgdiv.classList.add('checked')
-                    input.checked = true
-                }
-            } else if (mainGallery.getAttribute('data-value') === "Gallery") {
-                if (image['associated_to_vehicle'] == vehicleId && image['type'] == 1) {
-                    imgdiv.classList.add('checked')
-                    input.checked = true
-                }
-            }
-            imgdiv.addEventListener('click', () => {
-                input.checked = !input.checked;
-                imgdiv.classList.toggle('checked', input.checked);
-
-
-                if (input.checked) {
-                    let checkedImgId = input.value;
-                    const imageIdInput = document.querySelector('.image-info-sidebar');
-
-                    const selectedImage = imageData.find(image => image.id_img === checkedImgId);
-                    console.log(selectedImage)
-
-                    imageIdInput.innerHTML = `
-                <h3>Image info</h3>
-                <img src="${selectedImage.link}" class="gallery-image-selected">
-                <div>
-                <label>Name</label>
-                <input type="text" readonly value="${selectedImage.name}">
-                </div>
-                <div>
-                <label>Link</label>
-                <a href="${selectedImage.link}" target="_blank" rel="noreferrer">Show image in a new tab</a>
-                </div>
-                <div>
-                <a href="?id=${selectedImage.id_img}" id="supprimer-img">Supprimer Image</a>
-                </div>
-                `
-                    // Set the value of the input field to the checkedImgId
-                    const imageSelectedInput = document.getElementById('imageSelectedInput')
-                    imageSelectedInput.value = checkedImgId;
-
-                    deleteImagePopup(selectedImage)
-
-                }
-
-            });
-
-            input.addEventListener('click', () => {
-                input.checked = !input.checked;
-                imgdiv.classList.toggle('checked', input.checked);
-
-            });
         }
-    });
+        createPopup(header, content, getGalleryContent);
 
-    imgSubPopup()
 
+    } else {
+        function getGalleryContent() {
+            fetchAndUpdateImageInfo()
+            selectImgfromGallery()
+        }
+        createPopup(header, content, getGalleryContent);
+
+        //Attribute the correct gallery type
+        imgType = gallerytype.includes('mainCarImage') ? 'Main' : 'Gallery';
+        const mainGallery = document.getElementById('mainGallery')
+        mainGallery.setAttribute('data-value', imgType)
+        const selectImg = document.getElementById('selectImg')
+        selectImg.setAttribute('data-value', imgType)
+    }
+
+    //Attribute the correct class to gallery popup
+    let popupDiv = popup.lastChild;
+    popupDiv.classList.add('popup-window-gallery');
+    popupDiv.classList.remove('popup-window')
 }
 
+//Filter gallery - vehicle-form
 function filterGallery() {
-    console.log('image data before filter', imageData)
     const notAssignedElement = document.getElementById('not-assigned');
     const thisCarElement = document.getElementById('this-car');
     const allElement = document.getElementById('all');
@@ -969,6 +702,99 @@ function filterGallery() {
 
     populateGallery(imageData)
 }
+
+//Populate Gallery - vehicle and web pages
+function populateGallery(imageData) {
+    const mainGallery = document.getElementById('mainGallery');
+
+    //clear all images from gallery
+    mainGallery.innerHTML = ""
+    console.log(imageData)
+
+    imageData.forEach(image => {
+        let associated = "";
+        let imgdiv = document.createElement('div');
+        imgdiv.classList.add('galleryImgDiv');
+
+        if (currentURL == "web-pages.php" && (image['type'] == 2 || image['type'] == 1)) {
+            return; // Skip this image
+        }
+
+        if (currentURL !== "web-pages.php" && image['type'] == 3) {
+            return; // Skip this image
+        }
+
+        if (image['associated_to_vehicle'] != null) {
+            associated = "associated";
+        }
+
+        imgdiv.classList.add('galleryImgDiv');
+        imgdiv.innerHTML = `
+            <img src="${image['link']}" class="gallery-image ${associated}">
+            <input type="checkbox" value="${image['id_img']}" class="img-checkbox">
+            `
+        mainGallery.appendChild(imgdiv);
+
+        //Check box checked for images that are assigned to this vehicle
+        const input = imgdiv.querySelector('input.img-checkbox');
+
+        if (currentURL == "vehicle-form.php") {
+            const urlParams = new URLSearchParams(window.location.search);
+            const vehicleId = urlParams.get('id');
+            if (mainGallery.getAttribute('data-value') === "Main") {
+                if (image['associated_to_vehicle'] == vehicleId && image['type'] == 2) {
+                    imgdiv.classList.add('checked')
+                    input.checked = true
+                }
+            } else if (mainGallery.getAttribute('data-value') === "Gallery") {
+                if (image['associated_to_vehicle'] == vehicleId && image['type'] == 1) {
+                    imgdiv.classList.add('checked')
+                    input.checked = true
+                }
+            }
+        }
+
+        //When image or check box clicked select the check box and pass the image info into the sidebar
+        imgdiv.addEventListener('click', handleCheckboxClick);
+        input.addEventListener('click', handleCheckboxClick);
+
+        function handleCheckboxClick() {
+            input.checked = !input.checked;
+            imgdiv.classList.toggle('checked', input.checked);
+
+            if (input.checked) {
+                let checkedImgId = input.value;
+                const imageIdInput = document.querySelector('.image-info-sidebar')
+                let imgLink = imageIdInput.querySelector(".gallery-image-selected")
+                let imageName = imageIdInput.querySelector("input")
+                let actionLinks = imageIdInput.querySelectorAll("a")
+
+                const selectedImage = imageData.find(image => image.id_img === checkedImgId);
+                console.log(selectedImage)
+
+                imgLink.src = selectedImage.link
+                imageName.value = selectedImage.name
+                actionLinks[0].href = selectedImage.link
+                actionLinks[1].href = `?id=${selectedImage.id_img}`
+
+                // Set the value of the input field to the checkedImgId
+                const imageSelectedInput = document.getElementById('imageSelectedInput')
+                imageSelectedInput.value = checkedImgId;
+
+                //assign the delete image action to selected image
+                deleteImagePopup(selectedImage)
+
+            }
+
+        }
+
+    });
+
+    imgSubPopup()
+
+}
+
+
 
 
 async function modifyUserPopup(selectedItem) {
@@ -1087,120 +913,106 @@ async function modifyUserPopup(selectedItem) {
     }
 }
 
-//user delete
-function confirmationPopup(selectedItem) {
-    // Create and populate the popup with the selected data
-    var popupDiv = document.createElement('div');
-    popupDiv.id = "popupDiv"
-
-    popupDiv.innerHTML += `
-
-        <div class="popup-header">
-            <h2>Archiver l'utilisateur</h2>
-            <button class="close-sign close-btn" id="close">X</button>
-        </div>
-        <div class="popup-body-normal">
-            <h3>Êtes-vous sûr de vouloir archiver cet utilisateur ?</h3>
-        <form id="archivForm" class="popup-btns">
-            <button class="btn error-btn close-btn" type="reset">NON</button>
-            <button class="btn success-btn" type="submit">OUI</button>
-        <form>
-        </div>`;
-
-    popup.appendChild(popupDiv);
-    popupDiv.classList.add('popup-window');
-    isPopupOpen = true;
-
-    // Add event listeners after appending the form to the DOM
-    const archivForm = document.getElementById('archivForm');
-    archivForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        console.log('supprimer');
-        arraydeleteUser(selectedItem.id_user)
-    });
-
-    archivForm.addEventListener('reset', (e) => {
-        e.preventDefault();
-        isPopupOpen = false
-        popupDiv.innerHTML = ''
-    });
-
-
-}
 
 function selectImgfromGallery() {
-    const submit = document.getElementById('selectImg')
+    const submit = document.getElementById('selectImg');
 
     submit.addEventListener('click', (e) => {
-        e.preventDefault()
-        const selectedImgInput = document.querySelectorAll('.galleryImgDiv.checked')
+        e.preventDefault();
+        const selectedImgInput = document.querySelectorAll('.galleryImgDiv.checked');
         let selectedImgArray = [];
 
         if (selectedImgInput.length === 0) {
             alert('You must select at least one image');
-        } else if (submit.getAttribute('data-value') === "Main") {
+            return;
+        }
+
+        //Web pages icons or main image on vehicle pages - handle the get id of selected image
+        if (currentURL === 'web-pages.php' || submit.getAttribute('data-value') === 'Main') {
             if (selectedImgInput.length === 1) {
-                //get only one image -  ineed to get the MAIN img somewhere
                 const inputValue = selectedImgInput[0].querySelector('input').value;
                 const url = selectedImgInput[0].querySelector('img').src;
-
-                // Create an object to store id and url
-                const imageInfo = {
-                    id: inputValue,
-                    url: url
-                };
-
-                // Push the object into the selectedImgArray
+                const imageInfo = { id: inputValue, url: url };
                 selectedImgArray.push(imageInfo);
 
-                const mainImage = document.querySelector('.img-container .car-tumbnail')
-
-                mainImage.src = selectedImgArray[0]['url']
-                mainImage.setAttribute('data-value', selectedImgArray[0]['id'])
-
-                popup.innerHTML = ''; // Close the popup window
-                isPopupOpen = false
-                console.log('array', selectedImgArray)
+                //update UI once image selected
+                if (currentURL === 'web-pages.php') {
+                    const serviceIconContainer = document.getElementById('serviceIconContainer');
+                    serviceIconContainer.querySelector('img').src = selectedImgArray[0].url;
+                    serviceIconContainer.querySelector('img').setAttribute('data-value', selectedImgArray[0].id);
+                } else if (submit.getAttribute('data-value') === 'Main') {
+                    const mainImage = document.querySelector('.img-container .car-tumbnail');
+                    mainImage.src = selectedImgArray[0].url;
+                    mainImage.setAttribute('data-value', selectedImgArray[0].id);
+                }
             } else {
                 alert('You must select only one image');
             }
-        } else if (submit.getAttribute('data-value') === "Gallery") {
-            console.log('gallery')
-            selectedImgInput.forEach(imgDiv => {
+            //for gallery images - get all images
+        } else if (submit.getAttribute('data-value') === 'Gallery') {
+            selectedImgInput.forEach((imgDiv, index) => {
                 const url = imgDiv.querySelector('img').src;
                 const inputValue = imgDiv.querySelector('input').value;
-
-                // Create an object to store id and url
-                const imageInfo = {
-                    id: inputValue,
-                    url: url
-                };
-
-                // Push the object into the selectedImgArray
+                const imageInfo = { id: inputValue, url: url };
                 selectedImgArray.push(imageInfo);
+            });
 
-                //REMOVE IMAGES FROM GALLERY
-                // Find the container element
-                const galleryContainer = document.querySelector('.gallery.container');
-                // Get all the <img> elements within the container
-                const images = galleryContainer.querySelectorAll('.carGallerythumbnail');
-                console.log(galleryContainer)
-                images.forEach(image => {
-                    galleryContainer.removeChild(image);
-                });
+            const galleryContainer = document.querySelector('.gallery.container');
+            galleryContainer.innerHTML = ''; // Clear the gallery
 
-                //ADD IMAGES TO GALLERY
-                selectedImgArray.forEach((item, index) => {
-                    galleryContainer.innerHTML += `
-                        <img src="${item.url}" alt="Car Image" class="carGallerythumbnail" data-value="${item.id}" name="galleryImg${index}">
-                    `;
-                });
-                popup.innerHTML = ''; // Close the popup window
-                isPopupOpen = false
+            selectedImgArray.forEach((item, index) => {
+                galleryContainer.innerHTML += `
+                    <img src="${item.url}" alt="Car Image" class="carGallerythumbnail" data-value="${item.id}" name="galleryImg${index}">
+                `;
             });
         }
 
+        // Close the last popup
+        const lastPopup = popup.lastChild;
+        if (lastPopup) {
+            popup.removeChild(lastPopup);
+            isPopupOpen = false;
+        }
+    });
+}
 
+//delete image action
+function deleteImagePopup(selectedImage) {
+    const deleteImgBtn = document.getElementById('supprimer-img')
+
+    deleteImgBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        // Create a confirmation pop-up
+        const subPopup = document.getElementById('sub-popup');
+        subPopup.classList.add('popup-window');
+
+        // Prompt the user for confirmation in French
+        subPopup.innerHTML = `
+                                    <h3>Confirmer la suppression</h3>
+                                    <p>Êtes-vous sûr de vouloir supprimer cette image ?</p>
+                                    <div class="popup-btns">
+                                        <button class="btn error-btn" id="cancel-delete">Non</button>
+                                        <button class="btn success-btn" id="confirm-delete">Oui</button>
+                                    </div>
+                                `
+        deleteImagePopupActions(selectedImage, subPopup)
     })
+}
+
+//ASSIGN EVENT LISTNERES TO CONFIRMATION DELET POPUP
+function deleteImagePopupActions(selectedImage, subPopup) {
+    const confirmDeleteBtn = document.getElementById('confirm-delete');
+    const cancelDeleteBtn = document.getElementById('cancel-delete');
+
+    confirmDeleteBtn.addEventListener('click', () => {
+        deleteImage(selectedImage, false)
+
+    });
+
+    cancelDeleteBtn.addEventListener('click', () => {
+        // User canceled deletion - clear the innerHTML and remove the popup window
+        subPopup.innerHTML = '';
+        subPopup.classList.remove('popup-window');
+    });
 
 }

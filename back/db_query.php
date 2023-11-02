@@ -1,23 +1,39 @@
 <?php
 require_once "./config/db.php";
-
 $pdo = connectToDatabase($dbConfig);
 
+function handleError($e)
+{
+    $error_message = 'Erreur: ' . $e->getMessage();
+
+    // Log the error to a file
+    $log_file = './error.log'; // Adjust the file path as needed
+    $timestamp = date('Y-m-d H:i:s');
+    $log_entry = "[$timestamp] $error_message\n";
+
+    if (file_put_contents($log_file, $log_entry, FILE_APPEND) === false) {
+        $error_message += 'Error logging the message.';
+    }
+
+    $response = ['message' => $error_message];
+    return $response;
+    //echo json_encode($response);
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
-    switch ($_GET['action']) {
-        case 'fetchData':
-            fetchData();
-            break;
-        case 'fetchDropdowns':
-            fetchDropdowns();
-            break;
-        case 'fetchDataDashbord':
-            fetchDataDashbord();
-            break;
-        default:
-            echo 'Invalid action requested.';
-            break;
+    $getActions = [
+        'fetchData' => 'fetchData',
+        'fetchDropdowns' => 'fetchDropdowns',
+        'fetchDataDashbord' => 'fetchDataDashbord',
+    ];
+
+    $action = $_GET['action'];
+
+    if (array_key_exists($action, $getActions)) {
+        $functionName = $getActions[$action];
+        $functionName();
+    } else {
+        echo 'Invalid action requested.';
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_FILES["image"])) {
@@ -25,42 +41,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
     } else {
         $data = json_decode(file_get_contents('php://input'), true);
         $action = $data['action'];
-        switch ($action) {
-            case 'delete':
-                deleteData();
-                break;
-            case 'modifyMessageFeedback':
-                updateMessageFeedbacks();
-                break;
-            case 'modifyWeb':
-                modifyWeb();
-                break;
-            case 'newFeedback':
-                addFeedback();
-                break;
-            case 'newMessage':
-                addMessage();
-                break;
-            case 'updateVehicle':
-                updateVehicle();
-                break;
-            case 'updateUser':
-                updateUser();
-                break;
-            case 'updateDropdown':
-                updateDropdown();
-                break;
-            case 'deleteImg':
-                deleteImg();
-                break;
-            default:
-                echoData();
-                break;
+
+        $postActions = [
+            'delete' => 'deleteData',
+            'deleteService' => 'deleteService',
+            'modifyMessageFeedback' => 'updateMessageFeedbacks',
+            'modifyWeb' => 'modifyWeb',
+            'newFeedback' => 'addFeedback',
+            'newMessage' => 'addMessage',
+            'updateVehicle' => 'updateVehicle',
+            'updateUser' => 'updateUser',
+            'updateDropdown' => 'updateDropdown',
+            'deleteImg' => 'deleteImg',
+            'modifyServices' => 'updateServices',
+        ];
+
+        if (array_key_exists($action, $postActions)) {
+            $functionName = $postActions[$action];
+            $functionName();
+        } else {
+            echoData();
         }
     }
 } else {
     echoData();
 }
+
 
 function sanitizeData($data) {
     if (is_array($data)) {
@@ -73,6 +79,16 @@ function sanitizeData($data) {
         $data = htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
     }
     return $data;
+}
+
+function echoData()
+{
+    try {
+        $response = ['error' => 'no method']; // Create an array with your data
+    } catch (Exception $e) {
+        $response = ['message' => 'issue'];
+    }
+    echo json_encode($response);
 }
 
 function fetchData()

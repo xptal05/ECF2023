@@ -19,6 +19,30 @@ async function fetchData(phpScriptURL) {
     }
 }
 
+async function fetchAndUpdateImageInfo() {
+    try {
+        const phpScriptURL = './func-one.php?action=fetchData&data=images';
+        // Fetch dropdown data from the server
+        const imageInfoData = await fetchData(phpScriptURL);
+        // Group the fetched data by "type" key
+
+        imageData = imageInfoData
+        console.log('image data', imageData)
+
+        currentURL = window.location.pathname.split('/').pop()
+        if (currentURL == "web-pages.php") {
+            console.log('fetch')
+            let gallerytype = "Main"
+            //imgGalleryPopup(gallerytype)
+            populateGallery(imageData)
+        } else {
+            filterGallery();
+        }
+    } catch (error) {
+        console.log('Error fetching web info data:', error);
+    }
+}
+
 // Fetch dropdown data and update dropdownMapping
 async function fetchAndUpdateDropdownData() {
     console.log('fetch')
@@ -111,6 +135,7 @@ async function fetchDataForDashboard() {
         data = await fetchData(phpScriptURL);
         return data
     } catch (error) {
-        // Handle errors if needed
+        console.error('Fetch error:', error);
+        throw error;
     }
 }

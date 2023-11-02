@@ -20,40 +20,20 @@ function handleError($e)
     //echo json_encode($response);
 }
 
-/*
-$actions = [
-    'fetchData' => 'fetchData',
-    'fetchDropdowns' => 'fetchDropdowns',
-    // Add more actions as needed
-];
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
+    $getActions = [
+        'fetchData' => 'fetchData',
+        'fetchDropdowns' => 'fetchDropdowns',
+        'fetchDataDashbord' => 'fetchDataDashbord',
+    ];
 
-$action = $_GET['action'] ?? '';
+    $action = $_GET['action'];
 
-if (array_key_exists($action, $actions)) {
-    $functionName = $actions[$action];
-    if (function_exists($functionName)) {
+    if (array_key_exists($action, $getActions)) {
+        $functionName = $getActions[$action];
         $functionName();
     } else {
         echo 'Invalid action requested.';
-    }
-} else {
-    echo 'Invalid action requested.';
-}*/
-
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
-    switch ($_GET['action']) {
-        case 'fetchData':
-            fetchData();
-            break;
-        case 'fetchDropdowns':
-            fetchDropdowns();
-            break;
-        case 'fetchDataDashbord':
-            fetchDataDashbord();
-            break;
-        default:
-            echo 'Invalid action requested.';
-            break;
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_FILES["image"])) {
@@ -61,50 +41,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
     } else {
         $data = json_decode(file_get_contents('php://input'), true);
         $action = $data['action'];
-        switch ($action) {
-            case 'delete':
-                deleteData();
-                break;
-            case 'deleteService':
-                deleteService();
-                break;
-            case 'modifyMessageFeedback':
-                updateMessageFeedbacks();
-                break;
-            case 'modifyWeb':
-                modifyWeb();
-                break;
-            case 'newFeedback':
-                addFeedback();
-                break;
-            case 'newMessage':
-                addMessage();
-                break;
-            case 'updateVehicle':
-                updateVehicle();
-                break;
-            case 'updateUser':
-                updateUser();
-                break;
-            case 'updateDropdown':
-                updateDropdown();
-                break;
-            case 'deleteImg':
-                deleteImg();
-                break;
-            case 'modifyServices':
-                updateServices();
-                break;
 
+        $postActions = [
+            'delete' => 'deleteData',
+            'deleteService' => 'deleteService',
+            'modifyMessageFeedback' => 'updateMessageFeedbacks',
+            'modifyWeb' => 'modifyWeb',
+            'newFeedback' => 'addFeedback',
+            'newMessage' => 'addMessage',
+            'updateVehicle' => 'updateVehicle',
+            'updateUser' => 'updateUser',
+            'updateDropdown' => 'updateDropdown',
+            'deleteImg' => 'deleteImg',
+            'modifyServices' => 'updateServices',
+        ];
 
-            default:
-                echoData();
-                break;
+        if (array_key_exists($action, $postActions)) {
+            $functionName = $postActions[$action];
+            $functionName();
+        } else {
+            echoData();
         }
     }
 } else {
     echoData();
 }
+
 
 
 function echoData()
@@ -203,46 +165,51 @@ function fetchData()
         global $pdo;
         $currentURL = $_SERVER['HTTP_REFERER']; // Get the current URL
         $sql = ''; // Initialize an empty SQL query
-
         // Determine the SQL query based on the current URL
-        if (strpos($currentURL, 'user-settings.php') !== false) {
-            // If the URL contains 'user.php', select from the 'users' table
-            $sql = 'SELECT * FROM users';
-        } elseif (strpos($currentURL, 'messages.php') !== false) {
-            // If the URL contains 'messages.php', select from the 'messages' table
-            $sql = 'SELECT * FROM messages';
-        } elseif (strpos($currentURL, 'feedback.php') !== false) {
-            $sql = 'SELECT * FROM feedbacks';
-        } elseif (strpos($currentURL, 'vehicles.php') !== false) {
-            $sql = 'SELECT DISTINCT vehicles.id_vehicle as id, brands.name as brand, models.name as model, vehicles.status as status, vehicles.price, vehicles.year, vehicles.km, images.link as img, fuel_properties.value as fuel
-            FROM vehicles
-            LEFT JOIN brands ON vehicles.brand = brands.id_brand
-            INNER JOIN models ON vehicles.model = models.id_model
-            LEFT JOIN images ON vehicles.id_vehicle = images.associated_to_vehicle AND images.type = 2
-            LEFT JOIN (
-                SELECT vehicle_properties.*, properties_meta.*
-FROM vehicle_properties
-LEFT JOIN properties_meta ON vehicle_properties.property = properties_meta.id_meta
-WHERE vehicle_properties.property_name = "Carbourant"
-            ) AS fuel_properties ON vehicles.id_vehicle = fuel_properties.vehicle;
-        ';
-        } else if (strpos($currentURL, 'vehicle-form.php') !== false || $_GET['data'] === 'images') {
-            $sql = 'SELECT * FROM images;';
-        } else if (strpos($currentURL, 'web-pages.php')  !== false && $_GET['data'] !== 'images') {
-            $sql = 'SELECT * FROM web_page_info';
-        } else if (strpos($currentURL, 'catalogue.php') !== false) {
-            $sql = 'SELECT DISTINCT vehicles.id_vehicle as id, brands.name as brand, models.name as model, vehicles.status as status, vehicles.price, vehicles.year, vehicles.km, images.link as img, fuel_properties.value as fuel
-            FROM vehicles
-            LEFT JOIN brands ON vehicles.brand = brands.id_brand
-            INNER JOIN models ON vehicles.model = models.id_model
-            LEFT JOIN images ON vehicles.id_vehicle = images.associated_to_vehicle AND images.type = 2
-            LEFT JOIN (
-                SELECT DISTINCT vehicle, value
-                FROM vehicle_properties
-                INNER JOIN properties_meta ON vehicle_properties.property = properties_meta.id_meta
-                WHERE properties_meta.name = "Carbourant"
-            ) AS fuel_properties ON vehicles.id_vehicle = fuel_properties.vehicle WHERE (status = 1 OR status = 2);
-        ';
+        switch (true) {
+            case strpos($currentURL, 'user-settings.php') !== false:
+                $sql = 'SELECT * FROM users';
+                break;
+
+            case strpos($currentURL, 'messages.php') !== false:
+                $sql = 'SELECT * FROM messages';
+                break;
+
+            case strpos($currentURL, 'feedback.php') !== false:
+                $sql = 'SELECT * FROM feedbacks';
+                break;
+
+            case strpos($currentURL, 'vehicle-form.php') !== false || $_GET['data'] === 'images':
+                $sql = 'SELECT * FROM images;';
+                break;
+
+            case strpos($currentURL, 'web-pages.php') !== false && $_GET['data'] !== 'images':
+                $sql = 'SELECT * FROM web_page_info';
+                break;
+
+            case strpos($currentURL, 'vehicles.php') !== false || strpos($currentURL, 'catalogue.php') !== false:
+                $sql = '
+                        SELECT DISTINCT vehicles.id_vehicle as id, brands.name as brand, models.name as model, vehicles.status as status, vehicles.price, vehicles.year, vehicles.km, images.link as img, fuel_properties.value as fuel
+                        FROM vehicles
+                        LEFT JOIN brands ON vehicles.brand = brands.id_brand
+                        INNER JOIN models ON vehicles.model = models.id_model
+                        LEFT JOIN images ON vehicles.id_vehicle = images.associated_to_vehicle AND images.type = 2
+                        LEFT JOIN (
+                            SELECT vehicle_properties.*, properties_meta.*
+                            FROM vehicle_properties
+                            LEFT JOIN properties_meta ON vehicle_properties.property = properties_meta.id_meta
+                            WHERE vehicle_properties.property_name = "Carbourant"
+                        ) AS fuel_properties ON vehicles.id_vehicle = fuel_properties.vehicle';
+
+                if (strpos($currentURL, 'catalogue.php') !== false) {
+                    $sql .= ' WHERE (status = 1 OR status = 2);';
+                } else {
+                    $sql .= ';';
+                }
+                break;
+
+            default:
+                $sql = '';
         }
 
         if (!empty($sql)) {
@@ -419,15 +386,6 @@ function imgToDB($targetFile)
 
 function updateImg()
 {
-    /*RENAME AN IMAGE
-        $oldFileName = "uploads/old_name.png"; // Specify the old file path.
-        $newFileName = "uploads/new_name.png"; // Specify the new file path.
-
-        if (rename($oldFileName, $newFileName)) {
-            echo "File has been successfully renamed.";
-        } else {
-            echo "Error renaming the file.";
-        }*/
     $data = json_decode(file_get_contents('php://input'), true);
     $way = $data['way'];
     $id = $data['id'];
@@ -484,6 +442,7 @@ function updateMessageFeedbacks()
     }
     echo json_encode($response);
 }
+
 
 function addFeedback()
 {
@@ -904,13 +863,12 @@ function updateDropdown()
             if ($itemDescription != '') {
                 $sql = "UPDATE " . $table . " SET `" . $nameColumn . "` = :itemName, `description` = '" . $itemDescription . "' WHERE " . $idColumn . " = :id";
             } else if ($brandSelect != '') {
-                $sql = "UPDATE " . $table . " SET " . $nameColumn . " = :itemName, brand ='" . $brandSelect . "' WHERE " . $idColumn . " = :id";//funguje
+                $sql = "UPDATE " . $table . " SET " . $nameColumn . " = :itemName, brand ='" . $brandSelect . "' WHERE " . $idColumn . " = :id"; //funguje
             } else {
                 $sql = "UPDATE " . $table . " SET `" . $nameColumn . "` = :itemName WHERE `" . $idColumn . "` = :id";
             }
         } else {
             $sql = "UPDATE properties_meta SET `" . $nameColumn . "` = :itemName WHERE '" . $idColumn . "' = :id";
-
         }
     } else {
         if ($table != "properties_meta") {
