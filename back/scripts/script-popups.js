@@ -499,7 +499,7 @@ function uploadImageAndUpdateUI() {
             const formData = new FormData();
             formData.append('image', selectedFile);
 
-            fetch('func-one.php', {
+            fetch('db_query.php', {
                 method: 'POST',
                 body: formData
             })

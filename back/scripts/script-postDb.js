@@ -65,7 +65,7 @@ function sendAjaxRequest(url, method, data) {
 }
 
 function arraydelete(tableDb, idKey, id) {
-    const phpScriptURL = './func-one.php?action=deleteData';
+    const phpScriptURL = './db_query.php?action=deleteData';
     const postData = {
         action: 'delete',
         table: tableDb,
@@ -78,7 +78,7 @@ function arraydelete(tableDb, idKey, id) {
 }
 
 function deteleService(selectedItem) {
-    const phpScriptURL = './func-one.php?action=deleteService';
+    const phpScriptURL = './db_query.php?action=deleteService';
     const postData = {
         action: 'deleteService',
         table: 'web_page_info',
@@ -93,7 +93,7 @@ function deteleService(selectedItem) {
 
 
 function vehicleInfoPush(formData) {
-    const phpScriptURL = 'func-one.php?action=updateVehicle';
+    const phpScriptURL = 'db_query.php?action=updateVehicle';
     formData.action = 'updateVehicle'
 
     return sendAjaxRequest(phpScriptURL, 'POST', formData)
@@ -102,21 +102,21 @@ function vehicleInfoPush(formData) {
 function pushWebPageInfo(formData) {
     console.log('pushweb trigerred', formData); // Form data with inputId and dataValue for select options
 
-    const phpScriptURL = './func-one.php?action=modifyWeb';
+    const phpScriptURL = './db_query.php?action=modifyWeb';
     formData.action = 'modifyWeb'
 
     return sendAjaxRequest(phpScriptURL, 'POST', formData)
 }
 
 function pushServiceInfo(formData) {
-    const phpScriptURL = './func-one.php?action=modifyServices';
+    const phpScriptURL = './db_query.php?action=modifyServices';
     formData.action = 'modifyServices'
 
     return sendAjaxRequest(phpScriptURL, 'POST', formData)
 }
 
 function pushMessageFeedback(formData) {
-    const phpScriptURL = './func-one.php?action=modifyMessageFeedback';
+    const phpScriptURL = './db_query.php?action=modifyMessageFeedback';
     formData.action = 'modifyMessageFeedback'
 
     return sendAjaxRequest(phpScriptURL, 'POST', formData)
@@ -168,7 +168,7 @@ function dropdownpush(tableId, name, selectedItem, idKey, additionalValue) {
 
     itemData.action = 'updateDropdown'
     // Send an AJAX request to update the database
-    fetch('./func-one.php?action=updateDropdown', {
+    fetch('./db_query.php?action=updateDropdown', {
         method: 'POST',
         body: JSON.stringify(itemData), // Send data as JSON
         headers: {
@@ -192,7 +192,7 @@ function dropdownpush(tableId, name, selectedItem, idKey, additionalValue) {
 
 function pushNewFeedback(formData) {
 
-    const phpScriptURL = '../BACK/func-one.php?action=newFeedback';
+    const phpScriptURL = '../BACK/db_query.php?action=newFeedback';
     formData.action = 'newFeedback'
 
     // Send an AJAX request to update the database
@@ -239,7 +239,7 @@ function arraypush(itemId) {
     userData.action = 'updateUser'
 
     // Send an AJAX request to update the database
-    fetch('./func-one.php?action=updateUser', {
+    fetch('./db_query.php?action=updateUser', {
         method: 'POST',
         body: JSON.stringify(userData), // Send data as JSON
         headers: {
@@ -261,7 +261,7 @@ function arraypush(itemId) {
 
 //user delete
 function arraydeleteUser(itemId) {
-    const phpScriptURL = './func-one.php?action=deleteData';
+    const phpScriptURL = './db_query.php?action=deleteData';
     const postData = {
         action: 'delete',
         table: 'users',
@@ -291,7 +291,7 @@ function arraydeleteUser(itemId) {
 }
 
 function deleteImage(selectedImage, notify = true) {
-    const phpScriptURL = './func-one.php?action=deleteImg';
+    const phpScriptURL = './db_query.php?action=deleteImg';
     const postData = {
         action: 'deleteImg',
         id_img: selectedImage.id_img,

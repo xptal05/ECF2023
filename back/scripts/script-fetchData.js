@@ -21,7 +21,7 @@ async function fetchData(phpScriptURL) {
 
 async function fetchAndUpdateImageInfo() {
     try {
-        const phpScriptURL = './func-one.php?action=fetchData&data=images';
+        const phpScriptURL = './db_query.php?action=fetchData&data=images';
         // Fetch dropdown data from the server
         const imageInfoData = await fetchData(phpScriptURL);
         // Group the fetched data by "type" key
@@ -46,7 +46,7 @@ async function fetchAndUpdateImageInfo() {
 // Fetch dropdown data and update dropdownMapping
 async function fetchAndUpdateDropdownData() {
     console.log('fetch')
-    const phpScriptURL = './func-one.php?action=fetchDropdowns';
+    const phpScriptURL = './db_query.php?action=fetchDropdowns';
     try {
         // Clear existing data from the arrays
         for (const key in dropdownMapping) {
@@ -83,8 +83,8 @@ async function fetchAndUpdatePageInfo() {
         iconData = [];
 
         // Fetch dropdown data from the server
-        const phpScriptURLData = './func-one.php?action=fetchData';
-        const phpScriptURLImages = './func-one.php?action=fetchData&data=images';
+        const phpScriptURLData = './db_query.php?action=fetchData';
+        const phpScriptURLImages = './db_query.php?action=fetchData&data=images';
 
         const webInfoData = await fetchData(phpScriptURLData);
         const imageInfoData = await fetchData(phpScriptURLImages);
@@ -114,7 +114,7 @@ async function fetchAndUpdatePageInfo() {
 
 // Fetch data and render a list - all data
 async function fetchDataAndRenderList() {
-    const phpScriptURL = './func-one.php?action=fetchData';
+    const phpScriptURL = './db_query.php?action=fetchData';
 
     try {
         const data = await fetchData(phpScriptURL);
@@ -130,7 +130,7 @@ async function fetchDataAndRenderList() {
 
 // Fetch data for dashboard
 async function fetchDataForDashboard() {
-    const phpScriptURL = './func-one.php?action=fetchDataDashbord';
+    const phpScriptURL = './db_query.php?action=fetchDataDashbord';
     try {
         data = await fetchData(phpScriptURL);
         return data
