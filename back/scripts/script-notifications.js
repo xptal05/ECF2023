@@ -9,12 +9,12 @@ function notificationsServeur(data) {
     notifications.innerHTML = `${data['message']}<div class="notification-progress-bar"></div>`
 
     if (notifications.classList.contains('error')) {
-        console.log('error');
+        console.log('error')
     } else {
         //Close the last popup
-        const lastPopup = popup.lastChild;
+        const lastPopup = popup.lastChild
         if (lastPopup) {
-            popup.removeChild(lastPopup);
+            popup.removeChild(lastPopup)
             isPopupOpen = false
         }
 
@@ -29,6 +29,6 @@ function notificationsServeur(data) {
         }
     }
     setTimeout(function () {
-        notifications.className = '';
-    }, 8000);
+        notifications.className = ''
+    }, 8000)
 }

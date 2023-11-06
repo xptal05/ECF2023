@@ -6,24 +6,24 @@ async function fetchData(phpScriptURL) {
             headers: {
                 'Content-Type': 'application/json',
             },
-        });
+        })
 
         if (!response.ok) {
-            throw new Error(`Network response was not ok for ${phpScriptURL}`);
+            throw new Error(`Network response was not ok for ${phpScriptURL}`)
         }
 
-        return await response.json();
+        return await response.json()
     } catch (error) {
-        console.error('Fetch error:', error);
-        throw error;
+        console.error('Fetch error:', error)
+        throw error
     }
 }
 
 async function fetchAndUpdateImageInfo() {
     try {
-        const phpScriptURL = './db_query.php?action=fetchData&data=images';
+        const phpScriptURL = './db_query.php?action=fetchData&data=images'
         // Fetch dropdown data from the server
-        const imageInfoData = await fetchData(phpScriptURL);
+        const imageInfoData = await fetchData(phpScriptURL)
         // Group the fetched data by "type" key
 
         imageData = imageInfoData
@@ -36,38 +36,38 @@ async function fetchAndUpdateImageInfo() {
             //imgGalleryPopup(gallerytype)
             populateGallery(imageData)
         } else {
-            filterGallery();
+            filterGallery()
         }
     } catch (error) {
-        console.log('Error fetching web info data:', error);
+        console.log('Error fetching web info data:', error)
     }
 }
 
 // Fetch dropdown data and update dropdownMapping
 async function fetchAndUpdateDropdownData() {
     console.log('fetch')
-    const phpScriptURL = './db_query.php?action=fetchDropdowns';
+    const phpScriptURL = './db_query.php?action=fetchDropdowns'
     try {
         // Clear existing data from the arrays
         for (const key in dropdownMapping) {
-            dropdownMapping[key].array = [];
+            dropdownMapping[key].array = []
         }
 
         // Fetch dropdown data from the server
-        const dropdownData = await fetchData(phpScriptURL);
+        const dropdownData = await fetchData(phpScriptURL)
 
         // Loop through the keys and update dropdownMapping based on the received data
         for (const key in dropdownKeys) {
-            const dataKey = dropdownKeys[key];
+            const dataKey = dropdownKeys[key]
             if (dropdownData[dataKey] && Array.isArray(dropdownData[dataKey])) {
                 // Use the idKey and name from the dropdownMapping
-                dropdownMapping[key] = { array: dropdownData[dataKey], idKey: dropdownMapping[key].idKey, name: dropdownMapping[key].name };
+                dropdownMapping[key] = { array: dropdownData[dataKey], idKey: dropdownMapping[key].idKey, name: dropdownMapping[key].name }
             } 
         }
         // Now that dropdownMapping is updated, proceed to set up your pop-up
-        pageDropdownsActions();
+        pageDropdownsActions()
     } catch (error) {
-        console.log('Error fetching dropdown data:', error);
+        console.log('Error fetching dropdown data:', error)
     }
 }
 
@@ -77,36 +77,36 @@ async function fetchAndUpdatePageInfo() {
     try {
         // Clear existing data in arrays
         for (const key in webInfo) {
-            webInfo[key].array = [];
+            webInfo[key].array = []
         }
-        imageData = [];
-        iconData = [];
+        imageData = []
+        iconData = []
 
         // Fetch dropdown data from the server
-        const phpScriptURLData = './db_query.php?action=fetchData';
-        const phpScriptURLImages = './db_query.php?action=fetchData&data=images';
+        const phpScriptURLData = './db_query.php?action=fetchData'
+        const phpScriptURLImages = './db_query.php?action=fetchData&data=images'
 
-        const webInfoData = await fetchData(phpScriptURLData);
-        const imageInfoData = await fetchData(phpScriptURLImages);
+        const webInfoData = await fetchData(phpScriptURLData)
+        const imageInfoData = await fetchData(phpScriptURLImages)
         
         // Group the fetched data by "type" key
         webInfoData.forEach((item) => {
             for (const key in webInfo) {
                 if (webInfo[key].key == item.type) {
-                    webInfo[key].array.push(item);
+                    webInfo[key].array.push(item)
                 }
             }
-        });
+        })
 
-        imageData = imageInfoData;
+        imageData = imageInfoData
         imageData.forEach(image => {
             if (image.type == 3) {
-                iconData.push(image);
+                iconData.push(image)
             }
-        });
-        updateData();
+        })
+        updateData()
     } catch (error) {
-        console.log('Error fetching and updating web info data:', error);
+        console.log('Error fetching and updating web info data:', error)
     }
 }
 
@@ -114,28 +114,28 @@ async function fetchAndUpdatePageInfo() {
 
 // Fetch data and render a list - all data
 async function fetchDataAndRenderList() {
-    const phpScriptURL = './db_query.php?action=fetchData';
+    const phpScriptURL = './db_query.php?action=fetchData'
 
     try {
-        const data = await fetchData(phpScriptURL);
-        console.log('data', data);
-        createTableHeaders();
-        sortData(data);
+        const data = await fetchData(phpScriptURL)
+        console.log('data', data)
+        createTableHeaders()
+        sortData(data)
     } catch (error) {
-        console.error('Fetch error:', error);
-        throw error;
+        console.error('Fetch error:', error)
+        throw error
     }
 }
 
 
 // Fetch data for dashboard
 async function fetchDataForDashboard() {
-    const phpScriptURL = './db_query.php?action=fetchDataDashbord';
+    const phpScriptURL = './db_query.php?action=fetchDataDashbord'
     try {
-        data = await fetchData(phpScriptURL);
+        data = await fetchData(phpScriptURL)
         return data
     } catch (error) {
-        console.error('Fetch error:', error);
-        throw error;
+        console.error('Fetch error:', error)
+        throw error
     }
 }

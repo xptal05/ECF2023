@@ -5,7 +5,7 @@
     --secondary-color: black;
     --text-color: white;
     --button-fill-color: rgba(0, 0, 0, 0.6);
-    --input-fill-color: rgba(255, 255, 255, 0.50);
+    --input-fill-color: rgba(255, 255, 255, 0.30);
     --error-color: #D7062C;
     --success-color: #19C449;
     --dark-gradient: linear-gradient(90deg, rgba(0, 0, 0, 0.5) 0%, rgba(255, 255, 255, 0.5) 20%, rgba(0, 0, 0, 0.5) 50%);
@@ -300,9 +300,9 @@ footer {
     top: 0;
     left: 0;
     width: 100vw;
-    height: 150vh;
+    height: 130vh;
     z-index: -20;
-    background: url("src/hero_img.jpg") no-repeat;
+    background: url("src/hero3.png") no-repeat;
     background-position: top center;
     background-size: cover;
 }
@@ -430,11 +430,9 @@ footer {
     gap: 10px;
     align-items: center;
     justify-content: flex-start;
-    justify-self: center;
 }
 
 .feedback-section {
-    height: 800px;
     background: url("src/feedback_section.png");
     background-position: center;
     background-repeat: no-repeat;
@@ -667,6 +665,13 @@ textarea {
         grid-column: span 4;
     }
 
+    .input-container-front>label{
+font-size: 1.2rem;
+    }
+
+    .input-container-front>input, .input-front{
+        font-size: 1.4rem; 
+    }
     .popup-div {
 
         width: 58%;
@@ -726,13 +731,21 @@ textarea {
     align-items: flex-start;
     justify-content: space-evenly;
     background: rgba(255, 255, 255, 0.9);
-    width: calc(100vw - 160px);
+    width: 100%;
     padding: 30px;
     border: var(--primary-color) 1px solid;
 }
 
 .filter-pop-up-container.off {
     display: none;
+}
+
+.filter-pop-up-container .close-btn{
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    font-size: 2rem;
+    cursor: pointer;
 }
 
 .filter-container-filters {
@@ -821,6 +834,14 @@ textarea {
     transition: all 0.3s ease-in-out;
 }
 
+.message-icon{
+    filter: brightness(0%);
+    width: 60%;
+    object-fit: contain;
+    display: block; 
+    margin: 0 auto; 
+}
+
 .catalogue-car-info-container {
     display: flex;
     align-items: center;
@@ -832,7 +853,8 @@ textarea {
 }
 
 .main-car-img {
-    max-width: 100%;
+    width: 100%;
+    object-fit: cover;
 }
 
 .table-pagination {
@@ -847,6 +869,10 @@ textarea {
 
 }
 
+.nav-btn:disabled{
+    color: rgba(255, 255, 255, 0.5);
+}
+
 
 /* ----price slider-----*/
 
@@ -858,7 +884,7 @@ textarea {
 }
 
 .range-slider {
-    width: 200px;
+    width: 250px;
     text-align: center;
     position: relative;
     padding-bottom: 20px;
@@ -880,14 +906,13 @@ textarea {
 input[type=range] {
     -webkit-appearance: none;
     border: 1px solid white;
-    width:
-        200px;
+    width:250px;
     position: absolute;
     left: 0;
 }
 
 input[type=range]::-webkit-slider-runnable-track {
-    width: 200px;
+    width: 250px;
     height: 5px;
     background: #ddd;
     border: none;
@@ -926,7 +951,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     gap: 10px;
 }
 
-#filter-tags>span {
+#filter-tags>div {
     background-color: var(--primary-color);
     padding: 5px;
     color: var(--secondary-color);
@@ -934,6 +959,13 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 10px;
+    padding: 10px;
+}
+
+#filter-tags a{
+    color: black;
+    text-decoration: none;
 }
 
 /*....VEHICLE page-----*/
@@ -980,7 +1012,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 .vehicle-properties-main {
     width: 80%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     grid-gap: 30px 40px;
 }
 

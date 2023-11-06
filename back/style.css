@@ -382,6 +382,10 @@ tbody {
     top: 1rem;
 }
 
+tbody>tr{
+    height: 80px;
+}
+
 td {
     text-align: center;
 }
@@ -401,6 +405,10 @@ td {
     gap: 5px;
     padding: 10px;
     height: min-content;
+}
+
+.tag-remove{
+    cursor: pointer;
 }
 
 input.search {
@@ -662,7 +670,7 @@ textarea {
 }
 
 .form-new-container>input,
-.form-new-container>select,
+.form-new-container>select, .popup-body-normal>select,
 .form-new-container>label {
     font-size: 1.5rem;
 }
@@ -949,6 +957,7 @@ input[type="file"]::file-selector-button {
 .new-form-input>input,
 .new-form-input>select {
     flex: 5;
+    padding: 5px 10px;
 }
 
 .popup-input-container>input[type="color"] {

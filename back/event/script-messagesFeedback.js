@@ -6,7 +6,8 @@ function attachActionBtnListeners(filteredData) {
         btn.addEventListener('click', (e) => {
             e.preventDefault()
             console.log('Button clicked')
-            const itemId = e.currentTarget.getAttribute('href').split('=')[1]
+            const itemId = parseInt(e.currentTarget.getAttribute('href').split('=')[1], 10)
+            console.log(itemId)
             const actionBtn = e.currentTarget.getAttribute('href').split('=')[0].replace('?', '')
 
             let idKey = ''
@@ -18,7 +19,7 @@ function attachActionBtnListeners(filteredData) {
                 idKey = 'id_feedback'
             }
 
-            const selectedItem = filteredData.find((item) => item[idKey] === itemId)
+            const selectedItem = filteredData.find((item) => parseInt(item[idKey], 10) === itemId)
             console.log('Selected Item:', selectedItem)
 
             if (selectedItem) {
@@ -64,9 +65,9 @@ function attachActionBtnListeners(filteredData) {
 
 
 function openEmailClient(recipientEmail, subject, body) {
-    const mailtoLink = `mailto:${recipientEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    const anchor = document.createElement('a');
-    anchor.href = mailtoLink;
-    anchor.click();
+    const mailtoLink = `mailto:${recipientEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+    const anchor = document.createElement('a')
+    anchor.href = mailtoLink
+    anchor.click()
     console.log('clicked')
 }

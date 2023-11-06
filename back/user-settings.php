@@ -11,7 +11,7 @@ if (session_status() == PHP_SESSION_NONE) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Utilisateurs</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="style/style-svg-btn.css">
 </head>
@@ -124,14 +124,16 @@ if (session_status() == PHP_SESSION_NONE) {
             actionBtns.forEach((btn) => {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
-                    const itemId = e.currentTarget.getAttribute('href').split('=')[1]; // Extract the ID from the link
+                    const itemId = parseInt(e.currentTarget.getAttribute('href').split('=')[1], 10);
                     const actionBtn = e.currentTarget.getAttribute('href').split('=')[0].replace('?', '');
                     console.log(actionBtn)
                     console.log('item id', itemId)
 
                     // Fetch the corresponding data from your 'data' array
-                    const selectedItem = filteredData.find(item => item[customMappings[currentURL].headers["Actions"]] === itemId);
+                    const selectedItem = filteredData.find(item => parseInt(item[customMappings[currentURL].headers["Actions"]],10) === itemId);
                     console.log(selectedItem)
+
+                    
 
                     if (selectedItem) {
 

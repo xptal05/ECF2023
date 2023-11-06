@@ -7,9 +7,9 @@ function actionSvgMapping(action) {
         "Valider": "thumbs-up.svg",
         "Modifier": "edit_black.svg",
         "Supprimer": "delete_black.svg",
-    };
+    }
 
-    return svgMapping[action] || "edit_black.svg";
+    return svgMapping[action] || "edit_black.svg"
 }
 
 const statusMapping = {
@@ -21,7 +21,7 @@ const statusMapping = {
     "6": "Archivé",
     "7": "Rejeté",
     "8": "Terminé"
-};
+}
 
 const roleMapping = {
     "1" : "admin",
@@ -29,11 +29,11 @@ const roleMapping = {
 }
 
 function mapStatus(statusCode) {
-    return statusMapping[statusCode] || "Unknown";
+    return statusMapping[statusCode] || "Unknown"
 }
 
 function mapRole(roleCode){
-    return roleMapping[roleCode] || "Unknown";
+    return roleMapping[roleCode] || "Unknown"
 }
 
 /*
@@ -77,7 +77,7 @@ const customMappings = {
                     item.message.toLowerCase().includes(tag) ||
                     statusValue.toLowerCase().includes(tag)
                 )))
-            );
+            )
         }
     },
     'feedback.php': {
@@ -107,7 +107,7 @@ const customMappings = {
                     item.comment.toLowerCase().includes(tag) ||
                     statusValue.toLowerCase().includes(tag)
                 )))
-            );
+            )
         }
     },
     'vehicles.php': {
@@ -142,7 +142,7 @@ const customMappings = {
                     statusValue.toLowerCase().includes(tag) ||
                     item.fuel.toLowerCase().includes(tag)
                 )))
-            );
+            )
         }
 
     },
@@ -177,7 +177,7 @@ const customMappings = {
                     statusValue.toLowerCase().includes(tag) ||
                     role.toLowerCase().includes(tag)
                 )))
-            );
+            )
         }
     },
     'web-pages.php': {
@@ -192,9 +192,9 @@ const customMappings = {
         actions: ['?confirm=', 'Valider', '?archiv=', 'Archiver'],
         formHeaders : ["Nom", "Prénom", "Email", "Droits", "Statut"]
     },
-};
+}
 
-const currentMapping = customMappings[currentURL];
-const tableHeaders = Object.keys(customMappings[currentURL].headers);
+const currentMapping = customMappings[currentURL]
+const tableHeaders = Object.keys(customMappings[currentURL].headers)
 const formHeaders = customMappings[currentURL].formHeaders
 

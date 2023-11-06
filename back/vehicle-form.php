@@ -14,7 +14,7 @@ $pdo = connectToDatabase($dbConfig);
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Vehicule</title>
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" type="text/css" href="./style/style-svg-btn.css">
     <style>
@@ -368,7 +368,6 @@ $pdo = connectToDatabase($dbConfig);
             });
         }
 
-
         // Function to create options based on the mapping
         function createOptions(inputId, mapping) {
             const selectOptions = document.getElementById(`${inputId}Options`);
@@ -386,8 +385,6 @@ $pdo = connectToDatabase($dbConfig);
 
 
         function selectOption(inputId) {
-            // Your code for selectOption function
-
             const selectOptions = document.getElementById(`${inputId}Options`);
             const inputOptions = selectOptions.querySelectorAll(".option");
 
@@ -403,13 +400,13 @@ $pdo = connectToDatabase($dbConfig);
 
 
         //FORM SUBMIT
-        const selectedOptions = {}; // Object to store selected options
+        const selectedOptions = {}; 
         const form = document.getElementById("vehicleForm");
 
         form.addEventListener("submit", function(e) {
-            e.preventDefault(); // Prevent the form from submitting for demonstration purposes
+            e.preventDefault(); 
             const urlParams = new URLSearchParams(window.location.search);
-            const formData = {}; // For form data
+            const formData = {}; 
             formData.id = urlParams.get('id')
 
 
@@ -428,7 +425,6 @@ $pdo = connectToDatabase($dbConfig);
             });
 
             // Iterate through all input and select elements
-            // Initialize an empty array to store checked options
             const checkedOptions = [];
 
             // Loop through all input and select elements within the form
@@ -482,9 +478,7 @@ $pdo = connectToDatabase($dbConfig);
 
                     selectedItem = ""
                     dropdownPopup(selectedItem, tableId, name, idKey)
-
-                    //it should refetches the data from db, but reselects the options as well, it needs to be modified
-                    //it does not work!!!!!!
+                    //REFETCH 
                     fetchAndUpdateDropdownData()
                 }
             })

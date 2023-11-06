@@ -5,12 +5,12 @@ if (session_status() == PHP_SESSION_NONE) {
 
 // Table array
 $tables = [
-    ['name' => 'Services', 'columns' => ['IMG', 'HEADING', 'TEXT', 'ORDER'], 'id' => 'servicetbl', 'span' => 'span-12'],
-    ['name' => 'Hours', 'columns' => ['TEXT', 'ORDER'], 'id' => 'hourstbl', 'span' => 'span-6 row-2'],
-    ['name' => 'Contact', 'columns' => ['TEXT', 'CATEGORY', 'ORDER'], 'id' => 'contacttbl', 'span' => 'span-6'],
-    ['name' => 'Address', 'columns' => ['TEXT', 'CATEGORY', 'ORDER'], 'id' => 'addresstbl', 'span' => 'span-6'],
-    ['name' => 'About us', 'columns' => ['TEXT'], 'id' => 'abouttbl', 'span' => 'span-4'],
-    ['name' => 'Reasons', 'columns' => ['TEXT', 'CATEGORY', 'ORDER'], 'id' => 'reasonstbl', 'span' => 'span-8'],
+    ['name' => 'Services', 'columns' => ['Icon', 'Titre', 'Description', 'Ordre'], 'id' => 'servicetbl', 'span' => 'span-12'],
+    ['name' => 'Horaires', 'columns' => ['Text'], 'id' => 'hourstbl', 'span' => 'span-6 row-2'],
+    ['name' => 'Contact', 'columns' => ['Text', 'Categorie'], 'id' => 'contacttbl', 'span' => 'span-6'],
+    ['name' => 'Adresse', 'columns' => ['Text', 'Categorie'], 'id' => 'addresstbl', 'span' => 'span-6'],
+    ['name' => 'A propos', 'columns' => ['Text'], 'id' => 'abouttbl', 'span' => 'span-4'],
+    ['name' => 'Raisons', 'columns' => ['Text', 'Cathgorie', 'Ordre'], 'id' => 'reasonstbl', 'span' => 'span-8'],
 ];
 ?>
 
@@ -21,7 +21,7 @@ $tables = [
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Info website</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="style/style-svg-btn.css">
 <style>

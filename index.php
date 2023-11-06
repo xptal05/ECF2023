@@ -5,12 +5,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Parrot garage</title>
     <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
-<section id="notifications"></section>
+    <section id="notifications"></section>
     <?php include_once "./components/header.php";
 
     ?>
@@ -68,7 +68,7 @@
 
                     // Output the 'heading' and 'text' for the current order along with the icon
                     echo '<div class="service-container">
-                        <div class="service-icon"><img src="' .str_replace('../', './',$icon) . '"></div>
+                        <div class="service-icon"><img src="' . str_replace('../', './', $icon) . '"></div>
                         <div class="service-text-section">
                             <div class="service-title uppercase">' . $headingItem['text'] . '</div>
                             <div class="service-description">' . $textItem['text'] . '</div>
@@ -153,6 +153,8 @@
                 for ($i = 0; $i < $feedbackCounter; $i++) {
                     echo '<div class="feedback-dot" data-index="' . $i . '"></div>';
                 }
+
+
                 ?>
             </div>
             <a href="feedback.php" class="btn">ajouter mon témoignage</a>
@@ -196,7 +198,7 @@
             return starIcons;
         }
 
-        //FEEDBACK NAV _ check if works???
+        //FEEDBACK NAV 
 
         const slider = document.querySelector(".feedback-slider");
         const dots = document.querySelectorAll(".feedback-dot");
@@ -209,15 +211,15 @@
                 // Update the currentIndex to the clicked dot's index
                 currentIndex = index;
                 console.log(index)
-console.log(feedbackContainers.length)
+                console.log(feedbackContainers.length)
                 // Calculate the offset to slide the container to the center
                 const containerWidth = feedbackContainers[currentIndex].offsetWidth;
                 const gap = 45
                 const screenWidth = window.innerWidth; // Get the screen width
-const offset = ((containerWidth + gap)/2)*(feedbackContainers.length+1-(2*(currentIndex+1)))
-//const offset = slider.offsetWidth/2 - containerWidth/2 + (screenWidth-containerWidth)/2 - currentIndex*(containerWidth+gap)
+                const offset = ((containerWidth + gap) / 2) * (feedbackContainers.length + 1 - (2 * (currentIndex + 1)))
+                //const offset = slider.offsetWidth/2 - containerWidth/2 + (screenWidth-containerWidth)/2 - currentIndex*(containerWidth+gap)
 
-               // const offset = -currentIndex * containerWidth + slider.offsetWidth / 2 - containerWidth / 2;
+                // const offset = -currentIndex * containerWidth + slider.offsetWidth / 2 - containerWidth / 2;
                 // Slide the slider to the center of the clicked feedback
                 slider.style.transform = `translateX(${offset}px)`;
 
@@ -225,6 +227,12 @@ const offset = ((containerWidth + gap)/2)*(feedbackContainers.length+1-(2*(curre
                 dots.forEach((dot) => dot.classList.remove("selected"));
                 dot.classList.add("selected");
             });
+        });
+
+        // On window load, select the middle dot
+        window.addEventListener("load", () => {
+            const middleIndex = Math.floor(dots.length / 2)-1; // Calculate the middle dot's index
+            dots[middleIndex].click(); // Trigger a click event on the middle dot
         });
     </script>
 

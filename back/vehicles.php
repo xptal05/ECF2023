@@ -11,7 +11,7 @@ if (session_status() == PHP_SESSION_NONE) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Catalogue</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="style/style-svg-btn.css">
 
@@ -69,12 +69,12 @@ if (session_status() == PHP_SESSION_NONE) {
                 btn.addEventListener('click', (e) => {
 
                     console.log('Button clicked');
-                    const itemId = e.currentTarget.getAttribute('href').split('=')[1];
+                    const itemId = parseInt(e.currentTarget.getAttribute('href').split('=')[1], 10);
                     const actionBtn = e.currentTarget.getAttribute('href').split('=')[0].replace('?', '');
 
-                    let idKey = 'id'; // Initialize idKey
+                    let idKey = 'id'; 
 
-                    const selectedItem = filteredData.find((item) => item[idKey] === itemId);
+                    const selectedItem = filteredData.find((item) => parseInt(item[idKey],10) === itemId);
                     console.log('Selected Item:', selectedItem);
 
                     if (selectedItem) {

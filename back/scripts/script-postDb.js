@@ -4,33 +4,33 @@
 
 function formvalidation(formType) {
     if (formType == 'userForm') {
-        const emailInput = document.getElementById('EmailInput');
-        const passwordInput = document.getElementById('PasswordInput');
+        const emailInput = document.getElementById('EmailInput')
+        const passwordInput = document.getElementById('PasswordInput')
         console.log(passwordInput)
 
         // Additional validation for email format
-        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
         if (!emailPattern.test(emailInput.value)) {
-            alert('Please enter a valid email address');
-            emailInput.focus();
-            return false;
+            alert('Please enter a valid email address')
+            emailInput.focus()
+            return false
         }
 
         if (passwordInput.value != "") {
             if (passwordInput.value.length < 5) {
-                alert('Password must be at least 5 characters');
-                passwordInput.focus();
-                return false;
+                alert('Password must be at least 5 characters')
+                passwordInput.focus()
+                return false
             }
 
             // Ensure the password contains both letters and numbers
-            const containsLetters = /[a-zA-Z]/.test(passwordInput.value);
-            const containsNumbers = /\d/.test(passwordInput.value);
+            const containsLetters = /[a-zA-Z]/.test(passwordInput.value)
+            const containsNumbers = /\d/.test(passwordInput.value)
 
             if (!containsLetters || !containsNumbers) {
-                alert('Password must contain both letters and numbers');
-                passwordInput.focus();
-                return false;
+                alert('Password must contain both letters and numbers')
+                passwordInput.focus()
+                return false
             }
         }
         return true
@@ -55,17 +55,17 @@ function sendAjaxRequest(url, method, data) {
     })
         .then(response => response.json())
         .then(data => {
-            notificationsServeur(data);
-            console.log(data);
+            notificationsServeur(data)
+            console.log(data)
         })
         .catch(error => {
-            console.error('Error:', error);
-            return error;
-        });
+            console.error('Error:', error)
+            return error
+        })
 }
 
 function arraydelete(tableDb, idKey, id) {
-    const phpScriptURL = './db_query.php?action=deleteData';
+    const phpScriptURL = './db_query.php?action=deleteData'
     const postData = {
         action: 'delete',
         table: tableDb,
@@ -74,11 +74,11 @@ function arraydelete(tableDb, idKey, id) {
     }
 
     // Send an AJAX request to update the database
-    return sendAjaxRequest(phpScriptURL, 'POST', postData);
+    return sendAjaxRequest(phpScriptURL, 'POST', postData)
 }
 
 function deteleService(selectedItem) {
-    const phpScriptURL = './db_query.php?action=deleteService';
+    const phpScriptURL = './db_query.php?action=deleteService'
     const postData = {
         action: 'deleteService',
         table: 'web_page_info',
@@ -88,35 +88,40 @@ function deteleService(selectedItem) {
     console.log(postData)
 
     // Send an AJAX request to update the database
-    return sendAjaxRequest(phpScriptURL, 'POST', postData);
+    return sendAjaxRequest(phpScriptURL, 'POST', postData)
 }
 
 
 function vehicleInfoPush(formData) {
-    const phpScriptURL = 'db_query.php?action=updateVehicle';
+    const phpScriptURL = 'db_query.php?action=updateVehicle'
     formData.action = 'updateVehicle'
 
-    return sendAjaxRequest(phpScriptURL, 'POST', formData)
+    sendAjaxRequest(phpScriptURL, 'POST', formData)
+        .then(() => {
+            setTimeout(() => {
+                window.location.href = 'vehicles.php';
+            }, 4000)
+        });
 }
 
 function pushWebPageInfo(formData) {
-    console.log('pushweb trigerred', formData); // Form data with inputId and dataValue for select options
+    console.log('pushweb trigerred', formData)
 
-    const phpScriptURL = './db_query.php?action=modifyWeb';
+    const phpScriptURL = './db_query.php?action=modifyWeb'
     formData.action = 'modifyWeb'
 
     return sendAjaxRequest(phpScriptURL, 'POST', formData)
 }
 
 function pushServiceInfo(formData) {
-    const phpScriptURL = './db_query.php?action=modifyServices';
+    const phpScriptURL = './db_query.php?action=modifyServices'
     formData.action = 'modifyServices'
 
     return sendAjaxRequest(phpScriptURL, 'POST', formData)
 }
 
 function pushMessageFeedback(formData) {
-    const phpScriptURL = './db_query.php?action=modifyMessageFeedback';
+    const phpScriptURL = './db_query.php?action=modifyMessageFeedback'
     formData.action = 'modifyMessageFeedback'
 
     return sendAjaxRequest(phpScriptURL, 'POST', formData)
@@ -132,21 +137,21 @@ function dropdownpush(tableId, name, selectedItem, idKey, additionalValue) {
         { tableDb = "properties_meta" }
     } else { tableDb = dropdownKeys[tableId] }
 
-    const itemData = {};
+    const itemData = {}
 
     if (dropdownMapping[tableId].array[0].hasOwnProperty("description")) {
         for (const header of formHeadersDropdowns) {
-            const inputValue = document.getElementById(`${header}Input`).value;
-            itemData[header] = inputValue;
+            const inputValue = document.getElementById(`${header}Input`).value
+            itemData[header] = inputValue
         }
     } else if (tableId == "Couleur") {
         console.log('push dropdown colour')
         console.log('addition', additionalValue)
-        const inputValue = document.getElementById(`itemNameInput`).value;
+        const inputValue = document.getElementById(`itemNameInput`).value
         itemData.itemName = inputValue + '/' + additionalValue
     }
     else {
-        const inputValue = document.getElementById(`itemNameInput`).value;
+        const inputValue = document.getElementById(`itemNameInput`).value
         itemData.itemName = inputValue
     }
 
@@ -170,7 +175,7 @@ function dropdownpush(tableId, name, selectedItem, idKey, additionalValue) {
     // Send an AJAX request to update the database
     fetch('./db_query.php?action=updateDropdown', {
         method: 'POST',
-        body: JSON.stringify(itemData), // Send data as JSON
+        body: JSON.stringify(itemData),
         headers: {
             'Content-Type': 'application/json',
         },
@@ -179,34 +184,54 @@ function dropdownpush(tableId, name, selectedItem, idKey, additionalValue) {
         .then(data => {
             console.log(data)
             notificationsServeur(data)
+            //if vehicle pages add the value into input field
+            if (itemData.metaName == "Caroserie") {
+                itemData.metaName = "Carrosserie"
+            }
+            const input = document.getElementById(itemData.metaName + 'Input')
 
+            if (input) {
+                input.value = itemData.itemName
+            }
+            //delay the set select options so that the data is refetched first
+            setTimeout(() => {
+                const select = document.getElementById(itemData.metaName)
+                if (select) {
+                    for (let i = 0; i < select.options.length; i++) {
+                        if (select.options[i].text == itemData.itemName) {
+                            // Set the selected index to the index of the matching option
+                            select.options[i].selected = true;
+                            break;
+                        }
+                    }
+                }
+            }, 100)
             return (data)
-            // Handle the response from the server
+
         })
         .catch(error => {
-            console.error('Error:', error);
-        });
+            console.error('Error:', error)
+        })
 
 }
 
 
 function pushNewFeedback(formData) {
 
-    const phpScriptURL = '../BACK/db_query.php?action=newFeedback';
+    const phpScriptURL = '../BACK/db_query.php?action=newFeedback'
     formData.action = 'newFeedback'
 
     // Send an AJAX request to update the database
     fetch(phpScriptURL, {
         method: 'POST',
-        body: JSON.stringify(formData), // Send data as JSON
+        body: JSON.stringify(formData),
         headers: {
             'Content-Type': 'application/json',
         },
     })
 
-        .then((response) => response.json()) // Assuming the server returns JSON
+        .then((response) => response.json())
         .then((data) => {
-            // Handle the response from the server
             // Show a success message or redirect to a success page
             notificationsServeur(data)
             form.classList.toggle('on')
@@ -214,10 +239,10 @@ function pushNewFeedback(formData) {
         })
 
         .catch((error) => {
-            console.error("Error:", error);
+            console.error("Error:", error)
             console.log(data)
 
-        });
+        })
 
 
 
@@ -225,13 +250,13 @@ function pushNewFeedback(formData) {
 
 //users
 function arraypush(itemId) {
-    const userForm = document.getElementById('userForm');
+    const userForm = document.getElementById('userForm')
 
     // Collect input values
-    const userData = {};
+    const userData = {}
     for (const header of formHeaders) {
-        const inputValue = document.getElementById(`${header}Input`).value;
-        userData[header] = inputValue;
+        const inputValue = document.getElementById(`${header}Input`).value
+        userData[header] = inputValue
     }
     console.log(userData)
 
@@ -241,7 +266,7 @@ function arraypush(itemId) {
     // Send an AJAX request to update the database
     fetch('./db_query.php?action=updateUser', {
         method: 'POST',
-        body: JSON.stringify(userData), // Send data as JSON
+        body: JSON.stringify(userData),
         headers: {
             'Content-Type': 'application/json',
         },
@@ -249,19 +274,19 @@ function arraypush(itemId) {
         .then(response => response.json())
         .then(data => {
             // Handle the response from the server
-            console.log(data);
-            popup.innerHTML = ''; // Close the popup window
+            console.log(data)
+            popup.innerHTML = '' // Close the popup window
             fetchDataAndRenderList()
         })
         .catch(error => {
-            console.error('Error:', error);
-        });
+            console.error('Error:', error)
+        })
 
 }
 
 //user delete
 function arraydeleteUser(itemId) {
-    const phpScriptURL = './db_query.php?action=deleteData';
+    const phpScriptURL = './db_query.php?action=deleteData'
     const postData = {
         action: 'delete',
         table: 'users',
@@ -272,7 +297,7 @@ function arraydeleteUser(itemId) {
     // Send an AJAX request to update the database
     fetch(phpScriptURL, {
         method: 'POST',
-        body: JSON.stringify(postData), // Send data as JSON
+        body: JSON.stringify(postData),
         headers: {
             'Content-Type': 'application/json',
         },
@@ -280,18 +305,18 @@ function arraydeleteUser(itemId) {
         .then(response => response.json())
         .then(data => {
             // Handle the response from the server
-            console.log(data);
+            console.log(data)
             fetchDataAndRenderList()
-            popup.innerHTML = '';
+            popup.innerHTML = ''
         })
         .catch(error => {
-            console.error('Error:', error);
-        });
+            console.error('Error:', error)
+        })
 
 }
 
 function deleteImage(selectedImage, notify = true) {
-    const phpScriptURL = './db_query.php?action=deleteImg';
+    const phpScriptURL = './db_query.php?action=deleteImg'
     const postData = {
         action: 'deleteImg',
         id_img: selectedImage.id_img,
@@ -301,7 +326,7 @@ function deleteImage(selectedImage, notify = true) {
     // Send an AJAX request to update the database
     fetch(phpScriptURL, {
         method: 'POST',
-        body: JSON.stringify(postData), // Send data as JSON
+        body: JSON.stringify(postData),
         headers: {
             'Content-Type': 'application/json',
         },
@@ -309,12 +334,12 @@ function deleteImage(selectedImage, notify = true) {
         .then(response => response.json())
         .then(data => {
             // Handle the response from the server
-            console.log(data);
+            console.log(data)
 
             // Clear the innerHTML and remove the popup window
-            const subPopup = document.getElementById('sub-popup');
-            subPopup.innerHTML = '';
-            subPopup.classList.remove('popup-window');
+            const subPopup = document.getElementById('sub-popup')
+            subPopup.innerHTML = ''
+            subPopup.classList.remove('popup-window')
             //refetch images
             fetchAndUpdateImageInfo()
 
@@ -324,13 +349,13 @@ function deleteImage(selectedImage, notify = true) {
             let imageName = imageIdInput.querySelector("input")
             let actionLinks = imageIdInput.querySelectorAll("a")
 
-            imgLink.src =""
+            imgLink.src = ""
             imageName.value = ""
             actionLinks[0].href = ""
             actionLinks[1].href = ""
 
         })
         .catch(error => {
-            console.error('Error:', error);
-        });
+            console.error('Error:', error)
+        })
 }

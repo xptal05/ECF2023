@@ -11,7 +11,7 @@ if (session_status() == PHP_SESSION_NONE) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Table de bord</title>
     <link rel="stylesheet" href="style.css">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
@@ -195,7 +195,7 @@ global $pdo;
                     <div class="container-header-icon">
                         <img src="./src/cars.svg">
                     </div>
-                    <h2>Vehicles</h2>
+                    <h2>Vehicules</h2>
                 </div>
                 <div class="container-content">
                     <div class="dashboard-total-container">
@@ -204,7 +204,7 @@ global $pdo;
                             <div><?php echo count($data['vehicles']); ?></div>
                         </div>
                         <div>
-                            <h3>Total available</h3>
+                            <h3>Disponibles</h3>
                             <div>
                                 <?php
                                 echo countItemsAndRevenueByDateCriteria($data['vehicles'], $statusMapping["Active"], 'total') + countItemsAndRevenueByDateCriteria($data['vehicles'], $statusMapping["New"], 'total');;
@@ -242,11 +242,11 @@ global $pdo;
                         </tbody>
                     </table>
                     <div>
-                        <h3>Vehicles by status</h3>
+                        <h3>Vehicules selon statut</h3>
                         <table>
                             <thead>
                                 <th>Status</th>
-                                <th>Count</th>
+                                <th>Nombre</th>
                             </thead>
                             <tbody>
                                 <?php
@@ -265,8 +265,8 @@ global $pdo;
                         </table>
                     </div>
                     <div class="dashboard-btn-container">
-                        <a href="./vehicles.php" class="btn">GO TO VEHICLES</a>
-                        <a href="./vehicle-form.php" class="btn">ADD NEW VEHICLE</a>
+                        <a href="./vehicles.php" class="btn">Aller au catalogue</a>
+                        <a href="./vehicle-form.php" class="btn">Ajouter vehicule</a>
                     </div>
                 </div>
             </div>
@@ -284,12 +284,12 @@ global $pdo;
                             <div><?php echo count($data['messages']); ?></div>
                         </div>
                         <div>
-                            <h3>Total nouveaux</h3>
+                            <h3>Nouveaux</h3>
                             <div><?php echo countItemsAndRevenueByDateCriteria($data['messages'], $statusMapping["New"], 'total'); ?></div>
                         </div>
                     </div>
                     <div>
-                        <h3>Response time</h3>
+                        <h3>Temps de réponse (moyenne)</h3>
                         <div><?php
                                 function calculateResponseTime($messages, $statusMapping)
                                 {
@@ -372,20 +372,20 @@ global $pdo;
                             <div><?php echo count($data['feedbacks']); ?></div>
                         </div>
                         <div>
-                            <h3>Total nouveaux</h3>
+                            <h3>Nouveaux</h3>
                             <div><?php echo countItemsAndRevenueByDateCriteria($data['feedbacks'], $statusMapping["New"], 'total'); ?></div>
                         </div>
                     </div>
                     <div>
-                        <h3>Average Note</h3>
+                        <h3>Note moyenne</h3>
                         <div><?php echo $averageRating; ?></div>
                     </div>
                     <table>
                         <thead>
                             <th></th>
-                            <th>Recieved</th>
-                            <th>Approved</th>
-                            <th>Average Note</th>
+                            <th>Reçu</th>
+                            <th>Aprouvé</th>
+                            <th>Note moyenne</th>
                         </thead>
                         <tbody>
                             <tr>
@@ -414,7 +414,7 @@ global $pdo;
                             </tr>
                         </tbody>
                     </table>
-                    <a href="./feedback.php" class="btn">GO TO TEMOIGNAGES</a>
+                    <a href="./feedback.php" class="btn">Aller aux témoignages</a>
                 </div>
             </div>
         </div>

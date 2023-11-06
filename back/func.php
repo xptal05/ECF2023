@@ -10,7 +10,7 @@ function login()
             $inputPassword = trim($_POST["password"]);
 
             $statement = $pdo->prepare("SELECT * FROM users WHERE email = :username");
-            $statement->bindParam(':username', $inputUsername, PDO::PARAM_INT);
+            $statement->bindParam(':username', $inputUsername, PDO::PARAM_STR);
 
             // Query to check if the provided username exists in the database
             if ($statement->execute()) {
@@ -35,12 +35,19 @@ function login()
     }
 }
 
-function logout(){
-        session_start();
-        $_SESSION = array();
-        session_destroy();
-        header("Location: login.php");
-    } 
+function logout() {
+    // Clear and destroy the session
+    session_start();
+    $_SESSION = array();
+    session_unset();
+    session_destroy();
+    // Add a JavaScript delay and redirection
+    echo '<script>
+        setTimeout(function() {
+            window.location.href = "login.php";
+        }, 500); 
+    </script>';
+}
 
 function admin_menu(){
     if (isset($_SESSION["admin"])) {

@@ -10,7 +10,7 @@ if (isset($_POST["logout"])) {
 <div class="menu">
     <img class="logo" src="src/Logo-back.svg">
     <div class="menu-section one">
-        <a href="./">Tableau de bord</a>
+        <a href="./index.php">Tableau de bord</a>
         <a href="./messages.php">Messages</a>
         <a href="./feedback.php">Témoignages</a>
         <a href="./vehicles.php">Vehicules</a>
