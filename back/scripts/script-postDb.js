@@ -64,28 +64,29 @@ function sendAjaxRequest(url, method, data) {
         })
 }
 
-function arraydelete(tableDb, idKey, id) {
+function arraydelete(tableDb, idKey, id, csrf_token) {
     const phpScriptURL = './db_query.php?action=deleteData'
     const postData = {
         action: 'delete',
         table: tableDb,
         idKey: idKey,
-        id: id
+        id: id,
+        csrf_token : csrf_token
     }
 
     // Send an AJAX request to update the database
     return sendAjaxRequest(phpScriptURL, 'POST', postData)
 }
 
-function deteleService(selectedItem) {
+function deteleService(selectedItem, csrf_token) {
     const phpScriptURL = './db_query.php?action=deleteService'
     const postData = {
         action: 'deleteService',
         table: 'web_page_info',
         idKey: 'id_info',
-        items: selectedItem
+        items: selectedItem,
+        csrf_token : csrf_token
     }
-    console.log(postData)
 
     // Send an AJAX request to update the database
     return sendAjaxRequest(phpScriptURL, 'POST', postData)
@@ -130,7 +131,7 @@ function pushMessageFeedback(formData) {
 
 //ACTIONS SPECIFIQUE
 
-function dropdownpush(tableId, name, selectedItem, idKey, additionalValue) {
+function dropdownpush(tableId, name, selectedItem, idKey, additionalValue, csrf_token) {
     let tableDb
     console.log(tableId)
     if (metaTables.some(table => table.toLowerCase().trim() == tableId.toLowerCase().trim()) || tableId == "Carrosserie" || tableId == "caroserie") {
@@ -163,13 +164,11 @@ function dropdownpush(tableId, name, selectedItem, idKey, additionalValue) {
     itemData.name = name
     itemData.table = tableDb
     itemData.idKey = idKey
+    itemData.csrf_token = csrf_token
 
     if (selectedItem) {
         itemData.id = selectedItem[idKey]
     }
-    console.log(itemData)
-    console.log('item id : ', itemData.id)
-    console.log('item name : ', itemData.name)
 
     itemData.action = 'updateDropdown'
     // Send an AJAX request to update the database
@@ -251,6 +250,7 @@ function pushNewFeedback(formData) {
 //users
 function arraypush(itemId) {
     const userForm = document.getElementById('userForm')
+    const csrf_token = userForm.querySelector('input[type="hidden"]').value
 
     // Collect input values
     const userData = {}
@@ -258,10 +258,10 @@ function arraypush(itemId) {
         const inputValue = document.getElementById(`${header}Input`).value
         userData[header] = inputValue
     }
-    console.log(userData)
 
     userData.id = itemId
     userData.action = 'updateUser'
+    userData.csrf_token = csrf_token
 
     // Send an AJAX request to update the database
     fetch('./db_query.php?action=updateUser', {
@@ -285,13 +285,14 @@ function arraypush(itemId) {
 }
 
 //user delete
-function arraydeleteUser(itemId) {
+function arraydeleteUser(itemId, csrf_token) {
     const phpScriptURL = './db_query.php?action=deleteData'
     const postData = {
         action: 'delete',
         table: 'users',
         idKey: 'id_user',
-        id: itemId
+        id: itemId,
+        csrf_token: csrf_token
     }
 
     // Send an AJAX request to update the database
@@ -315,12 +316,13 @@ function arraydeleteUser(itemId) {
 
 }
 
-function deleteImage(selectedImage, notify = true) {
+function deleteImage(selectedImage, csrf_token, notify = true) {
     const phpScriptURL = './db_query.php?action=deleteImg'
     const postData = {
         action: 'deleteImg',
         id_img: selectedImage.id_img,
-        image_link: selectedImage.link
+        image_link: selectedImage.link,
+        csrf_token: csrf_token
     }
 
     // Send an AJAX request to update the database

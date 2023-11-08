@@ -349,7 +349,6 @@ footer {
     padding: 30px;
     display: flex;
     align-items: center;
-    justify-content: center;
     min-width: 200px;
     gap: 30px;
 }

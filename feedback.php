@@ -33,8 +33,9 @@
                 <textarea id="commentInput" rows="5" cols="50" required class="input-front"></textarea>
             </div>
             <select id="statusInput" hidden>
-                    <option value="2">New</option>
-                </select>
+                <option value="2">New</option>
+            </select>
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
             <div class="button-container span-2-end">
                 <button class="btn" type="reset" id="reset-btn">Annuler</button>
                 <button class="btn" type="submit">Envoyer</button>
@@ -123,9 +124,33 @@
         }
 
         function formvalidation() {
-            return true
+            let valid = true
+
+            const clientNameInput = document.getElementById('client_nameInput');
+            const ratingInput = document.getElementById('ratingInput');
+            const commentInput = document.getElementById('commentInput');
+
+            // Validate client name (required, max length)
+            if (clientNameInput.value.trim() === '' || clientNameInput.value.length > 150) {
+                alert('Veuillez entrer votre nom.');
+                valid = false
+            }
+
+            // Validate rating (at least one star required)
+            if (ratingInput.value < 1) {
+                alert('Veuillez sélectionner une évaluation d\'au moins 1 étoile.');
+                valid = false
+            }
+
+            // Validate comment (required)
+            if (commentInput.value.trim() === '') {
+                alert('Veuillez entrer un commentaire.');
+                valid = false
+            }
+            return valid
         }
         const feedbackForm = document.getElementById('feedbackForm')
+        
         // Add a submit event listener to the form
         feedbackForm.addEventListener('submit', (e) => {
             e.preventDefault();

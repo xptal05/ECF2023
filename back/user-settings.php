@@ -68,6 +68,7 @@ if (session_status() == PHP_SESSION_NONE) {
                         <option value="6">Archived</option>
                     </select>
                 </div>
+                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                 <div class="button-container span-2-end">
                     <button class="btn" type="reset" id="close-btn">Annuler</button>
                     <button class="btn" type="submit">Sauvegarder</button>

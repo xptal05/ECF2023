@@ -1,5 +1,7 @@
 <?php
-include_once "func.php";
+
+
+include_once "./func.php";
 $data = fetchData();
 $feedbacksData = $data[0];
 $webPageInfoData = $data[1];
@@ -19,6 +21,13 @@ foreach ($contactItems as $item) {
 
 $formatedPhone = implode(' ', str_split(str_replace("+33", "0", $phoneNumber), 2));
 
+
+session_start()
+// Generate and store the CSRF token in the user's session
+
+$csrf_token = bin2hex(random_bytes(32));
+/*
+$_SESSION['csrf_token'] = $csrf_token;*/
 ?>
 <div class="header">
     <a href="index.php"><img src="./src/logo.svg" class="logo-header"></a>

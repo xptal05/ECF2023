@@ -129,16 +129,16 @@ const customMappings = {
                 (filterText === '' || (
                     item.brand.toLowerCase().includes(filterText) ||
                     item.model.toLowerCase().includes(filterText) ||
-                    item.year.toLowerCase().includes(filterText) ||
-                    item.price.toLowerCase().includes(filterText) ||
+                    item.year.toString().toLowerCase().includes(filterText) ||
+                    item.price.toString().toLowerCase().includes(filterText) ||
                     statusValue.toLowerCase().includes(filterText) ||
                     item.fuel.toLowerCase().includes(filterText)
                 )) &&
                 (tagArray.length === 0 || tagArray.every(tag => (
                     item.brand.toLowerCase().includes(tag) ||
                     item.model.toLowerCase().includes(tag) ||
-                    item.year.toLowerCase().includes(tag) ||
-                    item.price.toLowerCase().includes(tag) ||
+                    item.year.toString().toLowerCase().includes(tag) ||
+                    item.price.toString().toLowerCase().includes(tag) ||
                     statusValue.toLowerCase().includes(tag) ||
                     item.fuel.toLowerCase().includes(tag)
                 )))

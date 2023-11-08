@@ -29,6 +29,7 @@ login()
                 <label for="password">Password</label>
                 <div class="password-input"><input type="password" name="password" id="password" required><img src="./src/eye.svg"></div>
             </div>
+            <input type="hidden" name="session_token" value="<?php echo $_SESSION['session_token']; ?>">
             <input type="submit" class="btn front" value="se connecter">
         </form>
 

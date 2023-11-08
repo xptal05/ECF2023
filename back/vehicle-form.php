@@ -251,6 +251,7 @@ $pdo = connectToDatabase($dbConfig);
                     </div>
                 </div>
             </div>
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
             <div class="button-container span-2-end">
                 <input type="reset" class="btn error-btn" value="Annuler">
                 <input type="submit" class="btn success-btn" value="Sauvegarder">

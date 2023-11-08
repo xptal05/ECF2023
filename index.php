@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
@@ -12,7 +12,6 @@
 <body>
     <section id="notifications"></section>
     <?php include_once "./components/header.php";
-
     ?>
     <div class="landing-background"></div>
     <div class="hero-section">
@@ -68,7 +67,7 @@
 
                     // Output the 'heading' and 'text' for the current order along with the icon
                     echo '<div class="service-container">
-                        <div class="service-icon"><img src="' . str_replace('../', './', $icon) . '"></div>
+                        <div class="service-icon"><img src="' . str_replace('../', './', $icon) . '" alt="icon"></div>
                         <div class="service-text-section">
                             <div class="service-title uppercase">' . $headingItem['text'] . '</div>
                             <div class="service-description">' . $textItem['text'] . '</div>
@@ -118,7 +117,7 @@
                     foreach ($reasonsArray as $item) {
                         echo ' 
                         <div class="reason">                       
-                            <div class="reason-icon"><img src="./src/check-circle.svg"></img></div>
+                            <div class="reason-icon"><img src="./src/check-circle.svg" alt="check-mark-icon"></img></div>
                             <div class="reason-text">' . $item['text'] . '</div>
                         </div>';
                     }

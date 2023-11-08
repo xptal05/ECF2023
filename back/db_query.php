@@ -2,6 +2,7 @@
 require_once "./config/db.php";
 $pdo = connectToDatabase($dbConfig);
 
+
 function handleError($e)
 {
     $error_message = 'Erreur: ' . $e->getMessage();
@@ -42,6 +43,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
         $data = json_decode(file_get_contents('php://input'), true);
         $action = $data['action'];
 
+                // Validate the CSRF token here before processing the action
+                if (isset($data['csrf_token']) && $data['csrf_token'] === $_SESSION['csrf_token']) {
+
         $postActions = [
             'delete' => 'deleteData',
             'deleteService' => 'deleteService',
@@ -60,11 +64,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
             $functionName = $postActions[$action];
             $functionName();
         } else {
-            echoData();
+            echoData('post action does not correspond');
         }
     }
+    else {
+        echoData('no valid token');
+    }
 } else {
-    echoData();
+    echoData('no method');
 }
 
 function sanitizeData($data) {
@@ -80,19 +87,20 @@ function sanitizeData($data) {
     return $data;
 }
 
-function echoData()
+function echoData($parameter)
 {
     try {
-        $response = ['error' => 'no method']; // Create an array with your data
+        $response = ['error' => 'Erreur : '$parameter]; // Create an array with your data
     } catch (Exception $e) {
-        $response = ['message' => 'issue'];
+        $response = ['message' => 'Erreur : issue'];
     }
     echo json_encode($response);
 }
 
 function deleteData()
 {
-    $data = json_decode(file_get_contents('php://input'), true);
+    $dataFetched = json_decode(file_get_contents('php://input'), true);
+    $data = sanitizeData($dataFetched);
     $table = $data['table'];
     $id = $data['id'];
     $idKey = $data['idKey'];
@@ -104,14 +112,14 @@ function deleteData()
         $statement->bindParam(':id', $id); // Bind :id to the $userId variable
 
         if ($statement->execute()) {
-            $response = ['message' => 'Succès : Element from ' . $table . ' deleted successfully'];
+            $response = ['message' => 'Succès : Element supprimé.'];
             echo json_encode($response);
         }
     } catch (PDOException $e) {
         $errorInfo = $e->errorInfo;
         if ($errorInfo[0] === '23000' && $errorInfo[1] === 1451) {
             // This error message is specific to the integrity constraint violation
-            $response = ['message' => 'Erreur : This item cannot be deleted as other items are related to it.'];
+            $response = ['message' => 'Erreur : Cet élément ne peut pas être supprimé car d\'autres éléments y sont liés.']; //This item cannot be deleted as other items are related to it.
         } else {
             // Handle other errors as needed
             $response = handleError($e);
@@ -122,7 +130,8 @@ function deleteData()
 
 function deleteService()
 {
-    $data = json_decode(file_get_contents('php://input'), true);
+    $dataFetched = json_decode(file_get_contents('php://input'), true);
+    $data = sanitizeData($dataFetched);
     $table = $data['table'];
     $idKey = $data['idKey'];
 
@@ -139,20 +148,20 @@ function deleteService()
         $stmt->bindParam(':serviceiId', $id);
 
         if ($stmt->execute()) {
-            $response = ['message' => 'Succès : Element from ' . $table . ' deleted successfully'];
+            $response = ['message' => 'Succès : Element supprimé'];
 
             $sql = "DELETE FROM $table WHERE $idKey = :id2;";   //DELETE TEXT
             $statement = $pdo->prepare($sql);
             $statement->bindParam(':id2', $id2);
 
             if ($statement->execute()) {
-                $response = ['message' => 'Succès : Element from ' . $table . ' deleted successfully'];
+                $response = ['message' => 'Succès : Element supprimé'];
 
                 $sql = "DELETE FROM $table WHERE $idKey = :id;";  //DELETE HEADING
                 $statement = $pdo->prepare($sql);
                 $statement->bindParam(':id', $id);
                 if ($statement->execute()) {
-                    $response = ['message' => 'Succès : Element from ' . $table . ' deleted successfully'];
+                    $response = ['message' => 'Succès : Element supprimé'];
                 }
             }
         }
@@ -160,7 +169,7 @@ function deleteService()
         $errorInfo = $e->errorInfo;
         if ($errorInfo[0] === '23000' && $errorInfo[1] === 1451) {
             // This error message is specific to the integrity constraint violation
-            $response = ['message' => 'Erreur : This item cannot be deleted as other items are related to it.'];
+            $response = ['message' => 'Erreur : Cet élément ne peut pas être supprimé car d\'autres éléments y sont liés.'];
         } else {
             // Handle other errors as needed
             $response = handleError($e);
@@ -235,7 +244,7 @@ function fetchData()
                 echo 'Une erreur est survenue';
             }
         } else {
-            echo 'Invalid URL or no data.';
+            echo 'Invalid URL ou pas de data.';
         }
     } catch (PDOException $e) {
         die("Connection failed: " . $e->getMessage());
@@ -272,7 +281,7 @@ function fetchDropdowns()
                 }
             }
         } else {
-            $result = 'Invalid URL or no data to fetch.';
+            $result = 'Invalid URL ou pas de data.';
         }
     } catch (PDOException $e) {
         die("Connection failed: " . $e->getMessage());
@@ -309,7 +318,7 @@ function vehicle_infos()
             $response = handleError($e);
         }
     } else {
-        $reponse = 'Invalid URL or no data to fetch. No valid vehicle selected.';
+        $reponse = 'URL invalide ou aucune donnée à récupérer. Aucun véhicule valide sélectionné.';
     }
     // Echo the JSON-encoded data
     header('Content-Type: application/json');
@@ -318,7 +327,8 @@ function vehicle_infos()
 
 function imgUpload()
 {
-    $uploadDir = "../images_voiture/";
+
+    $uploadDir = "../uploads/";
     $response = []; // Initialize the response array.
 
     // Create the uploads directory if it doesn't exist.
@@ -326,7 +336,8 @@ function imgUpload()
         mkdir($uploadDir, 0777, true);
     }
 
-    $targetFile = $uploadDir . basename($_FILES["image"]["name"]);
+    $file_name = strip_tags($_FILES['file']['name']); //no html in filename
+    $targetFile = $uploadDir . basename($file_name);       
 
     // Check if the file is an actual image.
     $check = getimagesize($_FILES["image"]["tmp_name"]);
@@ -334,7 +345,7 @@ function imgUpload()
     if ($check !== false && $_FILES["image"]["size"] < 1000000) {
         // Check if the file already exists.
         if (file_exists($targetFile)) {
-            $response['message'] = "Erreur:Sorry, this file already exists.";
+            $response['message'] = "Erreur: Désolé, ce fichier existe déjà.";
         } else {
             // Move the uploaded file to the specified directory.
             if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
@@ -346,14 +357,14 @@ function imgUpload()
                     $response['id_img'] = $imageInfo['id_img'];
                     $response['link'] = $imageInfo['link'];
                 } else {
-                    $response['message'] = "Erreur: Failed to create a database entry.";
+                    $response['message'] = "Échec de la création de l'entrée dans la base de données.";
                 }
             } else {
-                $response['message'] =  "Erreur: There was an error uploading your file.";
+                $response['message'] =  "Erreur: Une erreur s'est produite lors du téléchargement de votre fichier.";
             }
         }
     } else {
-        $response['message'] =  "Erreur: File is not an image or the image size exceeds 1MB.";
+        $response['message'] =  "Erreur: Le fichier n'est pas une image ou la taille de l'image dépasse 1 Mo.";
     }
 
     // Return the response as JSON.
@@ -365,7 +376,7 @@ function imgToDB($targetFile)
 {
     try {
         global $pdo;
-        $imageFileName = $_FILES["image"]["name"];
+        $imageFileName = strip_tags($_FILES['file']['name']);
         $imageFilePath = $targetFile;
         $type = "4";
 
@@ -418,7 +429,7 @@ function updateImg()
             $stmt->bindParam(':imageId', $imageId);
             if ($stmt->execute()) {
                 if ($stmt->execute()) {
-                    $response = ['message' => 'Succès : Image was updated successfully'];
+                    $response = ['message' => 'Succès : L\'image a été mise à jour avec succès.'];
                 }
             }
         }
@@ -430,7 +441,8 @@ function updateImg()
 
 function updateMessageFeedbacks()
 {
-    $data = json_decode(file_get_contents('php://input'), true);
+    $dataFetched = json_decode(file_get_contents('php://input'), true);
+    $data = sanitizeData($dataFetched);
     $table = $data['table'];
     $idName = $data['idColumn'];
     $itemId = $data['id'];
@@ -446,7 +458,7 @@ function updateMessageFeedbacks()
         $stmt->bindParam(':itemID', $itemId);
 
         if ($stmt->execute()) {
-            $response = ['message' => 'Succès : Element from ' . $table . ' updated successfully'];
+            $response = ['message' => 'Succès : Nous avons bien pris en compte votre message'];
         }
     } catch (PDOException $e) {
         $response = handleError($e);
@@ -485,7 +497,7 @@ function addFeedback()
         $stmt->bindParam(':status', $status);
 
         if ($stmt->execute()) {
-            $response = ['message' => 'Succès : Feedback inserted succesfully'];
+            $response = ['message' => 'Succès : Témoignage ajoutée avec succès.'];
         }
     } catch (PDOException $e) {
         $response = handleError($e);
@@ -520,7 +532,7 @@ function addMessage()
         $stmt->bindParam(':subject', $subject);
 
         if ($stmt->execute()) {
-            $response = ['message' => 'Succès : Feedback inserted succesfully'];
+            $response = ['message' => 'Succès : Message ajouté avec succès.'];
         }
     } catch (PDOException $e) {
         $response = handleError($e);
@@ -530,7 +542,8 @@ function addMessage()
 
 function modifyWeb()
 {
-    $data = json_decode(file_get_contents('php://input'), true);
+    $dataFetched = json_decode(file_get_contents('php://input'), true);
+    $data = sanitizeData($dataFetched);
     $id = $data['id'];
     $type = $data['type'];
     $text = $data['text'];
@@ -555,7 +568,7 @@ function modifyWeb()
         $stmt->bindParam(':category', $category);
 
         if ($stmt->execute()) {
-            $response = ['message' => 'Succès : Web page info updated succesfully'];
+            $response = ['message' => 'Succès : Informations de la page Web mises à jour avec succès.'];
         }
     } catch (PDOException $e) {
         $response = handleError($e);
@@ -565,7 +578,8 @@ function modifyWeb()
 
 function updateServices()
 {
-    $data = json_decode(file_get_contents('php://input'), true);
+    $dataFetched = json_decode(file_get_contents('php://input'), true);
+    $data = sanitizeData($dataFetched);
     $id = $data['id'];
     $type = $data['type'];
     $text = $data['heading'];
@@ -609,7 +623,7 @@ function updateServices()
             $stmt->bindParam(':order', $order);
 
             if ($stmt->execute()) {
-                $response = ['message' => 'Succès : Web page info updated succesfully'];
+                $response = ['message' => 'Succès : Informations de la page Web mises à jour avec succès.'];
             }
 
             if (isset($imgId)) {
@@ -625,7 +639,7 @@ function updateServices()
                     $stmt->bindParam(':mainImage', $imgId);
                     $stmt->bindParam(':serviceiId', $serviceId);
                     if ($stmt->execute()) {
-                        $response = ['message' => 'Succès : Web page info updated succesfully'];
+                        $response = ['message' => 'Succès : Informations de la page Web mises à jour avec succès.'];
                     }
                 }
             }
@@ -668,7 +682,8 @@ header('Content-Type: application/json');
 function updateVehicle()
 {
     $userId = $_SESSION["user_id"];
-    $data = json_decode(file_get_contents('php://input'), true);
+    $dataFetched = json_decode(file_get_contents('php://input'), true);
+    $data = sanitizeData($dataFetched);
 
     try {
         global $pdo;
@@ -773,7 +788,7 @@ function updateVehicle()
                                     if (!$stmt->execute()) {
                                         // Roll back the transaction and return an error response
                                         $pdo->rollBack();
-                                        $response = ['message' => 'Error: Failed to update vehicle properties.'];
+                                        $response = ['message' => 'Error: Échec de la mise à jour des propriétés du véhicule.'];
                                         echo json_encode($response);
                                         return;
                                     }
@@ -786,12 +801,12 @@ function updateVehicle()
 
             // Commit the transaction if all statements were successful
             $pdo->commit();
-            $response = ['message' => 'Succès: Vehicle data and properties updated successfully.'];
+            $response = ['message' => 'Succès: Données et propriétés du véhicule mises à jour avec succès.'];
             echo json_encode($response);
         } else {
             // Roll back the transaction and return an error response
             $pdo->rollBack();
-            $response = ['message' => 'Error: Failed to update vehicle data.'];
+            $response = ['message' => 'Error: Échec de la mise à jour des données du véhicule.'];
             echo json_encode($response);
         }
     } catch (PDOException $e) {
@@ -802,8 +817,8 @@ function updateVehicle()
 
 function updateUser()
 {
-    $data = json_decode(file_get_contents('php://input'), true);
-    // Extract data from userData array
+    $dataFetched = json_decode(file_get_contents('php://input'), true);
+    $data = sanitizeData($dataFetched);
     $lastName = $data['Nom'];
     $firstName = $data['Prénom'];
     $email = $data['Email'];
@@ -841,7 +856,7 @@ function updateUser()
             $statement->bindParam(':password', $hashedPassword);
         }
         if ($statement->execute()) {
-            $response = ['message' => 'Success:User updated successfully.'];
+            $response = ['message' => 'Success : Utilisateur mis à jour avec succès.'];
         }
     } catch (PDOException $e) {
         $response = handleError($e);
@@ -851,7 +866,8 @@ function updateUser()
 
 function updateDropdown()
 {
-    $data = json_decode(file_get_contents('php://input'), true);
+    $dataFetched = json_decode(file_get_contents('php://input'), true);
+    $data = sanitizeData($dataFetched);
 
     // Extract data
     $idColumn =  $data['idKey'];
@@ -908,7 +924,7 @@ function updateDropdown()
         }
 
         if ($statement->execute()) {
-            $response = ['message' => 'Succès: Element from ' . $table . ' ' . (isset($id) ? 'updated' : 'inserted') . ' successfully.'];
+            $response = ['message' => 'Succès: Element ' . (isset($id) ? 'mise a jour' : 'inseré') . ' avec succès.'];
         }
     } catch (PDOException $e) {
         $response = handleError($e);
@@ -921,7 +937,8 @@ function deleteImg()
 {
     try {
         global $pdo;
-        $data = json_decode(file_get_contents('php://input'), true);
+        $dataFetched = json_decode(file_get_contents('php://input'), true);
+        $data = sanitizeData($dataFetched);
         $idImg = $data['id_img'];
         $imageLink = $data['image_link']; // Assuming you have the image link in $data
 
@@ -932,9 +949,9 @@ function deleteImg()
             $stmt->bindParam(':id_img', $idImg);
             $stmt->execute();
 
-            $response = (["message" => "Image and record deleted successfully"]);
+            $response = (["message" => "Succès : Image et enregistrement supprimés avec succès."]);
         } else {
-            $response = (["message" => "Failed to delete the image file or it does not exist."]);
+            $response = (["message" => "Erreur : Échec de la suppression du fichier image ou il n'existe pas."]);
         }
     } catch (PDOException $e) {
         $response = handleError($e);

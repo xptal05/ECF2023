@@ -81,7 +81,7 @@ if (session_status() == PHP_SESSION_NONE) {
                     <label>Commentaire</label>
                     <textarea id="commentInput" rows="4" cols="100" required></textarea>
                 </div>
-
+                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                 <div class="button-container span-2-end">
                     <button class="btn" type="reset" id="close-btn">Annuler</button>
                     <button class="btn" type="submit">Sauvegarder</button>

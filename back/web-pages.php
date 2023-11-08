@@ -5,12 +5,12 @@ if (session_status() == PHP_SESSION_NONE) {
 
 // Table array
 $tables = [
-    ['name' => 'Services', 'columns' => ['Icon', 'Titre', 'Description', 'Ordre'], 'id' => 'servicetbl', 'span' => 'span-12'],
-    ['name' => 'Horaires', 'columns' => ['Text'], 'id' => 'hourstbl', 'span' => 'span-6 row-2'],
-    ['name' => 'Contact', 'columns' => ['Text', 'Categorie'], 'id' => 'contacttbl', 'span' => 'span-6'],
-    ['name' => 'Adresse', 'columns' => ['Text', 'Categorie'], 'id' => 'addresstbl', 'span' => 'span-6'],
-    ['name' => 'A propos', 'columns' => ['Text'], 'id' => 'abouttbl', 'span' => 'span-4'],
-    ['name' => 'Raisons', 'columns' => ['Text', 'Cathgorie', 'Ordre'], 'id' => 'reasonstbl', 'span' => 'span-8'],
+    ['name' => 'Services','db_name' => 'Services', 'columns' => ['Icon', 'Titre', 'Description', 'Ordre'], 'id' => 'servicetbl', 'span' => 'span-12'],
+    ['name' => 'Horaires','db_name' => 'Hours', 'columns' => ['Text'], 'id' => 'hourstbl', 'span' => 'span-6 row-2'],
+    ['name' => 'Contact','db_name' => 'Contact', 'columns' => ['Text', 'Categorie'], 'id' => 'contacttbl', 'span' => 'span-6'],
+    ['name' => 'Adresse','db_name' => 'Address', 'columns' => ['Text', 'Categorie'], 'id' => 'addresstbl', 'span' => 'span-6'],
+    ['name' => 'A propos','db_name' => 'About', 'columns' => ['Text'], 'id' => 'abouttbl', 'span' => 'span-4'],
+    ['name' => 'Raison','db_name' => 'Reasons', 'columns' => ['Text', 'Cathgorie', 'Ordre'], 'id' => 'reasonstbl', 'span' => 'span-8'],
 ];
 ?>
 
@@ -46,7 +46,7 @@ $tables = [
                 <div class="tbl <?php echo $table['span'] ?>">
                     <div class="table-header">
                         <h2><?php echo $table['name']; ?></h2>
-                        <a class="actionbtn svg-btn add" href="?add=<?php echo $table['name']; ?>" title="Ajouter">+</a>
+                        <a class="actionbtn svg-btn add" href="?add=<?php echo $table['db_name']; ?>" title="Ajouter">+</a>
                     </div>
                     <table>
                         <thead>

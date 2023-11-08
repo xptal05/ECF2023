@@ -124,8 +124,8 @@ function attachActionBtnListeners(modifiedServiceArray) {
             const tableId = e.currentTarget.getAttribute('href').split('=')[1].split('-')[0]
             const actionBtn = e.currentTarget.getAttribute('href').split('=')[0].replace('?', '')
 
-            const itemArray = webInfo[tableId]['array']
-
+            console.log(webInfo[tableId])
+            console.log(tableId)
 
             const selectedItem = webInfo[tableId]['array'].find(item => parseInt(item['id_info'], 10) === itemId)
             const selectedServiceItem = modifiedServiceArray.find(item => parseInt(item['id_info'],10) === itemId)
