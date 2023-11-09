@@ -3,19 +3,14 @@
 function login()
 {
     require_once "./config/db.php";
+    require_once "./config/jwt.php";
     $pdo = connectToDatabase($dbConfig);
-
-    // Start or resume a session
-    session_start();
 
     try {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            // Generate a unique session token
-            $session_token = bin2hex(random_bytes(32));
-            $_SESSION["session_token"] = $session_token;
 
             $inputUsername = $_POST["login"];
-            $inputPassword = trim($_POST["password");
+            $inputPassword = trim($_POST["password"]);
 
             // Verify the session token before processing the request
             if (isset($_POST["session_token"]) && $_POST["session_token"] === $_SESSION["session_token"]) {
@@ -32,14 +27,21 @@ function login()
                         }
                         $_SESSION["user_id"] = $user_login["id_user"];
                         $_SESSION["user_name"] = $user_login["first_name"];
-                        header("Location: index.php");
+                        $_SESSION["csrf_token"] = $_POST["session_token"];
+
+                        $jwtToken = generateJWT($_SESSION["user_id"], $_SESSION["user_name"]);
+                        error_log("JWT Token: $jwtToken"); // Check your server logs
+
+                        header("Authorization: Bearer $jwtToken");
+
+                       header("Location: index.php");
                         exit();
                     } else {
                         echo '<div class="error">Incorrect username or password. Please try again.</div>';
                     }
                 }
             } else {
-                echo '<div class="error">CSRF Token validation failed. Please try again.</div>';
+                echo '<div class="error">CSRF Token validation failed. Please try again.'.$_SESSION["session_token"] .'post'. $_POST["session_token"]. '</div>';
             }
         }
     } catch (PDOException $e) {
@@ -47,6 +49,8 @@ function login()
         echo 'exception';
     }
 }
+
+
 
 
 function logout() {
@@ -59,7 +63,7 @@ function logout() {
     echo '<script>
         setTimeout(function() {
             window.location.href = "login.php";
-        }, 500); 
+        }, 10); 
     </script>';
 }
 

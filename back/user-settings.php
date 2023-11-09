@@ -21,6 +21,7 @@ if (session_status() == PHP_SESSION_NONE) {
         <?php include_once "./components/menu.php" ?>
     </section>
     <section id="popup"></section>
+    <section id="notifications"></section>
     <section class="application">
         <h1>Gestion des utilisateurs</h1>
         <div class="tbl-header">
@@ -76,6 +77,8 @@ if (session_status() == PHP_SESSION_NONE) {
             </form>
         </div>
     </section>
+    <script src="./scripts/script-notifications.js"></script>
+    <?php adminAccess() ?>
     <script src="./script-dropdowns.js"></script>
 
     <script src="./scripts/script-mapping.js"></script>
@@ -85,7 +88,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
     <script src="./scripts/script-popups.js"></script>
     <script src="./scripts/script-postDb.js"></script>
-    <script src="./scripts/script-notifications.js"></script>
+
 
     <script src="./components/script-new-item.js"></script>
     <script src="./components/menu.js"></script>
@@ -169,7 +172,6 @@ if (session_status() == PHP_SESSION_NONE) {
             })
         }
     </script>
-
 </body>
 
 </html>

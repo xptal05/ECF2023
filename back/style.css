@@ -382,8 +382,12 @@ tbody {
     top: 1rem;
 }
 
-tbody>tr{
+#list>tr{
     height: 80px;
+}
+
+#dropdownsContainer #list>tr{
+    height: 15px;
 }
 
 td {

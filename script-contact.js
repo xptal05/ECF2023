@@ -81,6 +81,7 @@ function formvalidation() {
 function pushNewMessage(formData, messageForm) {
     const phpScriptURL = './back/db_query.php?action=newMessage'
     formData.action = 'newMessage'
+    console.log(formData)
 
     // Send an AJAX request to update the database
     fetch(phpScriptURL, {
@@ -100,8 +101,6 @@ function pushNewMessage(formData, messageForm) {
 
         .catch((error) => {
             console.error("Error:", error)
-            console.log(data)
-
         })
 
 
@@ -121,6 +120,7 @@ function messageEvent() {
             messageForm.querySelectorAll('input, textarea').forEach(input => {
                 // Handle other input and select elements
                 formData[input.id.replace("Input", "")] = input.value
+                console.log(input)
             })
 
             formData.status = 2

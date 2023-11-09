@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once "./config/db.php";
 $pdo = connectToDatabase($dbConfig);
 
@@ -18,7 +19,6 @@ function handleError($e)
 
     $response = ['message' => $error_message];
     return $response;
-    //echo json_encode($response);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
@@ -30,13 +30,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
 
     $action = $_GET['action'];
 
+    // Check if the action is valid
     if (array_key_exists($action, $getActions)) {
         $functionName = $getActions[$action];
-        $functionName();
+
+        // Check if additional data is provided in the URL
+        $data = isset($_GET['data']) ? $_GET['data'] : null;
+
+        $functionName($data);
     } else {
         echo 'Invalid action requested.';
     }
-} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+} else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_FILES["image"])) {
         imgUpload();
     } else {
@@ -44,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
         $action = $data['action'];
 
                 // Validate the CSRF token here before processing the action
-                if (isset($data['csrf_token']) && $data['csrf_token'] === $_SESSION['csrf_token']) {
+        if (isset($data['csrf_token']) && $data['csrf_token'] === $_SESSION['csrf_token']) {
 
         $postActions = [
             'delete' => 'deleteData',
@@ -64,15 +69,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
             $functionName = $postActions[$action];
             $functionName();
         } else {
-            echoData('post action does not correspond');
+           echoData('post action does not correspond');
         }
+    } else {
+       echoData('no valid token');
     }
-    else {
-        echoData('no valid token');
-    }
+}
 } else {
     echoData('no method');
 }
+
 
 function sanitizeData($data) {
     if (is_array($data)) {
@@ -89,11 +95,8 @@ function sanitizeData($data) {
 
 function echoData($parameter)
 {
-    try {
-        $response = ['error' => 'Erreur : '$parameter]; // Create an array with your data
-    } catch (Exception $e) {
-        $response = ['message' => 'Erreur : issue'];
-    }
+    $response = ['message' => 'Erreur : ' . $parameter];
+    header('Content-Type: application/json');
     echo json_encode($response);
 }
 
@@ -179,7 +182,7 @@ function deleteService()
 }
 
 
-function fetchData()
+function fetchData($data)
 {
     try {
         global $pdo;
@@ -199,11 +202,11 @@ function fetchData()
                 $sql = 'SELECT * FROM feedbacks';
                 break;
 
-            case strpos($currentURL, 'vehicle-form.php') !== false || $_GET['data'] === 'images':
+            case strpos($currentURL, 'vehicle-form.php') !== false || $data === 'images':
                 $sql = 'SELECT * FROM images;';
                 break;
 
-            case strpos($currentURL, 'web-pages.php') !== false && $_GET['data'] !== 'images':
+            case strpos($currentURL, 'web-pages.php') !== false && $data !== 'images':
                 $sql = 'SELECT * FROM web_page_info';
                 break;
 
@@ -328,7 +331,7 @@ function vehicle_infos()
 function imgUpload()
 {
 
-    $uploadDir = "../uploads/";
+    $uploadDir = "../images_voiture/";
     $response = []; // Initialize the response array.
 
     // Create the uploads directory if it doesn't exist.
@@ -336,7 +339,7 @@ function imgUpload()
         mkdir($uploadDir, 0777, true);
     }
 
-    $file_name = strip_tags($_FILES['file']['name']); //no html in filename
+    $file_name = strip_tags($_FILES['image']['name']); //no html in filename
     $targetFile = $uploadDir . basename($file_name);       
 
     // Check if the file is an actual image.
@@ -345,7 +348,7 @@ function imgUpload()
     if ($check !== false && $_FILES["image"]["size"] < 1000000) {
         // Check if the file already exists.
         if (file_exists($targetFile)) {
-            $response['message'] = "Erreur: Désolé, ce fichier existe déjà.";
+            $response['message'] = "Erreur: Désolé, ce fichier existe déjà.". $_FILES['image']['name'];
         } else {
             // Move the uploaded file to the specified directory.
             if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
@@ -533,6 +536,8 @@ function addMessage()
 
         if ($stmt->execute()) {
             $response = ['message' => 'Succès : Message ajouté avec succès.'];
+        } else {
+            $response = ['message' => 'Erreur : Échec de l\'ajout du message.'];
         }
     } catch (PDOException $e) {
         $response = handleError($e);
@@ -588,7 +593,7 @@ function updateServices()
     $id_text = $data['description-id'];
     $text_text = $data['description'];
 
-    $imgId = $data['img-id'];
+    $imgId = ($data['img-id'] == null) ? 0 : $data['img-id'];
     $sql = "";
 
     try {
@@ -626,7 +631,7 @@ function updateServices()
                 $response = ['message' => 'Succès : Informations de la page Web mises à jour avec succès.'];
             }
 
-            if (isset($imgId)) {
+            if ($imgId !== 0) {
                 //dis-asociate images with the service
                 $sql = "UPDATE images SET associated_to_info = null, type = 4 WHERE associated_to_info = :serviceiId AND type = 3";
                 $stmt = $pdo->prepare($sql);
@@ -676,8 +681,6 @@ function fetchDataDashbord()
         echo 'exception';
     }
 }
-
-header('Content-Type: application/json');
 
 function updateVehicle()
 {
@@ -871,9 +874,9 @@ function updateDropdown()
 
     // Extract data
     $idColumn =  $data['idKey'];
-    $id = $data['id'];
     $nameColumn = $data['name'];
     $itemName = $data['itemName'];
+    $id = $data['id'];
     $itemDescription = $data['itemDescription'];
     $table = $data['table'];
 

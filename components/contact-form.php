@@ -23,7 +23,7 @@
         </div>
         <label for="message">Message</label>
         <textarea class="input-front" id="message" placeholder="Votre message" rows="8" required></textarea>
-        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+        <input type="hidden" name="csrf_token" id="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
         <button type="submit" class="btn">envoyer</button>
     </form>

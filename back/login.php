@@ -1,7 +1,12 @@
 <?php
 session_start();
+if (!isset($_SESSION['session_token'])) {
+    // Generate and set the session token if not already set
+    $_SESSION['session_token'] = bin2hex(random_bytes(32));
+
+}
 include 'func.php';
-login()
+login();
 
 ?>
 
@@ -12,7 +17,7 @@ login()
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Login</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -20,7 +25,7 @@ login()
     <div class="login-page">
         <div class="background-img"></div>
         <div class="logo"><img src="../src/logo.svg"></div>
-        <form class="login-form-container" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+        <form class="login-form-container" method="POST" action="login.php">
             <div class="form-field">
                 <label for="login">Login</label>
                 <input type="text" name="login" id="login" required>
@@ -46,6 +51,7 @@ login()
                 }
             })
         </script>
+
 </body>
 
 </html>

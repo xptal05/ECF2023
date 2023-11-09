@@ -30,12 +30,14 @@ if (session_status() == PHP_SESSION_NONE) {
         </div>
     </section>
     <script src="./scripts/script-notifications.js"></script>
+    <?php adminAccess() ?>
     <script src="./scripts/script-popups.js"></script>
     <script src="./scripts/script-postDb.js"></script>
     <script src="./scripts/script-fetchData.js"></script>
     <script src="script-dropdowns.js"></script>
     <script src="./components/menu.js"></script>
     <script src="script-settings.js"></script>
+
 </body>
 
 </html>

@@ -64,12 +64,10 @@ $tables = [
     <script src="./scripts/script-popups.js"></script>
     <script src="./scripts/script-postDb.js"></script>
     <script src="./scripts/script-notifications.js"></script>
+    <?php adminAccess() ?>
     <script src="./scripts/script-fetchData.js"></script>
     <script src="script-web-info.js"></script>
     <script src="./components/menu.js"></script>
-    <script>
-
-    </script>
 </body>
 
 </html>

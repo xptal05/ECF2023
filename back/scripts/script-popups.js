@@ -46,6 +46,7 @@ function confirmationPopup(selectedItem) {
     <div class="popup-body-normal">
         <h3>Êtes-vous sûr de vouloir archiver cet utilisateur ?</h3>
         <form id="archivForm" class="popup-btns">
+        <input type="hidden" name="csrf_token" value="${csrfToken}">
             <button class="btn error-btn close-btn" type="reset">NON</button>
             <button class="btn success-btn" type="submit">OUI</button>
         <form>
@@ -91,6 +92,7 @@ function deletePopup(selectedItem, tableId, name, idKey) {
     <div class="popup-body-normal">
         <div>Êtes-vous sûr de vouloir supprimer l'élément <b>${selectedItem[name]}</b> ?</div>
         <form id="archivForm" class="popup-btns">
+            <input type="hidden" name="csrf_token" value="${csrfToken}">
             <button class="btn error-btn close-btn" type="reset">NON</button>
             <button class="btn success-btn" type="submit">OUI</button>
         <form>
@@ -169,7 +171,7 @@ function dropdownPopup(selectedItem, tableId, name, idKey) {
 
     content += `
     <div class="popup-btns">
-        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+        <input type="hidden" name="csrf_token" value="${csrfToken}">
         <button class="btn error-btn close-btn" type=reset id="close-btn">Annuler</button> 
         <button class="btn success-btn" type="submit">Sauvegarder</button>
     </div>
@@ -249,7 +251,7 @@ function webInfoPopup(selectedItem, serviceType) {
         </div>`
     }
     content += `<div class="popup-btns">
-                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                <input type="hidden" name="csrf_token" value="${csrfToken}">
                 <input type="reset" class="btn error-btn close-btn" value="Reset">
                 <input type="submit" class="btn success-btn" value="Submit">
             </div>`
@@ -267,7 +269,7 @@ function webInfoPopup(selectedItem, serviceType) {
                 formData.id = id
                 formData.type = type
 
-                const formInputs = document.querySelectorAll('input[type="text"], input[type="number, input[type="hidden"]')
+                const formInputs = document.querySelectorAll('input[type="text"], input[type="number"], input[type="hidden"]')
 
                 formInputs.forEach(input => {
                     formData[input.name] = input.value
@@ -336,7 +338,7 @@ function serviceInfoPopup(selectedItem, serviceType, dataArray) {
                     <textarea name="description" data-value="${descriptionId}" rows="6">${description}</textarea>
                 </div>
                 <div class="popup-btns">
-                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                    <input type="hidden" name="csrf_token" value="${csrfToken}">
                     <input type="reset" class="btn error-btn close-btn" value="Reset">
                     <input type="submit" class="btn success-btn" value="Submit">
                 </div>
@@ -431,7 +433,7 @@ function archiveMessageFeedbackPopup(selectedItem, idKey, status) {
     formData.id = selectedItem[idKey]
     formData.status = status
     formData.userId = UserId
-    formData.csrf_token = document.querySelector('input[type="hidden"]').value
+
 
     if (idKey === 'id_message') {
         formData.table = 'messages'
@@ -463,6 +465,7 @@ function archiveMessageFeedbackPopup(selectedItem, idKey, status) {
                 <div>Êtes-vous sûr de vouloir ${action} l'élément de <b>${selectedItem[formData.subject]}</b> ?</div>
             </div>
                 <form id="archivForm" class="popup-btns">
+                <input type="hidden" name="csrf_token" value="${csrfToken}">
                     <button class="btn error-btn close-btn" type="reset">NON</button>
                     <button class="btn success-btn" type="submit">OUI</button>
                 <form>
@@ -473,10 +476,12 @@ function archiveMessageFeedbackPopup(selectedItem, idKey, status) {
         const archivForm = document.getElementById('archivForm')
         archivForm.addEventListener('submit', (e) => {
             e.preventDefault()
+            console.log(formData)
             pushMessageFeedback(formData)
         })
     }
     createPopup(header, content, eventListeners)
+    formData.csrf_token = document.querySelector(' input[name="csrf_token"]').value
 }
 
 //MODIFY IMAGE POPUP -> choose from gallery or upload new
@@ -532,7 +537,7 @@ function imgAddPopup(gallerytype) {
     let content = `
     <form method="post" enctype="multipart/form-data" id="img-form" class="popup-body-normal">
     <input type="file" name="image" id="image" fieldtext="Select a File">
-    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+    <input type="hidden" name="csrf_token" value="${csrfToken}">
     <input type="submit" name="submit" id="selectImg" value="Upload" data-value=${imgType} class="btn">
     </form>
     `
@@ -622,7 +627,7 @@ function imgSubPopup() {
                 <form id="reattribute-img">
                 <div>Êtes-vous sûr de vouloir attribuer cette image à ce véhicule ? Elle est attribuée à un véhicule différent.</div>
                 <div class="popup-btns">
-                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                <input type="hidden" name="csrf_token" value="${csrfToken}">
                 <input class="btn error-btn close-btn"  type="reset" value="Non">
                 <input class="btn success-btn" type="submit" value="Oui">
                 </div>
@@ -671,7 +676,7 @@ function imgGalleryPopup(gallerytype) {
             <div class="main-gallery-body" id="mainGallery" data-value=${imgType}></div>
             <form id="mainImgSelect">
                 <input id="imageSelectedInput" type="number" hidden value="">
-                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                <input type="hidden" name="csrf_token" value="${csrfToken}">
                 <input type="reset" class="btn error-btn close-btn" value="annuler">
                 <input type="submit" class="btn success-btn" value="valider" id="selectImg" data-value=${imgType}>
             </form>
@@ -914,7 +919,7 @@ async function modifyUserPopup(selectedItem) {
 
         popupform.innerHTML += `
         <div class="popup-btns">
-            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+            <input type="hidden" name="csrf_token" value="${csrfToken}">
             <button class="btn" id="delete-btn">Supprimer</button>
             <button class="btn error-btn close-btn" type=reset id="close-btn">Annuler</button> 
             <button class="btn success-btn" type="submit">Sauvegarder</button>
@@ -1050,7 +1055,7 @@ function deleteImagePopup(selectedImage) {
                                     <h3>Confirmer la suppression</h3>
                                     <p>Êtes-vous sûr de vouloir supprimer cette image ?</p>
                                     <div class="popup-btns">
-                                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                                    <input type="hidden" name="csrf_token" value="${csrfToken}">
                                         <button class="btn error-btn" id="cancel-delete">Non</button>
                                         <button class="btn success-btn" id="confirm-delete">Oui</button>
                                     </div>

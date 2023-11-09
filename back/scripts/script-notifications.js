@@ -1,5 +1,4 @@
 function notificationsServeur(data) {
-    console.log('notif')
     notifications.classList.toggle('on')
     if (data['message'].startsWith('Erreur')) {
         notifications.classList.add('error')

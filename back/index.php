@@ -20,6 +20,7 @@ if (session_status() == PHP_SESSION_NONE) {
 <body class="application-window">
     <?php
 
+
 require_once "./config/db.php";
 $pdo = connectToDatabase($dbConfig);
     function fetchDataDashbord()

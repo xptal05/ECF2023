@@ -1,7 +1,12 @@
 <?php
+
 include "func.php";
-$jsonData = json_encode($_SESSION["user_id"]);
-echo "<script>var UserId = {$jsonData};</script>";
+$userId = json_encode($_SESSION["user_id"]);
+$csrfToken = json_encode($_SESSION["csrf_token"]);
+
+echo "<script>var UserId = {$userId}
+var csrfToken = {$csrfToken}
+</script>";
 
 if (isset($_POST["logout"])) {
     logout();
@@ -16,7 +21,7 @@ if (isset($_POST["logout"])) {
         <a href="./vehicles.php">Vehicules</a>
     </div>
     <?php admin_menu(); ?>
-    <div class="menu-user-name"><div><?php echo $_SESSION['user_name'].' '. $_SESSION["admin"] = 1 ? 'Admin' : '' ?></div><button type="submit" form="logoutForm" class="logoutBtn">
+    <div class="menu-user-name"><div><?php echo $_SESSION['user_name'].' '. ($_SESSION["admin"] == 1 ? ' Admin' : '') ?></div><button type="submit" form="logoutForm" class="logoutBtn">
 <img src="./src/right-from-bracket.svg" style="width:30px"></button></div>
 
 </div>
