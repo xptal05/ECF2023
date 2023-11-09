@@ -1,6 +1,6 @@
 <?php
 if (session_status() == PHP_SESSION_NONE) {
-    include 'session.php';
+    include './functions/session.php';
 }
 
 // Table array
@@ -22,8 +22,8 @@ $tables = [
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Info website</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="style/style-svg-btn.css">
+    <link rel="stylesheet" href="./assets/style/style.css">
+    <link rel="stylesheet" href="./assets/style/style-svg-btn.css">
 <style>
     table th:last-child{
         min-width: 125px;
@@ -61,12 +61,12 @@ $tables = [
             <?php endforeach; ?>
         </div>
     </section>
-    <script src="./scripts/script-popups.js"></script>
-    <script src="./scripts/script-postDb.js"></script>
-    <script src="./scripts/script-notifications.js"></script>
+    <script src="./assets/js/script-popups.js"></script>
+    <script src="./assets/js/script-postDb.js"></script>
+    <script src="./assets/js/script-notifications.js"></script>
     <?php adminAccess() ?>
-    <script src="./scripts/script-fetchData.js"></script>
-    <script src="script-web-info.js"></script>
+    <script src="./assets/js/script-fetchData.js"></script>
+    <script src="./assets/js/script-web-info.js"></script>
     <script src="./components/menu.js"></script>
 </body>
 

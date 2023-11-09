@@ -98,10 +98,10 @@ function populateWebInfoTables() {
             tableRow.innerHTML += `
                 <td>
                     <a href="?modify=${tableInfo.name}-${item.id_info}" class="actionbtn svg-btn" title="Modifier">
-                        <img src="./src/edit_black.svg">
+                        <img src="./assets/src/edit_black.svg">
                     </a>
                     <a href="?delete=${tableInfo.name}-${item.id_info}" class="actionbtn svg-btn" title="Supprimer">
-                        <img src="./src/delete_black.svg">
+                        <img src="./assets/src/delete_black.svg">
                     </a>
                 </td>
             `

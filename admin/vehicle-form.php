@@ -1,9 +1,9 @@
 <?php
 if (session_status() == PHP_SESSION_NONE) {
-    include 'session.php';
+    include './functions/session.php';
 }
 
-require_once "./config/db.php";
+require_once "../config/db.php";
 $pdo = connectToDatabase($dbConfig);
 ?>
 
@@ -15,8 +15,8 @@ $pdo = connectToDatabase($dbConfig);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vehicule</title>
-    <link rel="stylesheet" href="./style.css">
-    <link rel="stylesheet" type="text/css" href="./style/style-svg-btn.css">
+    <link rel="stylesheet" href="./assets/style/style.css">
+    <link rel="stylesheet" type="text/css" href="./assets/style/style-svg-btn.css">
     <style>
         <?php $imgBackground = $_GET['id'] ? $vehicle_img : 'src/img.png';
         echo ".img-container:before {background-image: url('$imgBackground');}"; ?>.custom-select {
@@ -135,7 +135,7 @@ $pdo = connectToDatabase($dbConfig);
             <div class="vehicle-details application-body span-12">
                 <div class="img-container span-4 container">
                     <div class="img-foreground">
-                        <a href="?modify=img" class="actionbtn mainCarImage"><img class="svg" src="./src/edit_black.svg"></a>
+                        <a href="?modify=img" class="actionbtn mainCarImage"><img class="svg" src="./assets/src/edit_black.svg"></a>
                     </div>
                     <img class="car-tumbnail" src="<?php echo $vehicle_img ?>" style="width:100%" name="mainImg">
                 </div>
@@ -214,7 +214,7 @@ $pdo = connectToDatabase($dbConfig);
 
 
                 <div class="gallery container">
-                    <a href="?modify=img" class="actionbtn CarGalleryImages"><img class="" src="./src/edit_black.svg"></a>
+                    <a href="?modify=img" class="actionbtn CarGalleryImages"><img class="" src="./assets/src/edit_black.svg"></a>
                     <?php
                     if ($imageGalleryImgs != '') {
                         $galleryIds = explode(', ', $vehicle_infos['gallery_ids']);
@@ -258,11 +258,11 @@ $pdo = connectToDatabase($dbConfig);
             </div>
         </form>
     </section>
-    <script src="./scripts/script-fetchData.js"></script>
-    <script src="script-dropdowns.js"></script>
-    <script src="./scripts/script-notifications.js"></script>
-    <script src="./scripts/script-popups.js"></script>
-    <script src="./scripts/script-postDb.js"></script>
+    <script src="./assets/js/script-fetchData.js"></script>
+    <script src="./assets/js/script-dropdowns.js"></script>
+    <script src="./assets/js/script-notifications.js"></script>
+    <script src="./assets/js/script-popups.js"></script>
+    <script src="./assets/js/script-postDb.js"></script>
     <script>
 
         const notifications = document.getElementById('notifications')

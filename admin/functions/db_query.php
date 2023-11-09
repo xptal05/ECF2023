@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once "./config/db.php";
+require_once "../../config/db.php";
 $pdo = connectToDatabase($dbConfig);
 
 
@@ -9,7 +9,7 @@ function handleError($e)
     $error_message = 'Erreur: ' . $e->getMessage();
 
     // Log the error to a file
-    $log_file = './error.log'; // Adjust the file path as needed
+    $log_file = '..../error.log'; // Adjust the file path as needed
     $timestamp = date('Y-m-d H:i:s');
     $log_entry = "[$timestamp] $error_message\n";
 
@@ -331,7 +331,7 @@ function vehicle_infos()
 function imgUpload()
 {
 
-    $uploadDir = "../images_voiture/";
+    $uploadDir = "..../images_voiture/";
     $response = []; // Initialize the response array.
 
     // Create the uploads directory if it doesn't exist.

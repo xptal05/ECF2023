@@ -135,9 +135,9 @@ function populateList(data) {
 
         // Customize the "Actions" column
         if (typeof customMappings[currentURL].actions[2] !== 'undefined') {
-            row.querySelector('td:last-child').innerHTML = `<a id="action1" class="actionbtn svg-btn" href="${customMappings[currentURL].actions[0]}${item[customMappings[currentURL].headers["Actions"]]}" title="${customMappings[currentURL].actions[1]}"><img src="./src/${actionSvgMapping(customMappings[currentURL].actions[1])}"></a><a id="action2" class="actionbtn svg-btn" href="${customMappings[currentURL].actions[2]}${item[customMappings[currentURL].headers["Actions"]]}" title="${customMappings[currentURL].actions[3]}"><img src="./src/${actionSvgMapping(customMappings[currentURL].actions[3])}"></a>`
+            row.querySelector('td:last-child').innerHTML = `<a id="action1" class="actionbtn svg-btn" href="${customMappings[currentURL].actions[0]}${item[customMappings[currentURL].headers["Actions"]]}" title="${customMappings[currentURL].actions[1]}"><img src="./assets/src/${actionSvgMapping(customMappings[currentURL].actions[1])}"></a><a id="action2" class="actionbtn svg-btn" href="${customMappings[currentURL].actions[2]}${item[customMappings[currentURL].headers["Actions"]]}" title="${customMappings[currentURL].actions[3]}"><img src="./assets/src/${actionSvgMapping(customMappings[currentURL].actions[3])}"></a>`
         } else {
-            row.querySelector('td:last-child').innerHTML = `<a id="action1" class="actionbtn svg-btn" href="${action1_1}${item[customMappings[currentURL].headers["Actions"]]}" title"${action1_2}"><img src="./src/${actionSvgMapping(action1_2)}"></a>`
+            row.querySelector('td:last-child').innerHTML = `<a id="action1" class="actionbtn svg-btn" href="${action1_1}${item[customMappings[currentURL].headers["Actions"]]}" title"${action1_2}"><img src="./assets/src/${actionSvgMapping(action1_2)}"></a>`
         }
 
         list.appendChild(row)

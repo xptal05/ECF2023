@@ -1,6 +1,6 @@
 <?php
 
-include "func.php";
+include "./functions/func.php";
 $userId = json_encode($_SESSION["user_id"]);
 $csrfToken = json_encode($_SESSION["csrf_token"]);
 
@@ -13,7 +13,7 @@ if (isset($_POST["logout"])) {
 }
 ?>
 <div class="menu">
-    <img class="logo" src="src/Logo-back.svg">
+    <img class="logo" src="./assets/src/Logo-back.svg">
     <div class="menu-section one">
         <a href="./index.php">Tableau de bord</a>
         <a href="./messages.php">Messages</a>
@@ -22,7 +22,7 @@ if (isset($_POST["logout"])) {
     </div>
     <?php admin_menu(); ?>
     <div class="menu-user-name"><div><?php echo $_SESSION['user_name'].' '. ($_SESSION["admin"] == 1 ? ' Admin' : '') ?></div><button type="submit" form="logoutForm" class="logoutBtn">
-<img src="./src/right-from-bracket.svg" style="width:30px"></button></div>
+<img src="./assets/src/right-from-bracket.svg" style="width:30px"></button></div>
 
 </div>
 <form id="logoutForm" action="" method="post">

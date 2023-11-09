@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parrot Catalogue</title>
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./assets/style/style.css">
     <style>
 
     </style>
@@ -15,7 +15,7 @@
 <body>
     <section id="notifications"></section>
     <?php include_once "./components/header.php";
-    include_once "./func.php";
+    include_once "./functions/func.php";
     $minMaxValues = fetch_min_max_values_filters();
 
     $minKm = floor($minMaxValues['MIN(km)'] / 100) * 100;
@@ -94,8 +94,8 @@
 
     ?>
     <script src="./components/notifications.js"></script>
-    <script src="script.js"></script>
-    <script src="script-contact.js"></script>
+    <script src="./components/script-menu.js"></script>
+    <script src="./assets/js/script-contact.js"></script>
 
     <script>
         const filter_toggle = document.querySelector('.filter-toggle')

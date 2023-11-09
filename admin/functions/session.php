@@ -1,5 +1,5 @@
 <?php
-require_once "config/jwt.php";
+//require_once "../config/jwt.php";
 session_start();
 
 // Generate a unique session token

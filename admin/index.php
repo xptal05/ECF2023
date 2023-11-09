@@ -1,6 +1,6 @@
 <?php
 if (session_status() == PHP_SESSION_NONE) {
-    include 'session.php';
+    include './functions/session.php';
 }
 ?>
 
@@ -12,7 +12,7 @@ if (session_status() == PHP_SESSION_NONE) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Table de bord</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./assets/style/style.css">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 </head>
@@ -21,7 +21,7 @@ if (session_status() == PHP_SESSION_NONE) {
     <?php
 
 
-require_once "./config/db.php";
+require_once "../config/db.php";
 $pdo = connectToDatabase($dbConfig);
     function fetchDataDashbord()
     {
@@ -194,7 +194,7 @@ global $pdo;
             <div class="container span-4 dashboard">
                 <div class="container-header">
                     <div class="container-header-icon">
-                        <img src="./src/cars.svg">
+                        <img src="./assets/src/cars.svg">
                     </div>
                     <h2>Vehicules</h2>
                 </div>
@@ -274,7 +274,7 @@ global $pdo;
             <div class="container span-4 dashboard">
                 <div class="container-header">
                     <div class="container-header-icon">
-                        <img src="./src/messages.svg">
+                        <img src="./assets/src/messages.svg">
                     </div>
                     <h2>Messages</h2>
                 </div>
@@ -362,7 +362,7 @@ global $pdo;
             <div class="container span-4 dashboard">
                 <div class="container-header">
                     <div class="container-header-icon">
-                        <img src="./src/feedbacks.svg">
+                        <img src="./assets/src/feedbacks.svg">
                     </div>
                     <h2>Témoignages</h2>
                 </div>
@@ -420,7 +420,7 @@ global $pdo;
             </div>
         </div>
     </section>
-    <script src="./scripts/script-fetchData.js"></script>
+    <script src="./assets/js/script-fetchData.js"></script>
     <script src="./components/menu.js"></script>
     <script>
         fetchDataForDashboard()

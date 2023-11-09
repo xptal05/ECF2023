@@ -2,8 +2,8 @@
 
 function login()
 {
-    require_once "./config/db.php";
-    require_once "./config/jwt.php";
+    require_once "../config/db.php";
+    require_once "../config/jwt.php";
     $pdo = connectToDatabase($dbConfig);
 
     try {
@@ -22,19 +22,16 @@ function login()
                     $user_login = $statement->fetch(PDO::FETCH_ASSOC);
                     if ($user_login && password_verify($inputPassword, $user_login["password"])) {
                         // Password is correct, check user role
-                        if ($user_login["role"] == 1) {
-                            $_SESSION["admin"] = $user_login["role"];
-                        }
+                        $_SESSION["admin"] = $user_login["role"];
                         $_SESSION["user_id"] = $user_login["id_user"];
                         $_SESSION["user_name"] = $user_login["first_name"];
                         $_SESSION["csrf_token"] = $_POST["session_token"];
 
-                        $jwtToken = generateJWT($_SESSION["user_id"], $_SESSION["user_name"]);
-                        error_log("JWT Token: $jwtToken"); // Check your server logs
+                        //$jwtToken = generateJWT($_SESSION["user_id"], $_SESSION["user_name"]);
+                        //error_log("JWT Token: $jwtToken"); // Check your server logs
+                        //header("Authorization: Bearer $jwtToken");
 
-                        header("Authorization: Bearer $jwtToken");
-
-                       header("Location: index.php");
+                      header("Location: index.php");
                         exit();
                     } else {
                         echo '<div class="error">Incorrect username or password. Please try again.</div>';

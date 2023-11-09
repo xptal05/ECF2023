@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Temoignages</title>
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./assets/style/style.css">
 </head>
 
 <body>
     <section id="notifications"></section>
     <?php include_once "./components/header.php" ?>
     <div class="feedback-page">
-        <div class="feedback-img"><img src="./src/feedback-img-1.png"></div>
+        <div class="feedback-img"><img src="./assets/src/feedback-img-1.png"></div>
         <form id="feedbackForm" class="form-new container feedback-form">
             <h2 class="span-12 primary uppercase">Ajouter un témoignage</h2>
             <div class="span-6"><label>Nom</label>
@@ -41,10 +41,10 @@
                 <button class="btn" type="submit">Envoyer</button>
             </div>
         </form>
-        <div class="feedback-img"><img src="./src/feedback-img-2.png"></div>
+        <div class="feedback-img"><img src="./assets/src/feedback-img-2.png"></div>
     </div>
     <?php include_once "./components/footer.php" ?>
-    <script src="script.js"></script>
+    <script src="./components/script-menu.js"></script>
     <script>
         const stars = document.querySelectorAll('.star');
         const ratingInput = document.getElementById('ratingInput')

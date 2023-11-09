@@ -1,6 +1,6 @@
 <?php
 
-include_once "./back/config/db.php";
+include_once "./config/db.php";
 $pdo = connectToDatabase($dbConfig);
 
 

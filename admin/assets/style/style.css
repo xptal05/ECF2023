@@ -151,7 +151,7 @@ button {
 .menu {
     position: absolute;
     top: 0;
-    background: url("../src/main_background.png");
+    background: url("../../../assets/src/main_background.png");
     background-position: top center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -231,7 +231,7 @@ button {
     position: absolute;
     top: 0;
     z-index: -1;
-    background: url("../src/main_background.png");
+    background: url("../../../assets/src/main_background.png");
     background-position: top center;
     background-repeat: no-repeat;
     background-size: contain;

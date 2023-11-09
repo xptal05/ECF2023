@@ -1,6 +1,6 @@
 <?php
 if (session_status() == PHP_SESSION_NONE) {
-    include 'session.php';
+    include './functions/session.php';
 }
 ?>
 
@@ -12,8 +12,8 @@ if (session_status() == PHP_SESSION_NONE) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reglages</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="style/style-svg-btn.css">
+    <link rel="stylesheet" href="./assets/style/style.css">
+    <link rel="stylesheet" href="./assets/style/style-svg-btn.css">
 
 </head>
 
@@ -29,14 +29,14 @@ if (session_status() == PHP_SESSION_NONE) {
             <div id="dropdownsContainer"></div>
         </div>
     </section>
-    <script src="./scripts/script-notifications.js"></script>
+    <script src="./assets/js/script-notifications.js"></script>
     <?php adminAccess() ?>
-    <script src="./scripts/script-popups.js"></script>
-    <script src="./scripts/script-postDb.js"></script>
-    <script src="./scripts/script-fetchData.js"></script>
-    <script src="script-dropdowns.js"></script>
+    <script src="./assets/js/script-popups.js"></script>
+    <script src="./assets/js/script-postDb.js"></script>
+    <script src="./assets/js/script-fetchData.js"></script>
+    <script src="./assets/js/script-dropdowns.js"></script>
     <script src="./components/menu.js"></script>
-    <script src="script-settings.js"></script>
+    <script src="./assets/js/script-settings.js"></script>
 
 </body>
 

@@ -1,6 +1,6 @@
 <?php
 if (session_status() == PHP_SESSION_NONE) {
-    include 'session.php';
+    include './functions/session.php';
 }
 ?>
 
@@ -12,8 +12,8 @@ if (session_status() == PHP_SESSION_NONE) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Temoignages</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="style/style-svg-btn.css">
+    <link rel="stylesheet" href="./assets/style/style.css">
+    <link rel="stylesheet" href="./assets/style/style-svg-btn.css">
 </head>
 
 <body class="application-window">
@@ -89,15 +89,15 @@ if (session_status() == PHP_SESSION_NONE) {
             </form>
         </div>
     </section>
-    <script src="./scripts/script-mapping.js"></script>
-    <script src="./scripts/script-fetchData.js"></script>
-    <script src="./scripts/script-filterActions.js"></script>
-    <script src="./scripts/script-updateData.js"></script>
+    <script src="./assets/js/script-mapping.js"></script>
+    <script src="./assets/js/script-fetchData.js"></script>
+    <script src="./assets/js/script-filterActions.js"></script>
+    <script src="./assets/js/script-updateData.js"></script>
 
-    <script src="./scripts/script-popups.js"></script>
-    <script src="./scripts/script-postDb.js"></script>
-    <script src="./scripts/script-notifications.js"></script>
-    <script src="./event/script-messagesFeedback.js"></script>
+    <script src="./assets/js/script-popups.js"></script>
+    <script src="./assets/js/script-postDb.js"></script>
+    <script src="./assets/js/script-notifications.js"></script>
+    <script src="./assets/js/script-messagesFeedback.js"></script>
     <script src="./components/script-new-item.js"></script>
     <script src="./components/menu.js"></script>
 

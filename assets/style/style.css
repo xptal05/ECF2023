@@ -284,7 +284,7 @@ footer {
     width: 100vw;
     position: absolute;
     top: -75px;
-    background: url("src/background\ fonder.png");
+    background: url("../src/background\ fonder.png");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -302,7 +302,7 @@ footer {
     width: 100vw;
     height: 130vh;
     z-index: -20;
-    background: url("src/hero3.png") no-repeat;
+    background: url("../src/hero3.png") no-repeat;
     background-position: top center;
     background-size: cover;
 }
@@ -386,7 +386,7 @@ footer {
     align-items: center;
     justify-content: center;
     gap: 40px;
-    background: url("src/service_section_inside.png");
+    background: url("../src/service_section_inside.png");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: top right;
@@ -394,7 +394,7 @@ footer {
 }
 
 .why-us-section {
-    background: url("src/main_background.png");
+    background: url("../src/main_background.png");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -432,7 +432,7 @@ footer {
 }
 
 .feedback-section {
-    background: url("src/feedback_section.png");
+    background: url("../src/feedback_section.png");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -524,7 +524,7 @@ footer {
 
     .about-section {
         height: 600px;
-        background: url("src/service_section_car.png");
+        background: url("../src/service_section_car.png");
         background-position: top left;
         background-repeat: no-repeat;
         background-size: cover;
@@ -550,20 +550,11 @@ footer {
 }
 
 .contact-section {
-    background: url("src/main_background.png");
+    background: url("../src/main_background.png");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     padding: 10% 10%;
-
-    /*?????
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 50px;
-
-    */
 }
 
 
@@ -698,7 +689,7 @@ font-size: 1.2rem;
 
 .catalogue,
 .vehicle-page {
-    background: url("src/main_background.png");
+    background: url("../src/main_background.png");
     background-position: top center;
     background-repeat: no-repeat;
     background-size: contain;
@@ -1120,7 +1111,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     padding-top: 170px;
     gap: 50px;
 
-    background: url(src/main_background.png);
+    background: url("../src/main_background.png");
     background-position: top center;
     background-repeat: no-repeat;
     background-size: contain;

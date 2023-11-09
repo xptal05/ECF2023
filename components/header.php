@@ -7,7 +7,7 @@ $csrf_token = bin2hex(random_bytes(32));
 $_SESSION['csrf_token'] = $csrf_token;
 
 
-include_once "./func.php";
+include_once "./functions/func.php";
 $data = fetchData();
 $feedbacksData = $data[0];
 $webPageInfoData = $data[1];
@@ -31,7 +31,7 @@ $formatedPhone = implode(' ', str_split(str_replace("+33", "0", $phoneNumber), 2
 
 ?>
 <div class="header">
-    <a href="index.php"><img src="./src/logo.svg" class="logo-header"></a>
+    <a href="index.php"><img src="./assets/src/logo.svg" class="logo-header"></a>
     <div class="menu">
         <a href="index.php">acceuil</a>
         <a href="catalogue.php">catalogue</a>

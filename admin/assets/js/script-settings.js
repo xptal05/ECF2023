@@ -44,19 +44,19 @@ function dropdowntopage() {
                     const brandName = brandArray.find(brandObj => brandObj.id_brand === brandKey).name
                     brandText = `<td>${brandName}</td>`
                     optionRow.innerHTML = `
-                    ${brandText}<td>${dropdownObj[name]}</td><td><a class="actionbtn svg-btn" href="?modify=${key}-${Number(dropdownObj[idKey])}" title="Modifier"><img src="./src/edit_black.svg"></a></td>
-                    <td><a class="actionbtn svg-btn" href="?delete=${key}-${Number(dropdownObj[idKey])}" title="Supprimer"><img src="./src/box-archive.svg"></a></td>`
+                    ${brandText}<td>${dropdownObj[name]}</td><td><a class="actionbtn svg-btn" href="?modify=${key}-${Number(dropdownObj[idKey])}" title="Modifier"><img src="./assets/src/edit_black.svg"></a></td>
+                    <td><a class="actionbtn svg-btn" href="?delete=${key}-${Number(dropdownObj[idKey])}" title="Supprimer"><img src="./assets/src/box-archive.svg"></a></td>`
 
                 } else if (key == "Couleur") {
                     colorCode = dropdownObj[name].split("/")[1]
                     colorName = dropdownObj[name].split("/")[0]
                     color = `<td><div class="color-point-form"  style="background:${colorCode}"></div></td>`
-                    optionRow.innerHTML = `<td>${colorName}</td>${color}<td><a class="actionbtn svg-btn" href="?modify=${key}-${Number(dropdownObj[idKey])}" title="Modifier"><img src="./src/edit_black.svg"></a></td>
-                    <td><a class="actionbtn svg-btn" href="?delete=${key}-${Number(dropdownObj[idKey])}" title="Supprimer"><img src="./src/box-archive.svg"></a></td>`
+                    optionRow.innerHTML = `<td>${colorName}</td>${color}<td><a class="actionbtn svg-btn" href="?modify=${key}-${Number(dropdownObj[idKey])}" title="Modifier"><img src="./assets/src/edit_black.svg"></a></td>
+                    <td><a class="actionbtn svg-btn" href="?delete=${key}-${Number(dropdownObj[idKey])}" title="Supprimer"><img src="./assets/src/box-archive.svg"></a></td>`
 
                 } else {
-                    optionRow.innerHTML = `<td>${dropdownObj[name]}</td><td><a class="actionbtn svg-btn" href="?modify=${key}-${Number(dropdownObj[idKey])}" title="Modifier"><img src="./src/edit_black.svg"></a></td>
-                    <td><a class="actionbtn svg-btn" href="?delete=${key}-${Number(dropdownObj[idKey])}" title="Supprimer"><img src="./src/box-archive.svg"></a></td>`
+                    optionRow.innerHTML = `<td>${dropdownObj[name]}</td><td><a class="actionbtn svg-btn" href="?modify=${key}-${Number(dropdownObj[idKey])}" title="Modifier"><img src="./assets/src/edit_black.svg"></a></td>
+                    <td><a class="actionbtn svg-btn" href="?delete=${key}-${Number(dropdownObj[idKey])}" title="Supprimer"><img src="./assets/src/box-archive.svg"></a></td>`
                 }
                 table.appendChild(optionRow)
             }

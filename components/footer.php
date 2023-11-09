@@ -1,6 +1,6 @@
 <?php
 
-include_once "func.php";
+include_once "./functions/func.php";
 $data = fetchData();
 $webPageInfoData = $data[1];
 

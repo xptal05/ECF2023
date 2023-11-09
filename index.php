@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parrot garage</title>
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./assets/style/style.css">
 </head>
 
 <body>
@@ -117,7 +117,7 @@
                     foreach ($reasonsArray as $item) {
                         echo ' 
                         <div class="reason">                       
-                            <div class="reason-icon"><img src="./src/check-circle.svg" alt="check-mark-icon"></img></div>
+                            <div class="reason-icon"><img src="./assets/src/check-circle.svg" alt="check-mark-icon"></img></div>
                             <div class="reason-text">' . $item['text'] . '</div>
                         </div>';
                     }
@@ -168,8 +168,8 @@
         </div>
     </section>
     <?php include_once "./components/footer.php" ?>
-    <script src="script.js"></script>
-    <script src="script-contact.js"></script>
+    <script src="./components/script-menu.js"></script>
+        <script src="./assets/js/script-contact.js"></script>
     <script>
         //add message event
         messageEvent()
