@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Garage Vincent parrot - ECF septembre 2023 STUDI
 Site vitrine du garage, disposant de la présentation des services proposés, des véhicules disponible à la vente, des horaires d'ouvertures ainsi qu'un moyen de contact.
 
@@ -37,3 +38,6 @@ Quitter la page d'administration :
 Pour quitter le menu d'administration, veuillez cliquer sur le lien de déconnexion sur le menu. Sachez que vous ne serez pas automatiquement déconnecté lorsque vous quitterez le site par un autre moyen que la déconnexion via la page d'administration. EN revanche vous serez déconnect automatiquement au bout de 30 minut d'inactivité.
 
 Liens d'accès au site en ligne : 
+=======
+
+>>>>>>> 25f13de8bca32dee8056a18436ed19c50b57149a
