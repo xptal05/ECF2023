@@ -23,10 +23,9 @@ const dropdownKeys = {
     "Transmission": "transmission"
 };
 
-
+//call function according to the page location
 function pageDropdownsActions() {
     const currentUrl = window.location.pathname.split('/').pop()
-    console.log('dispatch')
 
     if (currentUrl == "user-settings.php") { return dropdownMapping }
     else if (currentUrl == "settings.php") { dropdowntopage() }

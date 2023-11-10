@@ -19,21 +19,15 @@ async function fetchData(phpScriptURL) {
     }
 }
 
+//IMAGE FETCH
 async function fetchAndUpdateImageInfo() {
     try {
         const phpScriptURL = './functions/db_query.php?action=fetchData&data=images'
-        // Fetch dropdown data from the server
         const imageInfoData = await fetchData(phpScriptURL)
-        // Group the fetched data by "type" key
-
         imageData = imageInfoData
-        console.log('image data', imageData)
 
         currentURL = window.location.pathname.split('/').pop()
         if (currentURL == "web-pages.php") {
-            console.log('fetch')
-            let gallerytype = "Main"
-            //imgGalleryPopup(gallerytype)
             populateGallery(imageData)
         } else {
             filterGallery()
@@ -45,7 +39,6 @@ async function fetchAndUpdateImageInfo() {
 
 // Fetch dropdown data and update dropdownMapping
 async function fetchAndUpdateDropdownData() {
-    console.log('fetch')
     const phpScriptURL = './functions/db_query.php?action=fetchDropdowns'
     try {
         // Clear existing data from the arrays

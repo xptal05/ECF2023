@@ -1073,6 +1073,7 @@ function deleteImagePopupActions(selectedImage, subPopup) {
 
     confirmDeleteBtn.addEventListener('click', () => {
         deleteImage(selectedImage, csrf_token, false)
+        console.log(selectedImage)
 
     })
 

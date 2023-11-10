@@ -1,22 +1,14 @@
 <?php
-//require_once "../config/jwt.php";
+
 session_start();
 
 // Generate a unique session token
 $session_token = bin2hex(random_bytes(32));
 $_SESSION["session_token"] = $session_token;
 
-/* Check if the user is logged in
-if (isset($_SESSION["user_id"])) {
-    // Generate JWT token
-    $jwtToken = generateJWT($_SESSION["user_id"], $_SESSION["user_name"]);
-
-    // Set the Authorization header
-    header("Authorization: Bearer $jwtToken");
-    // Check if user is authenticated otherwise redirect to login
-    authenticateUser();
-}*/
-
+// Check if the user is logged in if so, authorize the JWT TOKEN
+require_once "../config/jwt.php";
+authenticateUser();
 
 // Check if the user has been inactive for 30 minutes (1800 seconds)
 $inactiveTimeout = 1800; // 30 minutes in seconds

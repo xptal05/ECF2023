@@ -943,18 +943,19 @@ function deleteImg()
         $dataFetched = json_decode(file_get_contents('php://input'), true);
         $data = sanitizeData($dataFetched);
         $idImg = $data['id_img'];
-        $imageLink = $data['image_link']; // Assuming you have the image link in $data
+        $imageLink = "../".$data['image_link']; 
 
         // First, delete the image file from the server's file system.
         if (file_exists($imageLink) && unlink($imageLink)) {
-            // Now, you can delete the database record.
+            // delete the database record.
             $stmt = $pdo->prepare("DELETE FROM images WHERE id_img = :id_img");
             $stmt->bindParam(':id_img', $idImg);
-            $stmt->execute();
+            if($stmt->execute()) {
 
             $response = (["message" => "Succès : Image et enregistrement supprimés avec succès."]);
+            }
         } else {
-            $response = (["message" => "Erreur : Échec de la suppression du fichier image ou il n'existe pas."]);
+            $response = (["message" => "Erreur : Échec de la suppression du fichier image ou il n'existe pas." . $imageLink]);
         }
     } catch (PDOException $e) {
         $response = handleError($e);
