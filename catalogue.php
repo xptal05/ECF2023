@@ -304,7 +304,7 @@
 
 
         async function fetchDatabase() {
-            const phpScriptURL = './back/db_query.php?action=fetchData';
+            const phpScriptURL = './admin/functions/db_query.php?action=fetchData';
 
             try {
                 const response = await fetch(phpScriptURL, {
@@ -371,7 +371,7 @@
                     vehicleContainer.innerHTML = `
                 <div class="catalogue-car-email">
                             <a class="action-btn" href="?vehicle=${vehicle['brand']}-${vehicle['model']}-${vehicle['year']}">
-                                <img src="./back/src/messages.svg" class="message-icon"></i>
+                                <img src="./admin/assets/src/messages.svg" class="message-icon"></i>
                             </a>
                         </div>
                         <img class="main-car-img" src="${vehicle['img'].replace('../', './')}">

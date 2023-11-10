@@ -331,7 +331,7 @@ function vehicle_infos()
 function imgUpload()
 {
 
-    $uploadDir = "..../images_voiture/";
+    $uploadDir = "../../uploads/";
     $response = []; // Initialize the response array.
 
     // Create the uploads directory if it doesn't exist.
@@ -356,9 +356,9 @@ function imgUpload()
                 $imageInfo = imgToDB($targetFile);
 
                 if ($imageInfo) {
-                    $response['message'] = "The file " . htmlspecialchars(basename($_FILES["image"]["name"])) . " has been uploaded.";
+                    $response['message'] = "Succès: file " . htmlspecialchars(basename($_FILES["image"]["name"])) . " has been uploaded.";
                     $response['id_img'] = $imageInfo['id_img'];
-                    $response['link'] = $imageInfo['link'];
+                    $response['link'] = str_replace("../../", "../", $imageInfo['link']);
                 } else {
                     $response['message'] = "Échec de la création de l'entrée dans la base de données.";
                 }
@@ -380,7 +380,7 @@ function imgToDB($targetFile)
     try {
         global $pdo;
         $imageFileName = strip_tags($_FILES['file']['name']);
-        $imageFilePath = $targetFile;
+        $imageFilePath = str_replace("../../", "../",$targetFile);
         $type = "4";
 
         $stmt = $pdo->prepare("INSERT INTO images (name, link, type) VALUES (:filename, :file_path, :type)");
