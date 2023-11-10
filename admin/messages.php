@@ -55,7 +55,6 @@ if (session_status() == PHP_SESSION_NONE) {
     <script src="./assets/js/script-fetchData.js"></script>
     <script src="./assets/js/script-filterActions.js"></script>
     <script src="./assets/js/script-updateData.js"></script>
-
     <script src="./assets/js/script-popups.js"></script>
     <script src="./assets/js/script-postDb.js"></script>
     <script src="./assets/js/script-notifications.js"></script>

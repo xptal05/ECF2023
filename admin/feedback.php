@@ -102,14 +102,13 @@ if (session_status() == PHP_SESSION_NONE) {
     <script src="./components/menu.js"></script>
 
     <script>
-        //STARS
+        //convert number to stars
         const stars = document.querySelectorAll('.star');
         const ratingInput = document.getElementById('ratingInput')
 
         stars.forEach((star, index) => {
             star.addEventListener('click', () => {
                 fillStars(stars, index);
-                console.log(index + 1)
                 ratingInput.value = index + 1
             });
         });

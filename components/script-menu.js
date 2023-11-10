@@ -7,7 +7,6 @@ const burger_lines = document.querySelector('.burger-lines')
 burger_menu.addEventListener('click', () => {
     burger_menu_container.classList.toggle('active')
     burger_lines.classList.toggle('selected')
-    console.log('clicked')
 })
 
 

@@ -33,8 +33,6 @@ foreach ($addressItems as $item) {
     }
 }
 $address = str_replace(' ', '%20', implode('%20', $addressParts));
-
-
 ?>
 
 
@@ -75,13 +73,11 @@ $address = str_replace(' ', '%20', implode('%20', $addressParts));
             }
             echo '<div>' . $contact . '</div>';
         }
-
-
-
         ?>
     </div>
     <div class="footer-section">
-        <div>Links</div>
-        <div>Legal</div>
+        <a href="#">RGPD</a>
+        <a href="#">Cookies</a>
+        <a href="#">Conditions générales</a>
     </div>
 </footer>

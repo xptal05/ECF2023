@@ -81,7 +81,6 @@ function formvalidation() {
 function pushNewMessage(formData, messageForm) {
     const phpScriptURL = './back/db_query.php?action=newMessage'
     formData.action = 'newMessage'
-    console.log(formData)
 
     // Send an AJAX request to update the database
     fetch(phpScriptURL, {
@@ -91,10 +90,8 @@ function pushNewMessage(formData, messageForm) {
             'Content-Type': 'application/json',
         },
     })
-
         .then((response) => response.json()) // Assuming the server returns JSON
         .then((data) => {
-            console.log(data)
             notificationsServeur(data)
             messageForm.reset()
         })
@@ -102,12 +99,9 @@ function pushNewMessage(formData, messageForm) {
         .catch((error) => {
             console.error("Error:", error)
         })
-
-
 }
 
 function messageEvent() {
-
     const messageForm = document.getElementById('messageForm')
     // Add a submit event listener to the form
     messageForm.addEventListener('submit', (e) => {
@@ -120,11 +114,9 @@ function messageEvent() {
             messageForm.querySelectorAll('input, textarea').forEach(input => {
                 // Handle other input and select elements
                 formData[input.id.replace("Input", "")] = input.value
-                console.log(input)
             })
 
             formData.status = 2
-            console.log(formData)
             pushNewMessage(formData, messageForm)
         } // Call the arraypush function when the form is submitted
     })

@@ -20,16 +20,14 @@ if (session_status() == PHP_SESSION_NONE) {
 <body class="application-window">
     <?php
 
+    require_once "../config/db.php";
+    $pdo = connectToDatabase($dbConfig);
 
-require_once "../config/db.php";
-$pdo = connectToDatabase($dbConfig);
+    //get the info to the dashbord
     function fetchDataDashbord()
     {
-
         try {
-global $pdo;
-
-            // Initialize an empty array to store the results
+            global $pdo;
             $data = array();
 
             // Define an array of table names you want to fetch data from
@@ -61,18 +59,17 @@ global $pdo;
     $totalRating = 0;
     $count = 0;
 
+    //map statuses to use the status name instead of number
     $statusMapping = [];
     foreach ($statusData as $status) {
         $statusMapping[$status["name"]] = $status["id_status"];
     }
 
+    //generat function to get the item count, revenue accoding to period and status
     function countItemsAndRevenueByDateCriteria($items, $status, $dateCriteria, $count = true)
     {
-        // Initialize variables for counting and summing revenue.
         $countResult = 0;
         $revenue = 0;
-
-        // Current date for comparison.
         $currentDate = date('Y-m-d');
 
         foreach ($items as $item) {
@@ -291,33 +288,36 @@ global $pdo;
                     </div>
                     <div>
                         <h3>Temps de réponse (moyenne)</h3>
-                        <div><?php
-                                function calculateResponseTime($messages, $statusMapping)
-                                {
-                                    $totalDifference = 0;
+                        <div>
+                            <?php
+                            //get the response time
+                            function calculateResponseTime($messages, $statusMapping)
+                            {
+                                $totalDifference = 0;
 
-                                    foreach ($messages as $message) {
-                                        if ($message['status'] == $statusMapping["Done"]) {
-                                            $dateCreated = strtotime($message['created']);
-                                            $dateModified = strtotime($message['modified']);
+                                foreach ($messages as $message) {
+                                    if ($message['status'] == $statusMapping["Done"]) {
+                                        $dateCreated = strtotime($message['created']);
+                                        $dateModified = strtotime($message['modified']);
 
-                                            // Calculate the time difference in seconds.
-                                            $difference = $dateModified - $dateCreated;
+                                        // Calculate the time difference in seconds.
+                                        $difference = $dateModified - $dateCreated;
 
-                                            // Add the difference to the total.
-                                            $totalDifference += $difference;
-                                        }
+                                        // Add the difference to the total.
+                                        $totalDifference += $difference;
                                     }
-
-                                    // Convert the total difference to a human-readable format, e.g., hours, minutes, seconds.
-                                    $hours = floor($totalDifference / 3600);
-                                    $minutes = floor(($totalDifference % 3600) / 60);
-                                    $seconds = $totalDifference % 60;
-
-                                    return "$hours hours, $minutes minutes, $seconds seconds";
                                 }
-                                echo calculateResponseTime($data['messages'], $statusMapping);
-                                ?></div>
+
+                                // Convert the total difference to a human-readable format, e.g., hours, minutes, seconds.
+                                $hours = floor($totalDifference / 3600);
+                                $minutes = floor(($totalDifference % 3600) / 60);
+                                $seconds = $totalDifference % 60;
+
+                                return "$hours hours, $minutes minutes, $seconds seconds";
+                            }
+                            echo calculateResponseTime($data['messages'], $statusMapping);
+                            ?>
+                        </div>
                     </div>
                     <table>
                         <thead>

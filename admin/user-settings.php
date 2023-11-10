@@ -120,8 +120,6 @@ if (session_status() == PHP_SESSION_NONE) {
         let isPopupOpen = false
 
         function attachActionBtnListeners(filteredData) {
-
-            console.log('array is')
             const actionBtns = document.querySelectorAll('a.actionbtn');
 
             // Add a click event listener to the table rows (or the "Modifier" links)
@@ -130,17 +128,11 @@ if (session_status() == PHP_SESSION_NONE) {
                     e.preventDefault();
                     const itemId = parseInt(e.currentTarget.getAttribute('href').split('=')[1], 10);
                     const actionBtn = e.currentTarget.getAttribute('href').split('=')[0].replace('?', '');
-                    console.log(actionBtn)
-                    console.log('item id', itemId)
 
                     // Fetch the corresponding data from your 'data' array
                     const selectedItem = filteredData.find(item => parseInt(item[customMappings[currentURL].headers["Actions"]],10) === itemId);
-                    console.log(selectedItem)
-
-                    
 
                     if (selectedItem) {
-
                         if (actionBtn == 'modify') {
                             if (isPopupOpen == true) {
                                 popup.innerHTML = ''; // Close the popup window

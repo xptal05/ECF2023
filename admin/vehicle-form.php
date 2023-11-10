@@ -59,6 +59,7 @@ $pdo = connectToDatabase($dbConfig);
                 $vehicle_infos = vehicle_infos();
             }
 
+            //get the vehicle info
             function vehicle_infos()
             {
                 global $pdo;
@@ -121,6 +122,7 @@ $pdo = connectToDatabase($dbConfig);
                 }
             }
 
+            //format the vehicle info
             foreach ($vehicle_infos as $key => $value) {
                 ${'vehicle_' . $key} = !empty($value) ? $value : '';
             }
@@ -186,6 +188,7 @@ $pdo = connectToDatabase($dbConfig);
             <div class="info-property span-6">
                 <h2>Informations principales</h2>
                 <?php
+                //define property types and fetch the info for each
                 $propertyValues = [
                     'Carbourant' => $vehicle_infos['Carbourant'],
                     'Carrosserie' => $vehicle_infos['Caroserie'],
@@ -210,8 +213,6 @@ $pdo = connectToDatabase($dbConfig);
                     }
                     ?>
                 </div>
-
-
 
                 <div class="gallery container">
                     <a href="?modify=img" class="actionbtn CarGalleryImages"><img class="" src="./assets/src/edit_black.svg"></a>
@@ -275,12 +276,12 @@ $pdo = connectToDatabase($dbConfig);
             "transmission"
         ];
         const formHeadersDropdowns = ["itemName", "itemDescription"];
-
         const formInputs = document.querySelectorAll('#vehicleForm input[type="text"].aa');
 
         fetchAndUpdateDropdownData()
 
-        function optionLoop() { //DROPDOWNS
+        // update the dropdown list for each select element
+        function optionLoop() { 
             const selectOptions = document.querySelectorAll('select');
             selectOptions.forEach(select => {
                 const selectId = select.id;
@@ -317,7 +318,8 @@ $pdo = connectToDatabase($dbConfig);
             });
         }
 
-        function hiddenOptions() { //HIDDEN DROPDOWNS BRAND + MODEL
+        //create a hidden dropdown list according to user input for Brand, model and status
+        function hiddenOptions() { 
             formInputs.forEach(input => {
                 const inputId = input.id.replace("Input", "");
 
@@ -384,7 +386,7 @@ $pdo = connectToDatabase($dbConfig);
             });
         }
 
-
+        //select the correct option value 
         function selectOption(inputId) {
             const selectOptions = document.getElementById(`${inputId}Options`);
             const inputOptions = selectOptions.querySelectorAll(".option");
@@ -399,8 +401,7 @@ $pdo = connectToDatabase($dbConfig);
             });
         }
 
-
-        //FORM SUBMIT
+        //VEHICLE FORM SUBMIT
         const selectedOptions = {}; 
         const form = document.getElementById("vehicleForm");
 
@@ -409,7 +410,6 @@ $pdo = connectToDatabase($dbConfig);
             const urlParams = new URLSearchParams(window.location.search);
             const formData = {}; 
             formData.id = urlParams.get('id')
-
 
             // Iterate through the selected input elements (dropdowns)
             formInputs.forEach(input => {
@@ -446,7 +446,6 @@ $pdo = connectToDatabase($dbConfig);
             });
 
             formData["Options"] = checkedOptions.join(", ");
-            console.log(formData)
             vehicleInfoPush(formData)
         })
 
@@ -456,13 +455,10 @@ $pdo = connectToDatabase($dbConfig);
         actionBtns.forEach((btn) => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
-                console.log('url', e.currentTarget.getAttribute('href'))
-                console.log(dropdownMapping)
                 const tableId = e.currentTarget.getAttribute('href').split('=')[1].split('-')[0];
                 const actionBtn = e.currentTarget.getAttribute('href').split('=')[0].replace('?', '');
 
                 if (tableId == "img") {
-                    console.log('image')
                     const gallerytype = e.currentTarget.className;
                     if (actionBtn == "delete") {
                         imgDeletePopup()
@@ -475,7 +471,6 @@ $pdo = connectToDatabase($dbConfig);
 
                     const idKey = dropdownMapping[tableId]['idKey'];
                     const name = dropdownMapping[tableId]['name'];
-                    console.log('tabel id:', tableId, 'idKey:', idKey, 'name', name)
 
                     selectedItem = ""
                     dropdownPopup(selectedItem, tableId, name, idKey)
@@ -484,7 +479,6 @@ $pdo = connectToDatabase($dbConfig);
                 }
             })
         })
-
 
         let imageData = {}
 

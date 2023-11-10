@@ -45,14 +45,15 @@
     </div>
     <?php include_once "./components/footer.php" ?>
     <script src="./components/script-menu.js"></script>
+    <script src="./assets/js/notifications.js"></script>
     <script>
+        //convert number into stars
         const stars = document.querySelectorAll('.star');
         const ratingInput = document.getElementById('ratingInput')
 
         stars.forEach((star, index) => {
             star.addEventListener('click', () => {
                 fillStars(stars, index);
-                console.log(index + 1)
                 ratingInput.value = index + 1
             });
         });
@@ -67,21 +68,7 @@
             }
         }
 
-        function notificationsServeur(data) {
-            notifications.classList.toggle('on')
-            if (data['message'].startsWith('Erreur')) {
-                notifications.classList.add('error')
-            } else if (data['message'].startsWith('Succès')) {
-                notifications.classList.add('success')
-            }
-            notifications.innerHTML = `${data['message']}<div class="notification-progress-bar"></div>`
-            setTimeout(function() {
-                notifications.className = '';
-            }, 8000);
-        }
-
         function pushNewFeedback(formData, feedbackForm) {
-
             const phpScriptURL = './back/db_query.php?action=newFeedback';
             formData.action = 'newFeedback'
 
@@ -96,9 +83,6 @@
 
                 .then((response) => response.json()) // Assuming the server returns JSON
                 .then((data) => {
-                    // Handle the response from the server
-                    // Show a success message or redirect to a success page
-                    console.log(data)
                     notificationsServeur(data)
                     feedbackForm.reset()
                     stars.forEach(star => {
@@ -108,11 +92,10 @@
 
                 .catch((error) => {
                     console.error("Error:", error);
-                    console.log(data)
-
                 });
         }
 
+        //the stars in the feedback form
         function isRatingSelected(stars) {
             // Check if at least one star is selected
             for (const star of stars) {
@@ -125,7 +108,6 @@
 
         function formvalidation() {
             let valid = true
-
             const clientNameInput = document.getElementById('client_nameInput');
             const ratingInput = document.getElementById('ratingInput');
             const commentInput = document.getElementById('commentInput');
@@ -168,10 +150,9 @@
                         // Handle other input and select elements
                         formData[input.id.replace("Input", "")] = input.value;
                     });
-                    console.log(formData)
                     pushNewFeedback(formData, feedbackForm)
                 };
-            } // Call the arraypush function when the form is submitted
+            } 
         });
 
         const resetButton = document.getElementById('reset-btn'); // Replace 'resetButton' with the actual ID of your reset button

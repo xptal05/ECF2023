@@ -6,7 +6,7 @@ session_start();
 $csrf_token = bin2hex(random_bytes(32));
 $_SESSION['csrf_token'] = $csrf_token;
 
-
+//get the data that needs to be included in header or footer
 include_once "./functions/func.php";
 $data = fetchData();
 $feedbacksData = $data[0];
@@ -24,10 +24,7 @@ foreach ($contactItems as $item) {
         break; // Exit the loop once the item is found
     }
 }
-
 $formatedPhone = implode(' ', str_split(str_replace("+33", "0", $phoneNumber), 2));
-
-
 
 ?>
 <div class="header">

@@ -1,7 +1,6 @@
 const popup = document.getElementById('popup')
 
 function closePopup() {
-    //  if (isPopupOpen == true) {
     // Attach the closeAction event listener
     const closeBtns = document.querySelectorAll('.close-btn')
     //    const cancelButton = document.querySelector('button.btn[type="reset"]')
@@ -14,9 +13,9 @@ function closePopup() {
             }
         })
     })
-    // }
 }
 
+// General create popup Function 
 function createPopup(header, content, formActions) {
     // Create and populate the popup
     var popupDiv = document.createElement('div')
@@ -52,14 +51,12 @@ function confirmationPopup(selectedItem) {
         <form>
     </div>
     `
-
     function eventListeners() {
         const archivForm = document.getElementById('archivForm')
         const csrf_token = userForm.querySelector('input[type="hidden"]').value
 
         archivForm.addEventListener('submit', (e) => {
             e.preventDefault()
-            console.log('supprimer')
             arraydeleteUser(selectedItem.id_user, csrf_token)
         })
     }
@@ -69,8 +66,6 @@ function confirmationPopup(selectedItem) {
 
 //delete items
 function deletePopup(selectedItem, tableId, name, idKey) {
-    console.log(name)
-
     let tableDb
     let id = selectedItem[idKey]
 
@@ -119,16 +114,15 @@ function deletePopup(selectedItem, tableId, name, idKey) {
 
 //Modify dropdown elements - web pages + vehicle form
 function dropdownPopup(selectedItem, tableId, name, idKey) {
-    console.log(selectedItem)
-
     let itemName = ""
     let itemDescription
     let title = "Ajouter"
     let colorRgb = "#ff0000"
 
+    //fill out the popup with values if item is selected
     if (selectedItem) {
         itemName = selectedItem[name]
-        if (tableId == "Couleur") {
+        if (tableId == "Couleur") { // if table is Color - > split the DB name so that i get color and the color code
             itemName = selectedItem[name].split("/")[0]
             colorRgb = selectedItem[name].split("/")[1]
         }
@@ -150,7 +144,7 @@ function dropdownPopup(selectedItem, tableId, name, idKey) {
     }
     content += `</div>`
 
-    if (tableId == "Modèle") {
+    if (tableId == "Modèle") {      //if table is model add the brand
         const brandArray = dropdownMapping['Marque'].array
         content += `<label>Marque</label>
         <select required id="brandInput">
@@ -160,7 +154,7 @@ function dropdownPopup(selectedItem, tableId, name, idKey) {
         content += `</select>`
     }
 
-    if (itemDescription != undefined) {
+    if (itemDescription != undefined) { //if the table items have description add it
         content += `    
         <div class="popup-input-container">
             <label>Description</label>
@@ -179,12 +173,11 @@ function dropdownPopup(selectedItem, tableId, name, idKey) {
 
 
     function eventListeners() {
+        //if the item  is selected and the table is model, add brand value
         if (selectedItem && tableId == "Modèle") {
             const itemBrand = selectedItem['brand']
-            //select correct option odf select tag
             const brandInput = document.getElementById('brandInput')
             brandInput.value = itemBrand
-            console.log('value', brandInput.value)
         }
 
         const popupform = document.getElementById('modifyForm')
@@ -204,8 +197,7 @@ function dropdownPopup(selectedItem, tableId, name, idKey) {
                     const colorPicker = document.getElementById('colorPicker')
                     additionalValue = colorPicker.value
                 }
-                console.log(selectedItem)
-                console.log('tableid', tableId.toLowerCase())
+                //add or modify the dropdown value
                 dropdownpush(tableId, name, selectedItem, idKey, additionalValue, csrf_token)
             }
         })
@@ -215,14 +207,13 @@ function dropdownPopup(selectedItem, tableId, name, idKey) {
 
 //Web info modifications - simple
 function webInfoPopup(selectedItem, serviceType) {
-    console.log('selected item', selectedItem)
     let id
     let text = ""
     let type = serviceType
     let order = ""
     let category = ""
 
-    if (selectedItem) {
+    if (selectedItem) { //get the selected item values if item selected
         id = selectedItem['id_info']
         text = selectedItem['text']
         type = selectedItem['type']
@@ -243,6 +234,7 @@ function webInfoPopup(selectedItem, serviceType) {
                 <input name="order" type="number" value="${order}" required>
             </div>
         `
+    //get the type 
     if (serviceType == 3 || serviceType == 2 || serviceType == 7 || serviceType == "Contact" || serviceType == "Address" || serviceType == "Reasons") {
         content += `
         <div class="popup-input-container">
@@ -283,9 +275,7 @@ function webInfoPopup(selectedItem, serviceType) {
 
 //WEB PAGE INFO - SERVICE modification
 function serviceInfoPopup(selectedItem, serviceType, dataArray) {
-    console.log('selected item', selectedItem)
-    console.log(dataArray)
-
+    //Sort out the items according their order value and get only the unique order values
     const orderArray = []
     dataArray.forEach(item => {
         orderArray.push(parseInt(item['order'], 10))
@@ -293,13 +283,12 @@ function serviceInfoPopup(selectedItem, serviceType, dataArray) {
     orderArray.sort((a, b) => a - b)
     const uniqueOrderArray = [...new Set(orderArray)]
 
-    console.log(uniqueOrderArray)
     let id, text = "", iconLink = "./src/img.png", iconId, description = "", descriptionId = ""
     let type = serviceType
     let order = ""
 
 
-    if (selectedItem) {
+    if (selectedItem) { //get the values of the selected item
         id = selectedItem['id_info']
         iconLink = selectedItem['icon']['link']
         iconId = selectedItem['icon']['id_img']
@@ -346,32 +335,26 @@ function serviceInfoPopup(selectedItem, serviceType, dataArray) {
         </form>
         `
     function eventListeners() {
-
-        //check the order value
-
+        //check the order value, if it already exists alert the user
         const orderInput = document.querySelector('input[name="order"]')
 
         orderInput.addEventListener('input', (event) => {
-            console.log('trigered')
             const enteredValue = parseInt(event.target.value, 10)
 
-            if (selectedItem) {
-    const initialValue = selectedItem['order']
-    if(enteredValue != initialValue && uniqueOrderArray.includes(enteredValue)){
-        alert('Value already exists. Please enter a unique value.');
-        orderInput.value = initialValue; // Clear the input field or set it to a default value
-    }
-    console.log(initialValue)
+            if (selectedItem) { //if item is selected check the order leaving out the original order value
+                const initialValue = selectedItem['order']
+                if (enteredValue != initialValue && uniqueOrderArray.includes(enteredValue)) {
+                    alert("La valeur existe déjà. Veuillez saisir une valeur unique.");
+                    orderInput.value = initialValue; // Clear the input field or set it to a default value
+                }
             } else {
                 if (uniqueOrderArray.includes(enteredValue)) {
                     // Value already exists in the uniqueOrderArray, show an error message or take necessary action
-                    alert('Value already exists. Please enter a unique value.');
-                    orderInput.value = uniqueOrderArray[uniqueOrderArray.length - 1]+1; // Clear the input field or set it to next order value
+                    alert("La valeur existe déjà. Veuillez saisir une valeur unique.");
+                    orderInput.value = uniqueOrderArray[uniqueOrderArray.length - 1] + 1; // Clear the input field or set it to next order value
                 }
             }
-
         });
-
 
         const form = document.getElementById('popupform')
 
@@ -384,7 +367,6 @@ function serviceInfoPopup(selectedItem, serviceType, dataArray) {
                 const actionBtn = e.currentTarget.getAttribute('href').split('=')[0].replace('?', '')
 
                 if (tableId == "img") {
-                    console.log('image')
                     const gallerytype = e.currentTarget.className
                     if (actionBtn == "add") {
                         imgAddPopup(gallerytype)
@@ -419,7 +401,6 @@ function serviceInfoPopup(selectedItem, serviceType, dataArray) {
 
                 formData['img-id'] = icon.getAttribute("data-value")
 
-                console.log('form data', formData)
                 pushServiceInfo(formData)
             }
         })
@@ -427,13 +408,12 @@ function serviceInfoPopup(selectedItem, serviceType, dataArray) {
     createPopup(header, content, eventListeners)
 }
 
-//ARCHIVE ALL ELEMENTS
+//ARCHIVE ALL ELEMENTS (function needs to be renamed)
 function archiveMessageFeedbackPopup(selectedItem, idKey, status) {
     formData = {}
     formData.id = selectedItem[idKey]
     formData.status = status
     formData.userId = UserId
-
 
     if (idKey === 'id_message') {
         formData.table = 'messages'
@@ -476,7 +456,6 @@ function archiveMessageFeedbackPopup(selectedItem, idKey, status) {
         const archivForm = document.getElementById('archivForm')
         archivForm.addEventListener('submit', (e) => {
             e.preventDefault()
-            console.log(formData)
             pushMessageFeedback(formData)
         })
     }
@@ -509,7 +488,6 @@ function imgModifyPopup(gallerytype) {
                 const actionBtn = e.currentTarget.getAttribute('href').split('=')[0].replace('?', '')
 
                 if (tableId == "img") {
-                    console.log('image')
                     if (actionBtn == "add") {
                         imgAddPopup(gallerytype)
                     } else if (actionBtn == "choose") {
@@ -542,7 +520,6 @@ function imgAddPopup(gallerytype) {
     </form>
     `
     createPopup(header, content, uploadImageAndUpdateUI)
-
 }
 
 //EVENT FUNCTION OF UPLOAD AN IMAGE
@@ -552,14 +529,13 @@ function uploadImageAndUpdateUI() {
 
     imgForm.addEventListener('submit', (e) => {
         e.preventDefault()
-
         const selectedFile = imageInput.files[0]
 
-        if (selectedFile) {
-            console.log('Selected file:', selectedFile)
+        if (selectedFile) { //if selected item get the image data
             const formData = new FormData()
             formData.append('image', selectedFile)
 
+            //push the data to PHP function
             fetch('./functions/db_query.php', {
                 method: 'POST',
                 body: formData
@@ -570,12 +546,11 @@ function uploadImageAndUpdateUI() {
                     currentURL = window.location.pathname.split('/').pop()
                     notificationsServeur(data)
 
-                    if (currentURL == "web-pages.php") {
-                        console.log('webpages')
+                    //update UI according to which button was clicked to change the image
+                    if (currentURL == "web-pages.php") {        
                         const serviceIconContainer = document.getElementById('serviceIconContainer')
                         serviceIconContainer.querySelector('img').src = data.link
                         serviceIconContainer.querySelector('img').setAttribute('data-value', data.id_img)
-
                     }
                     else if (submitType.getAttribute('data-value') === "Main") { //IMG to page MAIN
                         const mainImage = document.querySelector('.img-container .car-tumbnail')
@@ -586,18 +561,15 @@ function uploadImageAndUpdateUI() {
                         isPopupOpen = false
                     }
                     else if (submitType.getAttribute('data-value') === "Gallery") {
-                        console.log(submitType.getAttribute('data-value'))
                         const galleryContainer = document.querySelector('.gallery.container')
                         const imgs = document.querySelectorAll('.gallery.container img')
                         const index = imgs.length
-                        console.log(index)
                         galleryContainer.innerHTML += `
                         <img src="${data.link}" alt="Car Image" class="carGallerythumbnail" data-value="${data.id_img}" name="galleryImg${index}">
                             `
                         popup.innerHTML = '' // Close the popup window
                         isPopupOpen = false
                     }
-
                 })
                 .catch(error => {
                     console.error('Error:', error)
@@ -610,9 +582,8 @@ function fetchImages() {
     fetchAndUpdateImageInfo()
 }
 
-//ASSIGN IMAGE ALREADY ASSIGNED POPUP
+//ASSIGN IMAGE ALREADY ASSIGNED IMAGE POPUP
 function imgSubPopup() {
-    console.log('trigered')
     const imgdivs = document.querySelectorAll('.galleryImgDiv')
 
     imgdivs.forEach(imgdiv => {
@@ -701,16 +672,11 @@ function imgGalleryPopup(gallerytype) {
     <div id="sub-popup"></div>`
 
     if (currentURL == "web-pages.php") {
-
         function getGalleryContent() {
-            //POPULATE GALLERY WITH ICONS
-            //fetchAndUpdateImageInfo()
             populateGallery(imageData)
             selectImgfromGallery()
-
         }
         createPopup(header, content, getGalleryContent)
-
 
     } else {
         function getGalleryContent() {
@@ -749,13 +715,11 @@ function filterGallery() {
     thisCarElement.addEventListener('click', (e) => {
         const urlParams = new URLSearchParams(window.location.search)
         const vehicleId = urlParams.get('id')
-        console.log(vehicleId)
-
         e.preventDefault()
+
         filteredImageData = imageData.filter(image => image.associated_to_vehicle === vehicleId)
         populateGallery(filteredImageData)
     })
-
 
     allElement.addEventListener('click', (e) => {
         e.preventDefault()
@@ -772,9 +736,8 @@ function populateGallery(imageData) {
 
     //clear all images from gallery
     mainGallery.innerHTML = ""
-    console.log(imageData)
 
-    imageData.forEach(image => {
+    imageData.forEach(image => {    //attribute associated class if the image is associated to a vehicle
         let associated = ""
         let imgdiv = document.createElement('div')
         imgdiv.classList.add('galleryImgDiv')
@@ -833,7 +796,6 @@ function populateGallery(imageData) {
                 let actionLinks = imageIdInput.querySelectorAll("a")
 
                 const selectedImage = imageData.find(image => image.id_img === checkedImgId)
-                console.log(selectedImage)
 
                 imgLink.src = selectedImage.link
                 imageName.value = selectedImage.name
@@ -857,14 +819,11 @@ function populateGallery(imageData) {
 
 }
 
-
-
-
+//user modification
 async function modifyUserPopup(selectedItem) {
     try {
         // Fetch and update dropdown data
         await fetchAndUpdateDropdownData()
-        console.log(dropdownMapping)
 
         // Create and populate the popup with the selected data
         var popupDiv = document.createElement('div')
@@ -880,7 +839,6 @@ async function modifyUserPopup(selectedItem) {
         popupform.classList.add('popup-body-normal')
 
         for (const header of formHeaders) {
-            console.log('header value', customMappings[currentURL].headers[header])
             const headerValue = customMappings[currentURL].headers[header]
             const divElement = document.createElement("div")
             divElement.classList.add('popup-input-container')
@@ -900,7 +858,6 @@ async function modifyUserPopup(selectedItem) {
                     const selectElement = document.createElement("select")
                     selectElement.id = `${header}Input`
                     const { array, idKey, name } = dropdownMapping[header]
-                    console.log('dropdown', dropdownMapping[header])
 
                     for (const dropdownObj of array) {
                         const optionElement = document.createElement("option")
@@ -1073,8 +1030,6 @@ function deleteImagePopupActions(selectedImage, subPopup) {
 
     confirmDeleteBtn.addEventListener('click', () => {
         deleteImage(selectedImage, csrf_token, false)
-        console.log(selectedImage)
-
     })
 
     cancelDeleteBtn.addEventListener('click', () => {

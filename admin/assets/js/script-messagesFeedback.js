@@ -1,13 +1,12 @@
 function attachActionBtnListeners(filteredData) {
-    console.log('action')
-    let isPopupOpen = false
+    let isPopupOpen = false     //no popup is open
     const actionBtns = document.querySelectorAll('a.actionbtn')
+
+    //add action to each button according to their href attribute
     actionBtns.forEach((btn) => {
         btn.addEventListener('click', (e) => {
             e.preventDefault()
-            console.log('Button clicked')
             const itemId = parseInt(e.currentTarget.getAttribute('href').split('=')[1], 10)
-            console.log(itemId)
             const actionBtn = e.currentTarget.getAttribute('href').split('=')[0].replace('?', '')
 
             let idKey = ''
@@ -19,8 +18,8 @@ function attachActionBtnListeners(filteredData) {
                 idKey = 'id_feedback'
             }
 
+            //get the selected item
             const selectedItem = filteredData.find((item) => parseInt(item[idKey], 10) === itemId)
-            console.log('Selected Item:', selectedItem)
 
             if (selectedItem) {
                 if (actionBtn === 'archiv') {
@@ -39,9 +38,8 @@ function attachActionBtnListeners(filteredData) {
                     const body = '------------------<br>'+message 
                 
                     openEmailClient(recipientEmail, subject, body)
-
                     archiveMessageFeedbackPopup(selectedItem, idKey, status)
-                    //and the reply button 
+
                 } else if(actionBtn === 'confirm') {
                     let status = "1"
                     archiveMessageFeedbackPopup(selectedItem, idKey, status)
@@ -53,9 +51,8 @@ function attachActionBtnListeners(filteredData) {
                     popup.innerHTML = '' // Close the popup window
                     isPopupOpen = false
                 }
-                console.log('Key', webInfo[tableId]['key'])
                 // Call the webInfoPopup function with the selected item and tableId
-                archiveMessageFeedbackPopup(selectedItem, idKey) // You might want to specify the 'tableId' here.
+                archiveMessageFeedbackPopup(selectedItem, idKey) 
             } else {
                 console.log('Item not found')
             }
@@ -63,11 +60,10 @@ function attachActionBtnListeners(filteredData) {
     })
 }
 
-
+//Open the email client after button clicked
 function openEmailClient(recipientEmail, subject, body) {
     const mailtoLink = `mailto:${recipientEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
     const anchor = document.createElement('a')
     anchor.href = mailtoLink
     anchor.click()
-    console.log('clicked')
 }

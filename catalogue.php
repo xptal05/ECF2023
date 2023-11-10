@@ -93,7 +93,7 @@
     <?php include_once "./components/footer.php";
 
     ?>
-    <script src="./components/notifications.js"></script>
+    <script src="./assets/js/notifications.js"></script>
     <script src="./components/script-menu.js"></script>
     <script src="./assets/js/script-contact.js"></script>
 
@@ -134,6 +134,7 @@
             }
         });
 
+        //get the values for the filters
         function getVals() {
             // Get slider values
             let parent = this.parentNode;
@@ -183,7 +184,6 @@
             // Check if the slider is at its maximum position
             if (slide2 === parseFloat(slides[1].max)) {
                 slide2 = Math.ceil(slide2); // Round up to the nearest integer
-                console.log(slide2)
             }
 
             // Display the range values with the symbol
@@ -191,7 +191,7 @@
             displayElement.innerHTML = `${slide1} ${symbol} - ${slide2} ${symbol}`;
         }
 
-
+        // intitialize the filter values
         window.onload = function() {
             let sliderSections = document.getElementsByClassName("range-slider");
             //get each slider
@@ -212,7 +212,6 @@
                             }
                         });
                         // Manually trigger the input event first time to display values
-                        console.log(sliders[y].max)
                         sliders[y].dispatchEvent(new Event('input'));
                     }
                 }
@@ -220,7 +219,7 @@
             fetchDataAndRenderList();
         }
 
-
+    //filter the vehicle data
         function filterVehicles(data) {
             const minKm = document.querySelector('.km-filter .range-min').value;
             const maxKm = document.querySelector('.km-filter .range-max').value;
@@ -326,11 +325,9 @@
             }
         }
 
-        // Example of how to use fetchUserDatabase and updateList
         async function fetchDataAndRenderList() {
             try {
                 data = await fetchDatabase();
-                console.log(data)
                 filterVehicles(data)
 
             } catch (error) {
@@ -339,17 +336,15 @@
         }
 
         function populateCatalogue(data) {
-            console.log('data', data)
-
             let pageData
-
             const itemsPerPage = 12
+
             // Calculate pagination offsets
             const startIndex = (currentPage - 1) * itemsPerPage;
             const endIndex = startIndex + itemsPerPage;
+
             // Slice the data based on pagination offsets
             pageData = data.slice(startIndex, endIndex);
-            console.log(pageData)
 
             // Calculate total pages based on filtered data
             totalPages = Math.ceil(data.length / itemsPerPage);
@@ -370,7 +365,6 @@
             catalogueContainer.innerHTML = ""
 
             if (pageData.length > 0) {
-
                 pageData.forEach(vehicle => {
                     const vehicleContainer = document.createElement('div')
                     vehicleContainer.classList.add('catalogue-car-container')
@@ -388,7 +382,6 @@
                         <a href="./vehicle.php?vehicle=${vehicle['id']}">
                             <div class="car-container-overlay"><i class="fa-solid fa-eye"></i></div>
                         </a>
-
                 `
                     catalogueContainer.appendChild(vehicleContainer)
                 })
@@ -406,7 +399,6 @@
                             const subject = document.getElementById('subject');
                             subject.value = "Enquiry for" + btn.getAttribute("href").replace("?vehicle=", " ");
                             subject.readOnly = true
-                            console.log(subject);
 
                             const closeBtn = document.querySelector('.form-close-btn')
                             closeBtn.addEventListener('click', (e) => {
@@ -414,7 +406,6 @@
                             })
                         }, 0);
                     })
-
                 })
 
             } else {

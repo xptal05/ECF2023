@@ -67,15 +67,12 @@ if (session_status() == PHP_SESSION_NONE) {
             const actionBtns = document.querySelectorAll('a.actionbtn');
             actionBtns.forEach((btn) => {
                 btn.addEventListener('click', (e) => {
-
-                    console.log('Button clicked');
                     const itemId = parseInt(e.currentTarget.getAttribute('href').split('=')[1], 10);
                     const actionBtn = e.currentTarget.getAttribute('href').split('=')[0].replace('?', '');
 
                     let idKey = 'id'; 
 
                     const selectedItem = filteredData.find((item) => parseInt(item[idKey],10) === itemId);
-                    console.log('Selected Item:', selectedItem);
 
                     if (selectedItem) {
                         if (actionBtn === 'archiv') {
@@ -87,8 +84,6 @@ if (session_status() == PHP_SESSION_NONE) {
                             // Call the webInfoPopup function with the selected item
                             let status = "6"
                             archiveMessageFeedbackPopup(selectedItem, idKey, status);
-                            console.log('archived')
-
                         } else {
                             console.log('Item not found');
                         }

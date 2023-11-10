@@ -1,5 +1,7 @@
+//define the current URL
 const currentURL = window.location.pathname.split('/').pop()
 
+//SVG mapping
 function actionSvgMapping(action) {
     const svgMapping = {
         "Répondre": "reply.svg",
@@ -12,6 +14,7 @@ function actionSvgMapping(action) {
     return svgMapping[action] || "edit_black.svg"
 }
 
+//status mapping according to db 10/11/2023
 const statusMapping = {
     "1": "Actif",
     "2": "Nouveau",
@@ -23,27 +26,21 @@ const statusMapping = {
     "8": "Terminé"
 }
 
+function mapStatus(statusCode) {
+    return statusMapping[statusCode] || "Unknown"
+}
+
+//Role mapping
 const roleMapping = {
     "1" : "admin",
     "2" : "employee"
-}
-
-function mapStatus(statusCode) {
-    return statusMapping[statusCode] || "Unknown"
 }
 
 function mapRole(roleCode){
     return roleMapping[roleCode] || "Unknown"
 }
 
-/*
-case "settings.php":
-    formHeaders = ["Nom", "Prénom", "Email", "Droits", "Statut"]
-
-case "vehicle-form.php":
-    formHeaders = ["Marque", "Modele", "Caroserie", "Transmission", "Carbourant", "Portes", "Consomation", "Statut"]
-*/
-
+//Mapping for table headers, action buttons, popup form headers and filters according to url
 const customMappings = {
     'messages.php': {
         headers: {

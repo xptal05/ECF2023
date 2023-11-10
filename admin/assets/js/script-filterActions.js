@@ -48,8 +48,6 @@ function attachEventListeners(data) {
             updateList(data)
         }
     })
-
-    console.log('current page', currentPage)
 }
 
 const activeTags = []

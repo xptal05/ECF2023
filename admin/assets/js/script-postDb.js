@@ -6,7 +6,6 @@ function formvalidation(formType) {
     if (formType == 'userForm') {
         const emailInput = document.getElementById('EmailInput')
         const passwordInput = document.getElementById('PasswordInput')
-        console.log(passwordInput)
 
         // Additional validation for email format
         const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
@@ -45,6 +44,7 @@ function formvalidation(formType) {
     }
     return true
 }
+
 function sendAjaxRequest(url, method, data) {
     return fetch(url, {
         method: method,
@@ -56,7 +56,6 @@ function sendAjaxRequest(url, method, data) {
         .then(response => response.json())
         .then(data => {
             notificationsServeur(data)
-            console.log(data)
         })
         .catch(error => {
             console.error('Error:', error)
@@ -64,6 +63,7 @@ function sendAjaxRequest(url, method, data) {
         })
 }
 
+//delete data function
 function arraydelete(tableDb, idKey, id, csrf_token) {
     const phpScriptURL = './functions/db_query.php?action=deleteData'
     const postData = {
@@ -78,6 +78,7 @@ function arraydelete(tableDb, idKey, id, csrf_token) {
     return sendAjaxRequest(phpScriptURL, 'POST', postData)
 }
 
+//delete services from web-page info table
 function deteleService(selectedItem, csrf_token) {
     const phpScriptURL = './functions/db_query.php?action=deleteService'
     const postData = {
@@ -92,7 +93,7 @@ function deteleService(selectedItem, csrf_token) {
     return sendAjaxRequest(phpScriptURL, 'POST', postData)
 }
 
-
+//update vehicle infos
 function vehicleInfoPush(formData) {
     const phpScriptURL = 'functions/db_query.php?action=updateVehicle'
     formData.action = 'updateVehicle'
@@ -105,9 +106,8 @@ function vehicleInfoPush(formData) {
         });
 }
 
+//update web page infos (except services)
 function pushWebPageInfo(formData) {
-    console.log('pushweb trigerred', formData)
-
     const phpScriptURL = './functions/db_query.php?action=modifyWeb'
     formData.action = 'modifyWeb'
 
@@ -130,10 +130,9 @@ function pushMessageFeedback(formData) {
 
 
 //ACTIONS SPECIFIQUE
-
 function dropdownpush(tableId, name, selectedItem, idKey, additionalValue, csrf_token) {
     let tableDb
-    console.log(tableId)
+    //get the table db name according the table ID
     if (metaTables.some(table => table.toLowerCase().trim() == tableId.toLowerCase().trim()) || tableId == "Carrosserie" || tableId == "caroserie") {
         { tableDb = "properties_meta" }
     } else { tableDb = dropdownKeys[tableId] }
@@ -146,8 +145,6 @@ function dropdownpush(tableId, name, selectedItem, idKey, additionalValue, csrf_
             itemData[header] = inputValue
         }
     } else if (tableId == "Couleur") {
-        console.log('push dropdown colour')
-        console.log('addition', additionalValue)
         const inputValue = document.getElementById(`itemNameInput`).value
         itemData.itemName = inputValue + '/' + additionalValue
     }
@@ -160,6 +157,7 @@ function dropdownpush(tableId, name, selectedItem, idKey, additionalValue, csrf_
         itemData.brandSelect = additionalValue
     }
 
+    //add info into itemData
     itemData.metaName = (tableId === "Carrosserie") ? "Caroserie" : tableId
     itemData.name = name
     itemData.table = tableDb
@@ -181,7 +179,6 @@ function dropdownpush(tableId, name, selectedItem, idKey, additionalValue, csrf_
     })
         .then(response => response.json())
         .then(data => {
-            console.log(data)
             notificationsServeur(data)
             //if vehicle pages add the value into input field
             if (itemData.metaName == "Caroserie") {
@@ -214,7 +211,7 @@ function dropdownpush(tableId, name, selectedItem, idKey, additionalValue, csrf_
 
 }
 
-
+//New feedback
 function pushNewFeedback(formData) {
 
     const phpScriptURL = '../BACK/functions/db_query.php?action=newFeedback'
@@ -234,20 +231,14 @@ function pushNewFeedback(formData) {
             // Show a success message or redirect to a success page
             notificationsServeur(data)
             form.classList.toggle('on')
-            console.log(data)
         })
 
         .catch((error) => {
             console.error("Error:", error)
-            console.log(data)
-
         })
-
-
-
 }
 
-//users
+//users update or insert
 function arraypush(itemId) {
     const userForm = document.getElementById('userForm')
     const csrf_token = userForm.querySelector('input[type="hidden"]').value
@@ -274,7 +265,6 @@ function arraypush(itemId) {
         .then(response => response.json())
         .then(data => {
             // Handle the response from the server
-            console.log(data)
             popup.innerHTML = '' // Close the popup window
             fetchDataAndRenderList()
         })
@@ -305,8 +295,6 @@ function arraydeleteUser(itemId, csrf_token) {
     })
         .then(response => response.json())
         .then(data => {
-            // Handle the response from the server
-            console.log(data)
             fetchDataAndRenderList()
             popup.innerHTML = ''
         })
@@ -316,6 +304,7 @@ function arraydeleteUser(itemId, csrf_token) {
 
 }
 
+//delet image from gallery and DB
 function deleteImage(selectedImage, csrf_token, notify = true) {
     const phpScriptURL = './functions/db_query.php?action=deleteImg'
     const postData = {
@@ -335,9 +324,6 @@ function deleteImage(selectedImage, csrf_token, notify = true) {
     })
         .then(response => response.json())
         .then(data => {
-            // Handle the response from the server
-            console.log(data)
-
             // Clear the innerHTML and remove the popup window
             const subPopup = document.getElementById('sub-popup')
             subPopup.innerHTML = ''

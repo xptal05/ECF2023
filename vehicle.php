@@ -137,6 +137,7 @@
         <?php include_once "./components/footer.php" ?>
         <script src="./components/script-menu.js"></script>
         <script src="./assets/js/script-contact.js"></script>
+        <script src="./assets/js/notifications.js"></script>
         <script>
             const actionBtns = document.querySelectorAll('.action-btn');
             const popup = document.getElementById('popup')
@@ -151,7 +152,6 @@
                         const subject = document.getElementById('subject');
                         subject.value = "Enquiry for" + btn.getAttribute("href").replace("?vehicle=", " ");
                         subject.readOnly = true
-                        console.log(subject);
 
                         const closeBtn = document.querySelector('.form-close-btn')
                         closeBtn.addEventListener('click', (e) => {
@@ -159,7 +159,6 @@
                         })
                     }, 0);
                 })
-
             })
         </script>
 </body>

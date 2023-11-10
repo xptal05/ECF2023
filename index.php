@@ -80,7 +80,6 @@
             }
 
             ?>
-
         </div>
     </div>
     <section class="landing-section">
@@ -152,8 +151,6 @@
                 for ($i = 0; $i < $feedbackCounter; $i++) {
                     echo '<div class="feedback-dot" data-index="' . $i . '"></div>';
                 }
-
-
                 ?>
             </div>
             <a href="feedback.php" class="btn">ajouter mon témoignage</a>
@@ -170,9 +167,11 @@
     <?php include_once "./components/footer.php" ?>
     <script src="./components/script-menu.js"></script>
         <script src="./assets/js/script-contact.js"></script>
+        <script src="./assets/js/notifications.js"></script>
     <script>
         //add message event
         messageEvent()
+
         //FEEDBACK STARS
         const ratings = document.querySelectorAll('.feedback-container .rating')
 
@@ -197,8 +196,7 @@
             return starIcons;
         }
 
-        //FEEDBACK NAV 
-
+        //FEEDBACK NAVIGATION
         const slider = document.querySelector(".feedback-slider");
         const dots = document.querySelectorAll(".feedback-dot");
         const feedbackContainers = slider.querySelectorAll(".feedback-container");
@@ -209,17 +207,11 @@
             dot.addEventListener("click", () => {
                 // Update the currentIndex to the clicked dot's index
                 currentIndex = index;
-                console.log(index)
-                console.log(feedbackContainers.length)
                 // Calculate the offset to slide the container to the center
                 const containerWidth = feedbackContainers[currentIndex].offsetWidth;
                 const gap = 45
                 const screenWidth = window.innerWidth; // Get the screen width
                 const offset = ((containerWidth + gap) / 2) * (feedbackContainers.length + 1 - (2 * (currentIndex + 1)))
-                //const offset = slider.offsetWidth/2 - containerWidth/2 + (screenWidth-containerWidth)/2 - currentIndex*(containerWidth+gap)
-
-                // const offset = -currentIndex * containerWidth + slider.offsetWidth / 2 - containerWidth / 2;
-                // Slide the slider to the center of the clicked feedback
                 slider.style.transform = `translateX(${offset}px)`;
 
                 // Update the dot styles (e.g., add a "selected" class)

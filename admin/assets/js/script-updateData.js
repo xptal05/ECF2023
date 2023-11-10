@@ -1,3 +1,5 @@
+//update data on the pages after fetch/ filter
+
 const tagArray = []
 const filter = document.getElementById('search')
 const tagsEl = document.getElementById('tags')
@@ -6,10 +8,10 @@ const nextPageBtn = document.getElementById('nextPage')
 let currentPage = 1
 let totalPages = 1
 
-fetchDataAndRenderList()
+fetchDataAndRenderList()    //fetch data first
 
+//create the table headers according to mapping
 function createTableHeaders() {
-
     const thead = document.getElementById('tableHeaders')
     // Clear the current list
     thead.innerHTML = ''
@@ -25,24 +27,21 @@ function createTableHeaders() {
     thead.appendChild(headerRow)
 }
 
+//ORDER THE ITEMS SELON STATUS
 function sortData(data) {
-    //ORDER THE ITEMS SELON STATUS
     const customStatusOrder = [2, 3, 1, 8, 4, 5, 6]
-
     const sortedData = Object.values(data).sort((a, b) => {
         const statusA = customStatusOrder.indexOf(Number(a.status))
         const statusB = customStatusOrder.indexOf(Number(b.status))
 
         return statusA - statusB
     })
-    console.log('sorted data', sortedData)
     updateList(sortedData)
     attachEventListeners(sortedData)
 }
 
+//update the data according to filters applied
 function updateList(data) {
-
-    console.log('update data', data)
     // Apply filters
     const filterText = filter.value.toLowerCase()
     const tags = Array.from(tagsEl.children).map(tag => tag.querySelector('span').innerText)
@@ -63,10 +62,8 @@ function updateList(data) {
     }
 }
 
+//populate the table fith the data that is filtered and paginated for each page
 function populateList(data) {
-    console.log('populate data', data)
-
-
     let pageData
     const list = document.getElementById('list')
 
@@ -78,7 +75,6 @@ function populateList(data) {
 
     if (currentURL !== "web-pages.pgp") { //DO PAGINATION
         const itemsPerPage = Math.floor(containerHeight / minRowHeight);
-        console.log(itemsPerPage)
 
         // Calculate pagination offsets
         const startIndex = (currentPage - 1) * itemsPerPage
@@ -101,7 +97,7 @@ function populateList(data) {
         const totalPagesDisplay = document.getElementById('totalPages')
         totalPagesDisplay.textContent = `of ${totalPages}`
 
-    } else {
+    } else { //if web pages page
         pageData = data
     }
 
@@ -114,7 +110,6 @@ function populateList(data) {
 
         // Generate table columns based on tableHeaders
         for (const header of tableHeaders) {
-
             if (header === "Statut") {
                 // Customize the "Statut" column using the mapStatus function
                 const statusValue = mapStatus(item[customMappings[currentURL].headers[header]])
@@ -142,7 +137,6 @@ function populateList(data) {
 
         list.appendChild(row)
     })
-    console.log('beforeaction')
     attachActionBtnListeners(pageData)
 }
 

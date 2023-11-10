@@ -1,4 +1,4 @@
-
+//WEB info js
 const webInfo = {
     'Services': { array: [], key: 1 },
     'Address': { array: [], key: 2 },
@@ -123,10 +123,6 @@ function attachActionBtnListeners(modifiedServiceArray) {
             const itemId = parseInt(e.currentTarget.getAttribute('href').split('-')[1], 10)
             const tableId = e.currentTarget.getAttribute('href').split('=')[1].split('-')[0]
             const actionBtn = e.currentTarget.getAttribute('href').split('=')[0].replace('?', '')
-
-            console.log(webInfo[tableId])
-            console.log(tableId)
-
             const selectedItem = webInfo[tableId]['array'].find(item => parseInt(item['id_info'], 10) === itemId)
             const selectedServiceItem = modifiedServiceArray.find(item => parseInt(item['id_info'],10) === itemId)
 
@@ -164,7 +160,7 @@ function attachActionBtnListeners(modifiedServiceArray) {
                 }
                 else { webInfoPopup(selectedItem, webInfo[tableId]['key']) }
 
-            } else { (console.log('item2 not found')) }
+            } else { (console.log('item not found')) }
         })
     })
 }
