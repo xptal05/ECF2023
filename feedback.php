@@ -167,7 +167,7 @@ if (!isset($_SESSION['csrf_token'])) {
             } 
         });
 
-        const resetButton = document.getElementById('reset-btn'); // Replace 'resetButton' with the actual ID of your reset button
+        const resetButton = document.getElementById('reset-btn');
 
         resetButton.addEventListener('click', function(e) {
             e.preventDefault(); // Prevent the form from submitting

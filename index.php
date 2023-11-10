@@ -124,7 +124,7 @@ $_SESSION['csrf_token'] = $csrf_token;
                     foreach ($reasonsArray as $item) {
                         echo ' 
                         <div class="reason">                       
-                            <div class="reason-icon"><img src="./assets/src/check-circle.svg" alt="check-mark-icon"></img></div>
+                            <div class="reason-icon"><img src="./assets/src/check-circle.svg" alt="check-mark-icon" ></img></div>
                             <div class="reason-text">' . $item['text'] . '</div>
                         </div>';
                     }

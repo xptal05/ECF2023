@@ -35,4 +35,4 @@ Un compte par défaut avec le role "ADMIN" sera inscrit automatiquement en base 
 
 Quitter la page d'administration : Pour quitter le menu d'administration, veuillez cliquer sur le lien de déconnexion sur le menu. Sachez que vous ne serez pas automatiquement déconnecté lorsque vous quitterez le site par un autre moyen que la déconnexion via la page d'administration. En revanche vous serez déconnect automatiquement au bout de 30 minut d'inactivité.
 
-Liens d'accès au site en ligne :
+Liens d'accès au site en ligne : https://garage-parrot-2023.000webhostapp.com/
