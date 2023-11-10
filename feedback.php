@@ -1,3 +1,14 @@
+<?php 
+// Start or resume the session
+session_start();
+
+if (!isset($_SESSION['csrf_token'])) {
+    // Generate and set the session token if not already set
+    $csrf_token = bin2hex(random_bytes(32));
+    $_SESSION['csrf_token'] = $csrf_token;
+}
+
+?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -35,8 +46,9 @@
             <select id="statusInput" hidden>
                 <option value="2">New</option>
             </select>
-            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+            <input type="hidden" name="csrf_token" id="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
             <div class="button-container span-2-end">
+                
                 <button class="btn" type="reset" id="reset-btn">Annuler</button>
                 <button class="btn" type="submit">Envoyer</button>
             </div>
@@ -69,7 +81,7 @@
         }
 
         function pushNewFeedback(formData, feedbackForm) {
-            const phpScriptURL = './back/db_query.php?action=newFeedback';
+            const phpScriptURL = './admin/functions/db_query.php?action=newFeedback';
             formData.action = 'newFeedback'
 
             // Send an AJAX request to update the database

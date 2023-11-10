@@ -79,7 +79,7 @@ function formvalidation() {
 }
 
 function pushNewMessage(formData, messageForm) {
-    const phpScriptURL = './back/db_query.php?action=newMessage'
+    const phpScriptURL = './admin/functions/db_query.php?action=newMessage'
     formData.action = 'newMessage'
 
     // Send an AJAX request to update the database

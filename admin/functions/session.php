@@ -9,6 +9,10 @@ $_SESSION["session_token"] = $session_token;
 // Check if the user is logged in if so, authorize the JWT TOKEN
 require_once "../config/jwt.php";
 authenticateUser();
+if (!isset($_SESSION["user_id"])) {
+    header("Location: login.php"); // Redirect to the login page or another page as needed
+    exit();
+} 
 
 // Check if the user has been inactive for 30 minutes (1800 seconds)
 $inactiveTimeout = 1800; // 30 minutes in seconds

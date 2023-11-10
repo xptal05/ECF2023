@@ -6,8 +6,13 @@ function notificationsServeur(data) {
         notifications.classList.add('success')
     }
     notifications.innerHTML = `${data['message']}<div class="notification-progress-bar"></div>`
-    popup.innerHTML = '';
-    fetchDataAndRenderList()
+
+    const currentUrl = window.location.pathname.split('/').pop()
+    if (currentUrl !== "feedback.php") {
+        popup.innerHTML = '';
+        fetchDataAndRenderList()
+    }
+
     setTimeout(function () {
         notifications.className = '';
     }, 8000);

@@ -1,3 +1,10 @@
+<?php // Start or resume the session
+session_start();
+
+// Generate and store the CSRF token in the user's session
+$csrf_token = bin2hex(random_bytes(32));
+$_SESSION['csrf_token'] = $csrf_token;
+?>
 <!DOCTYPE html>
 <html lang="fr">
 

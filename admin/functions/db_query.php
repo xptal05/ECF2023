@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
         $action = $data['action'];
 
                 // Validate the CSRF token here before processing the action
-        if (isset($data['csrf_token']) && $data['csrf_token'] === $_SESSION['csrf_token']) {
+        if (isset($data['csrf_token']) && $data['csrf_token'] === $_SESSION["csrf_token"]) {
 
         $postActions = [
             'delete' => 'deleteData',

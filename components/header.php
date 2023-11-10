@@ -1,11 +1,4 @@
 <?php
-// Start or resume the session
-session_start();
-
-// Generate and store the CSRF token in the user's session
-$csrf_token = bin2hex(random_bytes(32));
-$_SESSION['csrf_token'] = $csrf_token;
-
 //get the data that needs to be included in header or footer
 include_once "./functions/func.php";
 $data = fetchData();
